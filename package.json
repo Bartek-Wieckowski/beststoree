@@ -12,7 +12,8 @@
     "test:coverage": "vitest run --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test:e2e": "start-server-and-test dev http://localhost:3000 cypress:open"
+    "test:e2e": "start-server-and-test dev http://localhost:3000 cypress:open",
+    "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cypress:run"
   },
   "dependencies": {
     "next": "15.1.7",
