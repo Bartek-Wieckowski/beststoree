@@ -5,7 +5,7 @@ import Link from 'next/link'
 //   title: 'Home',
 // }
  
-export default function Page() {
+export default async function HomePage() {
   return (
     <div>
       <h1>Home</h1>
