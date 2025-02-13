@@ -6,6 +6,12 @@ const CONTENT_PAGE = {
   FOOTER: {
     allRightsReserved: 'All Rights Reserved',
   },
+  MODE_TOGGLE: {
+    appearance: 'Appearance',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
+  },
 };
 
 export default CONTENT_PAGE;
