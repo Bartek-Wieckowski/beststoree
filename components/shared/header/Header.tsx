@@ -1,11 +1,9 @@
 import { APP_NAME } from '@/lib/constants';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, UserIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import ROUTES from '@/lib/routes';
-import CONTENT_PAGE from '@/lib/content-page';
-import ModeToggle from './ModeToggle';
+import Menu from './Menu';
+
 export default function Header() {
   return (
     <header className="w-full border-b">
@@ -28,19 +26,7 @@ export default function Header() {
             </span>
           </Link>
         </div>
-        <div className="flex justify-end gap-3">
-          <ModeToggle />
-          <Button asChild variant="ghost" data-testid="cart-button">
-            <Link href={ROUTES.CART}>
-              <ShoppingCart /> {CONTENT_PAGE.HEADER.cart}
-            </Link>
-          </Button>
-          <Button asChild data-testid="sign-in-button">
-            <Link href={ROUTES.SIGN_IN}>
-              <UserIcon /> {CONTENT_PAGE.HEADER.signIn}
-            </Link>
-          </Button>
-        </div>
+        <Menu />
       </div>
     </header>
   );

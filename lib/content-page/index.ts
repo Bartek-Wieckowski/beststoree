@@ -12,6 +12,9 @@ const CONTENT_PAGE = {
     dark: 'Dark',
     system: 'System',
   },
+  MENU: {
+    menu: 'Menu',
+  },
 };
 
 export default CONTENT_PAGE;

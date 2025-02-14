@@ -1,4 +1,4 @@
-describe('ModeToggle', () => {
+describe('ModeToggle()', () => {
   beforeEach(() => {
     cy.visit('/');
   });
