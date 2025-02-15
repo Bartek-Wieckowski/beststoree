@@ -15,7 +15,7 @@ export default function Header() {
             data-testid="logo-link"
           >
             <Image
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt={`${APP_NAME} logo`}
               width={40}
               height={40}

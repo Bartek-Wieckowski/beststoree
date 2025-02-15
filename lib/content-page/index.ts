@@ -15,6 +15,12 @@ const CONTENT_PAGE = {
   MENU: {
     menu: 'Menu',
   },
+  PRODUCT_LIST: {
+    noProductsFound: 'No products found',
+  },
+  PRODUCT_CARD: {
+    outOfStock: 'Out of Stock',
+  },
 };
 
 export default CONTENT_PAGE;

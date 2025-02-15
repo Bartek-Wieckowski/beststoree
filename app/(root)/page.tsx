@@ -1,15 +1,15 @@
-import Link from 'next/link'
+import sampleData from '@/db/sample-data';
+import ProductList from '@/components/shared/product/ProductList';
 // import { Metadata } from 'next';
 
 // export const metadata: Metadata = {
 //   title: 'Home',
 // }
- 
+
 export default async function HomePage() {
   return (
-    <div>
-      <h1>Home</h1>
-      <Link href="/about">About</Link>
-    </div>
-  )
+    <>
+      <ProductList data={sampleData.products} title="Newest Arrivals" limit={4} />
+    </>
+  );
 }
