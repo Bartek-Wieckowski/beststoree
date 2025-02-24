@@ -1,9 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import sampleData from './sample-data';
 
 export async function main() {
-  const prisma = new PrismaClient();
-
   try {
     await prisma.product.deleteMany();
 

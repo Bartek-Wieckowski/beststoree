@@ -9,16 +9,18 @@ import sampleData from '@/db/sample-data';
 describe('Product Actions', () => {
   describe('getLatestProducts()', () => {
     it('should return latest products with correct limit', async () => {
-      const prismaProducts = sampleData.products.slice(0, LATEST_PRODUCTS_LIMIT).map(product => ({
-        ...product,
-        id: product.slug,
-        price: new Decimal(product.price),
-        rating: new Decimal(product.rating),
-        createdAt: new Date(),
-      }));
+      const prismaProducts = sampleData.products
+        .slice(0, LATEST_PRODUCTS_LIMIT)
+        .map((product) => ({
+          ...product,
+          id: product.slug,
+          price: new Decimal(product.price),
+          rating: new Decimal(product.rating),
+          createdAt: new Date(),
+        }));
 
       const expectedProducts = convertToPlanObject(prismaProducts);
-      
+
       prismaMock.product.findMany.mockResolvedValue(prismaProducts);
 
       const result = await getLatestProducts();
@@ -46,7 +48,9 @@ describe('Product Actions', () => {
       const dbError = new Error('Database connection failed');
       prismaMock.product.findMany.mockRejectedValue(dbError);
 
-      await expect(getLatestProducts()).rejects.toThrow('Database connection failed');
+      await expect(getLatestProducts()).rejects.toThrow(
+        'Database connection failed'
+      );
     });
   });
 });

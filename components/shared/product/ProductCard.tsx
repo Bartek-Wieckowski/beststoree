@@ -4,8 +4,9 @@ import Image from 'next/image';
 import ROUTES from '@/lib/routes';
 import CONTENT_PAGE from '@/lib/content-page';
 import ProductPrice from './ProductPrice';
+import { Product } from '@/types';
 
-export default function ProductCard({ product }: { product: any }) {
+export default function ProductCard({ product }: { product: Product }) {
   return (
     <Card className="w-full max-w-sm" data-testid="product-card">
       <CardHeader className="p-0 items-center">

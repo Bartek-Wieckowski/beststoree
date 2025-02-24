@@ -8,6 +8,7 @@ import { getLatestProducts } from '@/lib/actions/product.actions';
 
 export default async function HomePage() {
   const products = await getLatestProducts();
+  
   return (
     <>
       <ProductList data={products} title="Newest Arrivals" limit={4} />
