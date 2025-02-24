@@ -1,14 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { prismaMock } from '../mocks/prisma.mock';
 import { main } from '@/db/seed';
 import sampleData from '@/db/sample-data';
 
 describe('Database seed', () => {
-  beforeEach(() => {
-    vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(console, 'error').mockImplementation(() => {});
-  });
-
   it('should delete existing products and create new ones', async () => {
     prismaMock.product.deleteMany.mockResolvedValue({ count: 0 });
     prismaMock.product.createMany.mockResolvedValue({
