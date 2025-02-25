@@ -20,6 +20,14 @@ const CONTENT_PAGE = {
   },
   PRODUCT_CARD: {
     outOfStock: 'Out of Stock',
+    inStock: 'In Stock',
+  },
+  PRODUCT_DETAILS: {
+    description: 'Description',
+    price: 'Price',
+    status: 'Status',
+    addToCart: 'Add to Cart',
+    reviews: 'Reviews',
   },
 };
 
