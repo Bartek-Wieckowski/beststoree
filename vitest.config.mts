@@ -9,7 +9,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: [
       './vitest.setup.ts',
-      './__tests__/mocks/prisma.mock.ts'
+      './__tests__/mocks/prisma.mock.ts',
+      'dotenv/config'
     ],
   },
 })
