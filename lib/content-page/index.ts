@@ -29,6 +29,20 @@ const CONTENT_PAGE = {
     addToCart: 'Add to Cart',
     reviews: 'Reviews',
   },
+  SIGN_IN_PAGE: {
+    signIn: 'Sign In',
+    signInToYourAccount: 'Sign in to your account',
+  },
+  SIGN_UP_PAGE_CREDENTIALS_FORM: {
+    email: 'Email',
+    password: 'Password',
+    signUp: 'Sign Up',
+    text: "Don't have an account?",
+  },
+  BUTTON_CREDENTIALS_SIGN_IN: {
+    signIn: 'Sign In',
+    signing: 'Signing in...',
+  },
 };
 
 export default CONTENT_PAGE;

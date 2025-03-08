@@ -6,4 +6,9 @@ const SERVER_URL =
 
 const LATEST_PRODUCTS_LIMIT = Number(process.env.LATEST_PRODUCTS_LIMIT) || 4;
 
-export { APP_NAME, APP_DESCRIPTION, SERVER_URL, LATEST_PRODUCTS_LIMIT };
+ const signInDefaultValues = {
+  email: 'admin@example.com',
+  password: '123456',
+};
+
+export { APP_NAME, APP_DESCRIPTION, SERVER_URL, LATEST_PRODUCTS_LIMIT, signInDefaultValues };

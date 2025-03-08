@@ -46,4 +46,9 @@ describe('Menu() in desktop view', () => {
     // cy.url().should('include', '/cart');
     cy.url().should('eq', Cypress.config('baseUrl') + 'cart');
   });
+
+  it("should change route to /sign-in when clicking on sign-in button", () => {
+    cy.getByTestId('sign-in-button').click();
+    cy.url().should('eq', Cypress.config('baseUrl') + 'sign-in');
+  });
 });
