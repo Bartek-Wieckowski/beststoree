@@ -15,6 +15,7 @@ export const config = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
+    // TODO: Add Google provider
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
