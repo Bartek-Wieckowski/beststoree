@@ -1,16 +1,17 @@
-import { EllipsisVertical, ShoppingCart, UserIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import ROUTES from '@/lib/routes';
-import CONTENT_PAGE from '@/lib/content-page';
-import ModeToggle from './ModeToggle';
-import Link from 'next/link';
+} from "@/components/ui/sheet";
+import CONTENT_PAGE from "@/lib/content-page";
+import ROUTES from "@/lib/routes";
+import { EllipsisVertical, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+import ModeToggle from "./ModeToggle";
+import UserButton from "./UserButton";
 
 export default function Menu() {
   return (
@@ -22,11 +23,7 @@ export default function Menu() {
             <ShoppingCart /> {CONTENT_PAGE.HEADER.cart}
           </Link>
         </Button>
-        <Button asChild data-testid="sign-in-button">
-          <Link href={ROUTES.SIGN_IN}>
-            <UserIcon /> {CONTENT_PAGE.HEADER.signIn}
-          </Link>
-        </Button>
+        <UserButton />
       </nav>
       <nav className="md:hidden">
         <Sheet data-testid="sheet-menu">
@@ -44,7 +41,7 @@ export default function Menu() {
                 <ShoppingCart /> {CONTENT_PAGE.HEADER.cart}
               </Link>
             </Button>
-            {/* <UserButton /> */}
+            <UserButton />
             <SheetDescription></SheetDescription>
           </SheetContent>
         </Sheet>

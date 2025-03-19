@@ -1,6 +1,6 @@
 Cypress.Commands.add('getByTestId', (selector: string) => {
-  return cy.get(`[data-testid="${selector}"]`)
-})
+  return cy.get(`[data-testid="${selector}"]`);
+});
 
 // Cypress.Commands.add('getByRole', (role: string, options?: { name?: string }) => {
 //   if (options?.name) {
@@ -8,5 +8,3 @@ Cypress.Commands.add('getByTestId', (selector: string) => {
 //   }
 //   return cy.get(`[role="${role}"]`)
 // })
-
-

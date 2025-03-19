@@ -1,8 +1,8 @@
-import { APP_NAME } from '@/lib/constants';
-import Link from 'next/link';
-import Image from 'next/image';
-import ROUTES from '@/lib/routes';
-import Menu from './Menu';
+import { APP_NAME } from "@/lib/constants";
+import Link from "next/link";
+import Image from "next/image";
+import ROUTES from "@/lib/routes";
+import Menu from "./Menu";
 
 export default function Header() {
   return (
