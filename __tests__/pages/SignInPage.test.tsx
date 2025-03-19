@@ -32,14 +32,14 @@ describe.skip('SignInPage()', () => {
       expect(screen.getByTestId('sign-in-title')).toHaveTextContent('Sign In');
     });
   });
-  
+
   it('should render credentials form component', async () => {
     await renderSignInPage();
     expect(
-      screen.getByText(CONTENT_PAGE.SIGN_UP_PAGE_CREDENTIALS_FORM.email)
+      screen.getByText(CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.email)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.SIGN_UP_PAGE_CREDENTIALS_FORM.password)
+      screen.getByText(CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.password)
     ).toBeInTheDocument();
   });
 });

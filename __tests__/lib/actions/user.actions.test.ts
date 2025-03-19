@@ -1,12 +1,11 @@
-import { signInWithCredentials, signOutUser } from '@/lib/actions/user.actions';
+import {
+  signInWithCredentials,
+  signOutUser,
+  signUpUser,
+} from '@/lib/actions/user.actions';
 import { describe, expect, it, vi } from 'vitest';
 import { signIn, signOut } from '@/auth';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-
-vi.mock('@/auth', () => ({
-  signIn: vi.fn(),
-  signOut: vi.fn(),
-}));
 
 vi.mock('next/dist/client/components/redirect-error', () => ({
   isRedirectError: vi.fn(),
@@ -30,6 +29,10 @@ describe('User Actions', () => {
       expect(result).toEqual({
         success: true,
         message: 'Signed in successfully',
+        fieldErrors: null,
+        generalError: null,
+        prismaError: null,
+        inputs: {},
       });
     });
 
@@ -49,7 +52,11 @@ describe('User Actions', () => {
       });
       expect(result).toEqual({
         success: false,
-        message: 'Invalid credentials',
+        message: '',
+        fieldErrors: null,
+        generalError: 'Invalid credentials',
+        prismaError: null,
+        inputs: { email: 'test@test.com' },
       });
     });
 
@@ -68,6 +75,48 @@ describe('User Actions', () => {
       );
 
       expect(isRedirectError).toHaveBeenCalledWith(redirectError);
+    });
+  });
+
+  describe('signUpUser', () => {
+    it('should sign up a user with valid credentials', async () => {
+      const formData = new FormData();
+      formData.set('name', 'test');
+      formData.set('email', 'test@test.com');
+      formData.set('password', 'password');
+      formData.set('confirmPassword', 'password');
+
+      vi.mocked(signIn).mockResolvedValue(undefined);
+
+      const result = await signInWithCredentials(null, formData);
+
+      expect(signIn).toHaveBeenCalledWith('credentials', {
+        email: 'test@test.com',
+        password: 'password',
+      });
+      expect(result).toEqual({
+        success: true,
+        message: 'Signed in successfully',
+        fieldErrors: null,
+        generalError: null,
+        prismaError: null,
+        inputs: {},
+      });
+    });
+
+    it('should throw redirect error when it occurs', async () => {
+      const formData = new FormData();
+      formData.set('name', 'test');
+      formData.set('email', 'test@test.com');
+      formData.set('password', 'password');
+      formData.set('confirmPassword', 'password');
+
+      vi.mocked(signIn).mockRejectedValue(new Error('Redirect error'));
+      vi.mocked(isRedirectError).mockReturnValue(true);
+
+      await expect(signUpUser(null, formData)).rejects.toThrow(
+        new Error('Redirect error')
+      );
     });
   });
 

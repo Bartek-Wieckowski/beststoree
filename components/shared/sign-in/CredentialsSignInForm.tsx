@@ -3,7 +3,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import CONTENT_PAGE from '@/lib/content-page';
-import { signInDefaultValues } from '@/lib/constants';
+// import { signInDefaultValues } from '@/lib/constants';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { signInWithCredentials } from '@/lib/actions/user.actions';
@@ -11,12 +11,19 @@ import { Button } from '@/components/ui/button';
 import ROUTES from '@/lib/routes';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { SignInActionResponse } from '@/types';
 
 export function CredentialsSignInForm() {
-  const [data, action] = useActionState(signInWithCredentials, {
+  const initialState: SignInActionResponse = {
     success: false,
     message: '',
-  });
+    fieldErrors: null,
+    generalError: null,
+    prismaError: null,
+    inputs: { email: '' },
+  };
+
+  const [data, action] = useActionState(signInWithCredentials, initialState);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || ROUTES.HOME;
 
@@ -36,49 +43,68 @@ export function CredentialsSignInForm() {
       </Button>
     );
   }
-  
+
   return (
     <form action={action}>
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
+        {data.success && (
+          <div className="text-sm text-green-500 text-center">
+            {data.message}
+          </div>
+        )}
         <div>
           <Label htmlFor="email">
-            {CONTENT_PAGE.SIGN_UP_PAGE_CREDENTIALS_FORM.email}
+            {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.email}
           </Label>
           <Input
             id="email"
             name="email"
             type="email"
-            required
             autoComplete="email"
-            defaultValue={signInDefaultValues.email}
+            defaultValue={data.inputs.email as string}
           />
+          {data.fieldErrors?.email && (
+            <p className="text-sm text-red-500 mt-1">
+              {data.fieldErrors.email[0]}
+            </p>
+          )}
         </div>
         <div>
           <Label htmlFor="password">
-            {CONTENT_PAGE.SIGN_UP_PAGE_CREDENTIALS_FORM.password}
+            {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.password}
           </Label>
           <Input
             id="password"
             name="password"
             type="password"
-            required
-            autoComplete="password"
-            defaultValue={signInDefaultValues.password}
+            // defaultValue={signInDefaultValues.password}
           />
+          {data.fieldErrors?.password && (
+            <p className="text-sm text-red-500 mt-1">
+              {data.fieldErrors.password[0]}
+            </p>
+          )}
         </div>
         <div>
           <SignInButton />
         </div>
 
-        {data && !data.success && (
-          <div className="text-center text-destructive">{data.message}</div>
+        {data.generalError && (
+          <div className="text-sm text-red-500 text-center">
+            {data.generalError}
+          </div>
         )}
 
         <div className="text-sm text-center text-muted-foreground">
-          {CONTENT_PAGE.SIGN_UP_PAGE_CREDENTIALS_FORM.text}{' '}
-          <Link href={ROUTES.SIGN_UP} target="_self" className="link">
-            {CONTENT_PAGE.SIGN_UP_PAGE_CREDENTIALS_FORM.signUp}
+          {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.text}{' '}
+          <Link
+            href={ROUTES.SIGN_UP}
+            target="_self"
+            className="link"
+            data-testid="sign-in-sign-up-link"
+          >
+            {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.signUp}
           </Link>
         </div>
       </div>

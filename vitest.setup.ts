@@ -4,6 +4,8 @@ import { afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import { cleanup, render, RenderOptions } from '@testing-library/react';
 import { Providers } from './components/providers/Providers';
 import { ReactElement } from 'react';
+import './__tests__/mocks/prisma.mock';
+import './__tests__/mocks/auth.mock';
 
 beforeAll(() => {
   // Mock ResizeObserver
@@ -16,7 +18,7 @@ beforeAll(() => {
   // Mock matchMedia
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: vi.fn().mockImplementation(query => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,

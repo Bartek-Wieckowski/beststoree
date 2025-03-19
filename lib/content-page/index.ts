@@ -33,7 +33,7 @@ const CONTENT_PAGE = {
     signIn: 'Sign In',
     signInToYourAccount: 'Sign in to your account',
   },
-  SIGN_UP_PAGE_CREDENTIALS_FORM: {
+  SIGN_IN_PAGE_CREDENTIALS_FORM: {
     email: 'Email',
     password: 'Password',
     signUp: 'Sign Up',
@@ -42,6 +42,23 @@ const CONTENT_PAGE = {
   BUTTON_CREDENTIALS_SIGN_IN: {
     signIn: 'Sign In',
     signing: 'Signing in...',
+  },
+  SIGN_UP_PAGE: {
+    createAccount: 'Create Account',
+    enterYourInformationBelowToSignUp:
+      'Enter your information below to sign up',
+  },
+  SIGN_UP_FORM: {
+    name: 'Name',
+    email: 'Email',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    alreadyHaveAccount: 'Already have an account?',
+    signIn: 'Sign In',
+  },
+  BUTTON_SIGN_UP_FORM: {
+    submitting: 'Submitting...',
+    signUp: 'Sign Up',
   },
 };
 
