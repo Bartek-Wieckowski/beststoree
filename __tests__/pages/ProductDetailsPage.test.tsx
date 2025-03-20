@@ -8,6 +8,14 @@ import { convertTestProduct } from '../mocks/test-data';
 vi.mock('@/lib/actions/product.actions', () => ({
   getProductBySlug: vi.fn(),
 }));
+vi.mock('next/navigation', () => ({
+  useRouter: () => vi.fn(),
+  // useRouter: () => ({
+  //   push: vi.fn(),
+  //   replace: vi.fn(),
+  //   prefetch: vi.fn(),
+  // }),
+}));
 
 const mockedGetProductBySlug = getProductBySlug as unknown as Mock;
 

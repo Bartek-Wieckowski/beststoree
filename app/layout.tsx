@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import '@/assets/styles/globals.css';
 import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from '@/lib/constants';
 import { Providers } from '@/components/providers/Providers';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
