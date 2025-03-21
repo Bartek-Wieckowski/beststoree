@@ -1,27 +1,27 @@
-'use server';
+"use server";
 
-import { signIn, signOut } from '@/auth';
-import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { hash } from '../encrypt';
-import { prisma } from '../prisma';
-import { signInFormSchema, signUpFormSchema } from '../validators';
-import { formatError } from '../utils';
+import { signIn, signOut } from "@/auth";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { hash } from "../encrypt";
+import { prisma } from "../prisma";
+import { signInFormSchema, signUpFormSchema } from "../validators";
+import { formatError } from "../utils";
 
 export async function signInWithCredentials(
   prevState: unknown,
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     const user = signInFormSchema.parse({
-      email: formData.get('email'),
-      password: formData.get('password'),
+      email: formData.get("email"),
+      password: formData.get("password"),
     });
 
-    await signIn('credentials', user);
+    await signIn("credentials", user);
 
     return {
       success: true,
-      message: 'Signed in successfully',
+      message: "Signed in successfully",
       fieldErrors: null,
       generalError: null,
       prismaError: null,
@@ -35,14 +35,14 @@ export async function signInWithCredentials(
 
     return {
       success: false,
-      message: '',
+      message: "",
       fieldErrors:
-        'fieldErrors' in formattedError ? formattedError.fieldErrors : null,
+        "fieldErrors" in formattedError ? formattedError.fieldErrors : null,
       generalError:
-        'generalError' in formattedError ? formattedError.generalError : null,
+        "generalError" in formattedError ? formattedError.generalError : null,
       prismaError:
-        'prismaError' in formattedError ? formattedError.prismaError : null,
-      inputs: { email: formData.get('email') },
+        "prismaError" in formattedError ? formattedError.prismaError : null,
+      inputs: { email: formData.get("email") },
     };
   }
 }
@@ -54,10 +54,10 @@ export async function signOutUser() {
 export async function signUpUser(prevState: unknown, formData: FormData) {
   try {
     const user = signUpFormSchema.parse({
-      name: formData.get('name'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      confirmPassword: formData.get('confirmPassword'),
+      name: formData.get("name"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
     });
     const plainPassowrd = user.password;
 
@@ -71,14 +71,14 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       },
     });
 
-    await signIn('credentials', {
+    await signIn("credentials", {
       email: user.email,
       password: plainPassowrd,
     });
 
     return {
       success: true,
-      message: 'User registered successfully',
+      message: "User registered successfully",
       fieldErrors: null,
       generalError: null,
       prismaError: null,
@@ -90,20 +90,18 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     }
     const formattedError = formatError(error);
 
-    console.log(formattedError);
-
     return {
       success: false,
-      message: '',
+      message: "",
       fieldErrors:
-        'fieldErrors' in formattedError ? formattedError.fieldErrors : null,
+        "fieldErrors" in formattedError ? formattedError.fieldErrors : null,
       generalError:
-        'generalError' in formattedError ? formattedError.generalError : null,
+        "generalError" in formattedError ? formattedError.generalError : null,
       prismaError:
-        'prismaError' in formattedError ? formattedError.prismaError : null,
+        "prismaError" in formattedError ? formattedError.prismaError : null,
       inputs: {
-        name: formData.get('name'),
-        email: formData.get('email'),
+        name: formData.get("name"),
+        email: formData.get("email"),
       },
     };
   }

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import CONTENT_PAGE from '@/lib/content-page';
-import { CartItem } from '@/types';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-import { Plus } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { ToastAction } from '@/components/ui/toast';
-import { addItemToCart } from '@/lib/actions/cart.actions';
-import ROUTES from '@/lib/routes';
+import CONTENT_PAGE from "@/lib/content-page";
+import { CartItem } from "@/types";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { addItemToCart } from "@/lib/actions/cart.actions";
+import ROUTES from "@/lib/routes";
 
 export default function AddToCart({ item }: { item: CartItem }) {
   const router = useRouter();
@@ -18,8 +18,8 @@ export default function AddToCart({ item }: { item: CartItem }) {
     const res = await addItemToCart(item);
     if (!res.success) {
       toast({
-        description: res.message,
-        variant: 'destructive',
+        description: res.message as string,
+        variant: "destructive",
       });
       return;
     }
