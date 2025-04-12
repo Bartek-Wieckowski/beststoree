@@ -1,6 +1,6 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
-vi.mock('next-auth', () => ({
+vi.mock("next-auth", () => ({
   AuthError: class AuthError extends Error {
     type: string;
     constructor(type: string) {
@@ -10,7 +10,8 @@ vi.mock('next-auth', () => ({
   },
 }));
 
-vi.mock('@/auth', () => ({
+vi.mock("@/auth", () => ({
   signIn: vi.fn(),
   signOut: vi.fn(),
+  auth: vi.fn(),
 }));

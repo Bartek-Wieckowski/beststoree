@@ -1,11 +1,30 @@
 "use server";
 
-import { CartItem } from "@/types";
-import { cookies } from "next/headers";
-import { convertToPlanObject, formatError } from "../utils";
 import { auth } from "@/auth";
+import { CartItem } from "@/types";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { prisma } from "../prisma";
-import { cartItemSchema } from "../validators";
+import ROUTES from "../routes";
+import { convertToPlanObject, formatError, round2 } from "../utils";
+import { cartItemSchema, insertCartSchema } from "../validators";
+import { Prisma } from "@prisma/client";
+
+const calcPrice = (items: CartItem[]) => {
+  const itemsPrice = round2(
+      items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0),
+    ),
+    shippingPrice = round2(itemsPrice > 100 ? 0 : 10),
+    taxPrice = round2(0.15 * itemsPrice),
+    totalPrice = round2(itemsPrice + taxPrice + shippingPrice);
+
+  return {
+    itemsPrice: itemsPrice.toFixed(2),
+    shippingPrice: shippingPrice.toFixed(2),
+    taxPrice: taxPrice.toFixed(2),
+    totalPrice: totalPrice.toFixed(2),
+  };
+};
 
 export async function addItemToCart(data: CartItem) {
   try {
@@ -24,16 +43,61 @@ export async function addItemToCart(data: CartItem) {
       where: { id: item.productId },
     });
 
-    console.log({
-      "Session CartId": sessionCartId,
-      UserId: userId,
-      "Item requested": item,
-      "Product found": product,
-    });
-    return {
-      success: true,
-      message: "Item added to cart successfully",
-    };
+    if (!product) throw new Error("Product not found");
+
+    if (!cart) {
+      const newCart = insertCartSchema.parse({
+        userId: userId,
+        items: [item],
+        sessionCartId: sessionCartId,
+        ...calcPrice([item]),
+      });
+
+      await prisma.cart.create({
+        data: newCart,
+      });
+
+      revalidatePath(ROUTES.PRODUCT(product.slug));
+
+      return {
+        success: true,
+        message: `${product.name} added to cart`,
+      };
+    } else {
+      const existItem = (cart.items as CartItem[]).find(
+        (x) => x.productId === item.productId,
+      );
+
+      if (existItem) {
+        if (product.stock < existItem.qty + 1) {
+          throw new Error("Not enough stock");
+        }
+
+        (cart.items as CartItem[]).find(
+          (x) => x.productId === item.productId,
+        )!.qty = existItem.qty + 1;
+      } else {
+        if (product.stock < 1) throw new Error("Not enough stock");
+
+        cart.items.push(item);
+      }
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: cart.items as Prisma.CartUpdateitemsInput[],
+          ...calcPrice(cart.items as CartItem[]),
+        },
+      });
+
+      revalidatePath(ROUTES.PRODUCT(product.slug));
+
+      return {
+        success: true,
+        message: `${product.name} ${
+          existItem ? "updated in" : "added to"
+        } cart`,
+      };
+    }
   } catch (error) {
     return {
       success: false,

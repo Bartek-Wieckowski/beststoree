@@ -25,7 +25,7 @@ export default function AddToCart({ item }: { item: CartItem }) {
     }
 
     toast({
-      description: `${item.name} added to cart successfully`,
+      description: res.message as string,
       action: (
         <ToastAction
           className="bg-primary text-white hover:bg-gray-800"
