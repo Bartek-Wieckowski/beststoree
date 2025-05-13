@@ -1,9 +1,9 @@
-import { FormattedError } from '@/types';
-import { Prisma } from '@prisma/client';
-import { clsx, type ClassValue } from 'clsx';
-import { AuthError } from 'next-auth';
-import { twMerge } from 'tailwind-merge';
-import { ZodError } from 'zod';
+import { FormattedError } from "@/types";
+import { Prisma } from "@prisma/client";
+import { clsx, type ClassValue } from "clsx";
+import { AuthError } from "next-auth";
+import { twMerge } from "tailwind-merge";
+import { ZodError } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,8 +14,8 @@ export function convertToPlanObject<T>(value: T): T {
 }
 
 export function formatNumberWithDecimals(num: number): string {
-  const [int, decimal] = num.toString().split('.');
-  return decimal ? `${int}.${decimal.padEnd(2, '0')}` : `${int}.00`;
+  const [int, decimal] = num.toString().split(".");
+  return decimal ? `${int}.${decimal.padEnd(2, "0")}` : `${int}.00`;
 }
 
 export function formatError(error: unknown): FormattedError {
@@ -23,7 +23,7 @@ export function formatError(error: unknown): FormattedError {
     const fieldErrors: Record<string, string[]> = {};
 
     error.errors.forEach((err) => {
-      const field = err.path.join('.');
+      const field = err.path.join(".");
       if (!fieldErrors[field]) {
         fieldErrors[field] = [];
       }
@@ -34,7 +34,7 @@ export function formatError(error: unknown): FormattedError {
   }
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    if (error.code === 'P2002') {
+    if (error.code === "P2002") {
       // const field = Array.isArray(error.meta?.target)
       //   ? error.meta.target[0]
       //   : 'unknown_field';
@@ -42,7 +42,7 @@ export function formatError(error: unknown): FormattedError {
       return {
         prismaError: {
           code: error.code,
-          message: 'Invalid registration details. Please try again.',
+          message: "Invalid registration details. Please try again.",
           // message: `${
           //   field.charAt(0).toUpperCase() + field.slice(1)
           // } already exists`,
@@ -53,14 +53,14 @@ export function formatError(error: unknown): FormattedError {
 
   if (error instanceof AuthError) {
     switch (error.type) {
-      case 'CredentialsSignin':
+      case "CredentialsSignin":
         return {
-          generalError: 'Invalid credentials',
+          generalError: "Invalid credentials",
         };
 
       default:
         return {
-          generalError: 'Something went wrong',
+          generalError: "Something went wrong",
         };
     }
   }
@@ -69,4 +69,14 @@ export function formatError(error: unknown): FormattedError {
     generalError:
       error instanceof Error ? error.message : JSON.stringify(error),
   };
+}
+
+export function round2(value: number | string) {
+  if (typeof value === "number") {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  } else if (typeof value === "string") {
+    return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+  } else {
+    throw new Error("Value is not a number or string");
+  }
 }

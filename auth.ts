@@ -1,25 +1,28 @@
-import NextAuth, { NextAuthConfig } from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from '@/lib/prisma';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from './lib/encrypt';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import NextAuth, { NextAuthConfig } from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { compare } from "./lib/encrypt";
+import { authConfig } from "./auth.config";
 
 export const config = {
   pages: {
-    signIn: '/sign-in',
-    error: '/sign-in',
+    signIn: "/sign-in",
+    error: "/sign-in",
   },
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   adapter: PrismaAdapter(prisma),
   providers: [
+    // TODO: Add Google provider
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (credentials == null) return null;
@@ -33,7 +36,7 @@ export const config = {
         if (user && user.password) {
           const isMatch = await compare(
             credentials.password as string,
-            user.password
+            user.password,
           );
 
           if (isMatch) {
@@ -50,14 +53,13 @@ export const config = {
     }),
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async session({ session, user, trigger, token }: any) {
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;
 
-      console.log(session);
-
-      if (trigger === 'update') {
+      if (trigger === "update") {
         session.user.name = user.name;
       }
       return session;
@@ -65,8 +67,8 @@ export const config = {
     async jwt({ token, user, trigger, session }: any) {
       if (user) {
         token.role = user.role;
-        if (user.name === 'NO_NAME') {
-          token.name = user.email!.split('@')[0];
+        if (user.name === "NO_NAME") {
+          token.name = user.email!.split("@")[0];
 
           await prisma.user.update({
             where: { id: user.id },
