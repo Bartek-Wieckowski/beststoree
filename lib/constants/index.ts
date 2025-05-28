@@ -18,6 +18,14 @@ const signUpDefaultValues = {
   confirmPassword: "",
 };
 
+const shippingAddressDefaultValues = {
+  fullName: "",
+  streetAddress: "",
+  city: "",
+  postalCode: "",
+  country: "",
+};
+
 export {
   APP_NAME,
   APP_DESCRIPTION,
@@ -25,4 +33,5 @@ export {
   LATEST_PRODUCTS_LIMIT,
   signInDefaultValues,
   signUpDefaultValues,
+  shippingAddressDefaultValues,
 };

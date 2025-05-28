@@ -1,9 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 import {
   cartItemSchema,
   insertCartSchema,
   insertProductSchema,
-} from '@/lib/validators';
+  shippingAddressSchema,
+} from "@/lib/validators";
 
 export type FormattedError =
   | {
@@ -48,3 +49,11 @@ export type Product = z.infer<typeof insertProductSchema> & {
 export type Cart = z.infer<typeof insertCartSchema>;
 
 export type CartItem = z.infer<typeof cartItemSchema>;
+
+export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
+
+export type TestCypressUser = {
+  id: string;
+  email: string;
+  name: string;
+};
