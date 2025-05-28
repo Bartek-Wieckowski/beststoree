@@ -26,6 +26,11 @@ const shippingAddressDefaultValues = {
   country: "",
 };
 
+const PAYMENT_METHODS = process.env.PAYMENT_METHODS
+  ? process.env.PAYMENT_METHODS.split(", ")
+  : ["PayPal", "Stripe", "CashOnDelivery"];
+const DEFAULT_PAYMENT_METHOD = process.env.DEFAULT_PAYMENT_METHOD || "PayPal";
+
 export {
   APP_NAME,
   APP_DESCRIPTION,
@@ -34,4 +39,6 @@ export {
   signInDefaultValues,
   signUpDefaultValues,
   shippingAddressDefaultValues,
+  PAYMENT_METHODS,
+  DEFAULT_PAYMENT_METHOD,
 };
