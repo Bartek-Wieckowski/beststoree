@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   convertToPlanObject,
+  formatCurrency,
   formatError,
   formatNumberWithDecimals,
   round2,
@@ -181,5 +182,37 @@ describe("round2", () => {
     expect(() => round2(dummyData)).toThrowError(
       "Value is not a number or string",
     );
+  });
+});
+
+describe("formatCurrency", () => {
+  it("should format a number as USD currency", () => {
+    const result = formatCurrency(123.45);
+    expect(result).toBe("$123.45");
+  });
+
+  it("should format a number with no decimal places as USD currency", () => {
+    const result = formatCurrency(123);
+    expect(result).toBe("$123.00");
+  });
+
+  it("should format a string containing a number as USD currency", () => {
+    const result = formatCurrency("123.45");
+    expect(result).toBe("$123.45");
+  });
+
+  it("should handle string with missing decimal places", () => {
+    const result = formatCurrency("123");
+    expect(result).toBe("$123.00");
+  });
+
+  it("should handle null values", () => {
+    const result = formatCurrency(null);
+    expect(result).toBe("NaN");
+  });
+
+  it("should handle invalid numeric strings", () => {
+    const result = formatCurrency("not-a-number");
+    expect(result).toBe("$NaN");
   });
 });

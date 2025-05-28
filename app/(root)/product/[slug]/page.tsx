@@ -1,12 +1,12 @@
-import ProductPrice from "@/components/shared/product/ProductPrice";
-import CONTENT_PAGE from "@/lib/content-page";
-import ProductImages from "@/components/shared/product/ProductImages";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { getProductBySlug } from "@/lib/actions/product.actions";
-import { notFound } from "next/navigation";
-import AddToCart from "@/components/shared/product/AddToCart";
-import { getMyCart } from "@/lib/actions/cart.actions";
+import ProductPrice from '@/components/shared/product/ProductPrice';
+import CONTENT_PAGE from '@/lib/content-page';
+import ProductImages from '@/components/shared/product/ProductImages';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { getProductBySlug } from '@/lib/actions/product.actions';
+import { notFound } from 'next/navigation';
+import AddToCart from '@/components/shared/product/AddToCart';
+import { getMyCart } from '@/lib/actions/cart.actions';
 
 export default async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -30,14 +30,14 @@ export default async function ProductDetailsPage(props: {
           <div className="col-span-2 p-5">
             <div className="flex flex-col gap-6">
               <p>
-                <span data-testid="product-brand">{product.brand}</span>{" "}
+                <span data-testid="product-brand">{product.brand}</span>{' '}
                 {product.category}
               </p>
               <h1 className="h3-bold" data-testid="product-name">
                 {product.name}
               </h1>
               <p>
-                {product.rating} of {product.numReviews}{" "}
+                {product.rating} of {product.numReviews}{' '}
                 {CONTENT_PAGE.PRODUCT_DETAILS.reviews}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

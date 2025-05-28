@@ -5,5 +5,7 @@ declare namespace Cypress {
     //   role: string,
     //   options?: { name?: string }
     // ): Chainable<JQuery<HTMLElement>>;
+    //
+    login(): Chainable<void>;
   }
 }
