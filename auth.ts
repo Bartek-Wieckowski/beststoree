@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth, { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
@@ -7,7 +6,7 @@ import { compare } from "./lib/encrypt";
 import { authConfig } from "./auth.config";
 import { cookies } from "next/headers";
 
-export const config = {
+export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/sign-in",
     error: "/sign-in",
@@ -37,7 +36,7 @@ export const config = {
         if (user && user.password) {
           const isMatch = await compare(
             credentials.password as string,
-            user.password,
+            user.password
           );
 
           if (isMatch) {
@@ -55,7 +54,7 @@ export const config = {
   ],
   callbacks: {
     ...authConfig.callbacks,
-    async session({ session, user, trigger, token }: any) {
+    async session({ session, user, trigger, token }) {
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;
@@ -65,7 +64,7 @@ export const config = {
       }
       return session;
     },
-    async jwt({ token, user, trigger, session }: any) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.role = user.role;
         if (user.name === "NO_NAME") {
@@ -102,6 +101,4 @@ export const config = {
       return token;
     },
   },
-} satisfies NextAuthConfig;
-
-export const { handlers, signIn, signOut, auth } = NextAuth(config);
+} satisfies NextAuthConfig);
