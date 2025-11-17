@@ -91,6 +91,7 @@ export default function PaymentMethodForm({
                               <RadioGroupItem
                                 value={paymentMethod}
                                 checked={field.value === paymentMethod}
+                                data-testid={`payment-method-${paymentMethod.toLowerCase()}`}
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
@@ -107,7 +108,7 @@ export default function PaymentMethodForm({
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" disabled={isPending} data-testid="continue-payment-button">
                 {isPending ? (
                   <Loader className="w-4 h-4 animate-spin" />
                 ) : (

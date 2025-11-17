@@ -7,5 +7,6 @@ declare namespace Cypress {
     // ): Chainable<JQuery<HTMLElement>>;
     //
     login(): Chainable<void>;
+    getAvailableProductCard(): Chainable<JQuery<HTMLElement>>;
   }
 }

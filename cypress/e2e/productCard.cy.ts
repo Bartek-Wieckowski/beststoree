@@ -4,7 +4,7 @@ describe('ProductCard()', () => {
   });
 
   it('should redirect to page with slug when image is clicked', () => {
-    cy.getByTestId('product-card').first().click();
+    cy.getAvailableProductCard().click();
     cy.url().should('include', '/product/');
   });
 });

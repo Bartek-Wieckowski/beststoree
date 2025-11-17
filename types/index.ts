@@ -6,6 +6,7 @@ import {
   insertOrderSchema,
   insertProductSchema,
   shippingAddressSchema,
+  paymentResultSchema,
 } from "@/lib/validators";
 
 export type FormattedError =
@@ -67,7 +68,7 @@ export type Order = z.infer<typeof insertOrderSchema> & {
   // paymentResult: PaymentResult;
 };
 
-// export type PaymentResult = z.infer<typeof paymentResultSchema>;
+export type PaymentResult = z.infer<typeof paymentResultSchema>;
 
 export type TestCypressUser = {
   id: string;

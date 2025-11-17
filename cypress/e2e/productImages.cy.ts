@@ -1,7 +1,7 @@
 describe('ProductImages()', () => {
   beforeEach(() => {
     cy.visit("/")
-    cy.getByTestId('product-card').first().click();
+    cy.getAvailableProductCard().click();
   });
 
   it('should thumbnail have active class when clicked', () => {

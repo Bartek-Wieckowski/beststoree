@@ -31,3 +31,18 @@ Cypress.Commands.add('login', () => {
     cy.reload();
   });
 });
+
+Cypress.Commands.add('getAvailableProductCard', () => {
+  return cy.get('[data-testid="product-card"]').then(($cards) => {
+    const availableCards = Array.from($cards).filter((card) => {
+      const cardText = Cypress.$(card).text();
+      return !cardText.includes('Out of Stock');
+    });
+
+    if (availableCards.length === 0) {
+      throw new Error('No available products found (all are out of stock)');
+    }
+
+    return cy.wrap(availableCards[0]);
+  });
+});

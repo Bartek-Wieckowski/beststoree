@@ -23,7 +23,11 @@ export default function PlaceOrderForm() {
   const PlaceOrderButton = () => {
     const { pending } = useFormStatus();
     return (
-      <Button disabled={pending} className="w-full">
+      <Button
+        disabled={pending}
+        className="w-full"
+        data-testid="place-order-button"
+      >
         {pending ? (
           <Loader className="w-4 h-4 animate-spin" />
         ) : (

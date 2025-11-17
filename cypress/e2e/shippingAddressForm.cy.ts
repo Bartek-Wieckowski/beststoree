@@ -10,7 +10,7 @@ describe("Shipping Address Form", () => {
     cy.get('input[name="password"]').clear().type("123456");
     cy.getByTestId("sign-in-button").click();
     cy.visit("/");
-    cy.get('[data-testid="product-card"]').first().click();
+    cy.getAvailableProductCard().click();
     cy.get('[data-testid="add-to-cart-button"]').click();
 
     cy.visit("/cart");

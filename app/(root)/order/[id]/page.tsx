@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { getOrderById } from "@/lib/actions/order.actions";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -21,14 +20,13 @@ export default async function OrderPage(props: {
     return notFound();
   }
 
-  const session = await auth();
-
   return (
     <OrderDetailsTable
       order={{
         ...order,
         shippingAddress: order.shippingAddress as ShippingAddress,
       }}
+      paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
     />
   );
 }
