@@ -1,15 +1,18 @@
 describe("Place Order Flow", () => {
   beforeEach(() => {
+    cy.clearCookies();
     cy.task("db:reset");
     cy.task("db:seed");
 
-    cy.login();
+    cy.task("db:createUser");
 
     cy.visit("/sign-in");
     cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
     cy.get('input[name="password"]').clear().type("123456");
     cy.getByTestId("sign-in-button").click();
-    cy.visit("/");
+    cy.url().should("not.include", "/sign-in");
+    cy.url().should("include", "/");
+    cy.getByTestId("user-button").should("be.visible");
     cy.getAvailableProductCard().click();
     cy.get('[data-testid="add-to-cart-button"]').click();
 
@@ -34,6 +37,8 @@ describe("Place Order Flow", () => {
 
   describe("PayPal Payment Method Flow", () => {
     it("should complete place order flow with PayPal and show PayPal gateway", () => {
+      cy.visit("/payment-method");
+      cy.url().should("include", "/payment-method");
       cy.get('[data-testid="payment-method-paypal"]').click();
       cy.get('[data-testid="continue-payment-button"]').click();
 
@@ -77,6 +82,9 @@ describe("Place Order Flow", () => {
 
   describe("CashOnDelivery Payment Method Flow", () => {
     it("should complete place order flow with CashOnDelivery and redirect to order page", () => {
+      cy.visit("/payment-method");
+      cy.url().should("include", "/payment-method");
+      cy.url().should("not.include", "/sign-in");
       cy.get('[data-testid="payment-method-cashondelivery"]').click();
       cy.get('[data-testid="continue-payment-button"]').click();
 

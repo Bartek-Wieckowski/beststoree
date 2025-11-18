@@ -1,15 +1,18 @@
 describe("Shipping Address Form", () => {
   beforeEach(() => {
+    cy.clearCookies();
     cy.task("db:reset");
     cy.task("db:seed");
 
-    cy.login();
+    cy.task("db:createUser");
 
     cy.visit("/sign-in");
     cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
     cy.get('input[name="password"]').clear().type("123456");
     cy.getByTestId("sign-in-button").click();
-    cy.visit("/");
+    cy.url().should("not.include", "/sign-in");
+    cy.url().should("include", "/");
+    cy.getByTestId("user-button").should("be.visible");
     cy.getAvailableProductCard().click();
     cy.get('[data-testid="add-to-cart-button"]').click();
 

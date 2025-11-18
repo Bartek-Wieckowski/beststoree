@@ -104,6 +104,24 @@ const CONTENT_PAGE = {
     shipping: "Shipping",
     total: "Total",
   },
+  ORDER_DETAILS_PAGE: {
+    order: "Order",
+    paymentMethod: "Payment Method",
+    paidAt: "Paid at",
+    notPaid: "Not paid",
+    shippingAddress: "Shipping Address",
+    deliveredAt: "Delivered at",
+    notDelivered: "Not Delivered",
+    orderItems: "Order Items",
+    item: "Item",
+    quantity: "Quantity",
+    price: "Price",
+    edit: "Edit",
+    items: "Items",
+    tax: "Tax",
+    shipping: "Shipping",
+    total: "Total",
+  },
 };
 
 export default CONTENT_PAGE;

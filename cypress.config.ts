@@ -90,6 +90,33 @@ export default defineConfig({
             name: user.name,
           };
         },
+        async "db:createAdminUser"() {
+          const hashedPassword = await hash("123456");
+          const user = await prisma.user.upsert({
+            where: { email: "testCypressAdmin@example.com" },
+            update: {
+              name: "Cypress Admin",
+              password: hashedPassword,
+              role: "admin",
+            },
+            create: {
+              email: "testCypressAdmin@example.com",
+              name: "Cypress Admin",
+              password: hashedPassword,
+              role: "admin",
+              image: null,
+              address: {},
+              emailVerified: null,
+              paymentMethod: null,
+            },
+          });
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          };
+        },
         async "db:updateOrderToPaid"(orderId: string) {
           const order = await prisma.order.findFirst({
             where: { id: orderId },

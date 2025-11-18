@@ -1,5 +1,6 @@
 describe("Cart Operations", () => {
   beforeEach(() => {
+    cy.clearCookies();
     cy.task("db:reset");
     cy.task("db:seed");
     cy.visit("/");
@@ -31,8 +32,8 @@ describe("Cart Operations", () => {
     });
 
     it("should redirect to shipping address when user is authenticated", () => {
+      cy.task("db:createUser");
       cy.get('[data-testid="checkout-button"]').click();
-      cy.login(); // custom command for authentication
 
       cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
       cy.get('input[name="password"]').clear().type("123456");
