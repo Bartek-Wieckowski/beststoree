@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
 
 export const authConfig = {
   providers: [],
   callbacks: {
-    authorized({ request, auth }: any) {
+    authorized({ request, auth }) {
       const protectedPaths = [
         /\/shipping-address/,
         /\/payment-method/,

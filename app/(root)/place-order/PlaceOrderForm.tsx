@@ -1,0 +1,46 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { createOrder } from "@/lib/actions/order.actions";
+import CONTENT_PAGE from "@/lib/content-page";
+import { Loader, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
+
+export default function PlaceOrderForm() {
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const res = await createOrder();
+
+    if (res.redirectTo) {
+      router.push(res.redirectTo);
+    }
+  };
+
+  const PlaceOrderButton = () => {
+    const { pending } = useFormStatus();
+    return (
+      <Button
+        disabled={pending}
+        className="w-full"
+        data-testid="place-order-button"
+      >
+        {pending ? (
+          <Loader className="w-4 h-4 animate-spin" />
+        ) : (
+          <Check className="w-4 h-4" />
+        )}{" "}
+        {CONTENT_PAGE.PLACE_ORDER_PAGE.placeOrder}
+      </Button>
+    );
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="w-full">
+      <PlaceOrderButton />
+    </form>
+  );
+}

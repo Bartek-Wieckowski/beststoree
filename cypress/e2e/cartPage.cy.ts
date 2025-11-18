@@ -1,5 +1,6 @@
 describe("Cart Operations", () => {
   beforeEach(() => {
+    cy.clearCookies();
     cy.task("db:reset");
     cy.task("db:seed");
     cy.visit("/");
@@ -10,7 +11,7 @@ describe("Cart Operations", () => {
   });
 
   it("should add product to cart and update quantity", () => {
-    cy.get('[data-testid="product-card"]').first().click();
+    cy.getAvailableProductCard().click();
     cy.get('[data-testid="add-to-cart-button"]').click();
     cy.get('[data-testid="cart-button"]').click();
     cy.get("table").should("contain", "Quantity");
@@ -20,7 +21,7 @@ describe("Cart Operations", () => {
 
   describe("Checkout Process", () => {
     beforeEach(() => {
-      cy.get('[data-testid="product-card"]').first().click();
+      cy.getAvailableProductCard().click();
       cy.get('[data-testid="add-to-cart-button"]').click();
       cy.visit("/cart");
     });
@@ -31,8 +32,8 @@ describe("Cart Operations", () => {
     });
 
     it("should redirect to shipping address when user is authenticated", () => {
+      cy.task("db:createUser");
       cy.get('[data-testid="checkout-button"]').click();
-      cy.login(); // custom command for authentication
 
       cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
       cy.get('input[name="password"]').clear().type("123456");
