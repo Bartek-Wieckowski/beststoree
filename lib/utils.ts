@@ -141,7 +141,6 @@ export const formatDateTime = (dateString: Date) => {
   };
 };
 
-// Form the pagination links
 export function formUrlQuery({
   params,
   key,

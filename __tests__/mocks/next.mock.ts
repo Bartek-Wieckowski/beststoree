@@ -9,10 +9,13 @@ vi.mock("next/cache", () => ({
 }));
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => vi.fn(),
-  // useRouter: () => ({
-  //   push: vi.fn(),
-  //   replace: vi.fn(),
-  //   prefetch: vi.fn(),
-  // }),
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    toString: vi.fn(() => ""),
+    get: vi.fn(),
+  }),
 }));
