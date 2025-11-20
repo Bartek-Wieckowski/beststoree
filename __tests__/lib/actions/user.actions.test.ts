@@ -3,11 +3,13 @@ import {
   signInWithCredentials,
   signOutUser,
   signUpUser,
+  updateProfile,
 } from "@/lib/actions/user.actions";
-import { describe, expect, it, vi } from "vitest";
-import { signIn, signOut } from "@/auth";
+import { describe, expect, it, vi, Mock } from "vitest";
+import { auth, signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { prismaMock } from "@/__tests__/mocks/prisma.mock";
+import { Session } from "next-auth";
 
 vi.mock("next/dist/client/components/redirect-error", () => ({
   isRedirectError: vi.fn(),
@@ -73,7 +75,7 @@ describe("User Actions", () => {
       vi.mocked(isRedirectError).mockReturnValue(true);
 
       await expect(signInWithCredentials(null, formData)).rejects.toThrow(
-        redirectError,
+        redirectError
       );
 
       expect(isRedirectError).toHaveBeenCalledWith(redirectError);
@@ -117,7 +119,7 @@ describe("User Actions", () => {
       vi.mocked(isRedirectError).mockReturnValue(true);
 
       await expect(signUpUser(null, formData)).rejects.toThrow(
-        new Error("Redirect error"),
+        new Error("Redirect error")
       );
     });
   });
@@ -160,11 +162,65 @@ describe("User Actions", () => {
       prismaMock.user.findFirst.mockResolvedValue(null);
 
       await expect(getUserById("non-existent-id")).rejects.toThrow(
-        "User not found",
+        "User not found"
       );
 
       expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
         where: { id: "non-existent-id" },
+      });
+    });
+  });
+
+  describe("updateProfile", () => {
+    it("should update a user's profile", async () => {
+      const mockUser = {
+        id: "user-123",
+        name: "Test User",
+        email: "test@example.com",
+        password: "hashed-password",
+        image: null,
+        address: {},
+        emailVerified: null,
+        role: "user",
+        paymentMethod: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      (auth as Mock).mockResolvedValue({
+        user: { id: "user-123" },
+      } as Session);
+      prismaMock.user.findFirst.mockResolvedValue(mockUser);
+      prismaMock.user.update.mockResolvedValue({
+        ...mockUser,
+        name: "test",
+      });
+
+      const result = await updateProfile({
+        name: "test",
+        email: "test@test.com",
+      });
+
+      expect(result).toEqual({
+        success: true,
+        message: "User updated successfully",
+      });
+    });
+
+    it("should return error when user is not found", async () => {
+      (auth as Mock).mockResolvedValue({
+        user: { id: "user-123" },
+      } as Session);
+      prismaMock.user.findFirst.mockResolvedValue(null);
+
+      const result = await updateProfile({
+        name: "test",
+        email: "test@test.com",
+      });
+
+      expect(result).toEqual({
+        success: false,
+        message: { generalError: "User not found" },
       });
     });
   });

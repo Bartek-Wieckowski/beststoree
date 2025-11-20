@@ -1,9 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   convertToPlanObject,
   formatCurrency,
   formatError,
   formatNumberWithDecimals,
+  formUrlQuery,
   round2,
 } from "../../lib/utils";
 import { signInFormSchema, signUpFormSchema } from "@/lib/validators";
@@ -61,7 +62,7 @@ describe("formatError", () => {
     if ("fieldErrors" in formattedError) {
       expect(formattedError.fieldErrors).toHaveProperty("email");
       expect(formattedError.fieldErrors?.email).toContain(
-        "Invalid email address",
+        "Invalid email address"
       );
     }
   });
@@ -78,7 +79,7 @@ describe("formatError", () => {
       expect(formattedError.fieldErrors).toHaveProperty("password");
 
       expect(formattedError.fieldErrors?.password).toContain(
-        "Password must be at least 6 characters",
+        "Password must be at least 6 characters"
       );
     }
   });
@@ -97,22 +98,22 @@ describe("formatError", () => {
     if ("fieldErrors" in formattedError) {
       expect(formattedError.fieldErrors).toHaveProperty("name");
       expect(formattedError.fieldErrors?.name).toContain(
-        "Name must be at least 3 characters",
+        "Name must be at least 3 characters"
       );
 
       expect(formattedError.fieldErrors).toHaveProperty("email");
       expect(formattedError.fieldErrors?.email).toContain(
-        "Invalid email address",
+        "Invalid email address"
       );
 
       expect(formattedError.fieldErrors).toHaveProperty("password");
       expect(formattedError.fieldErrors?.password).toContain(
-        "Password must be at least 6 characters",
+        "Password must be at least 6 characters"
       );
 
       expect(formattedError.fieldErrors).toHaveProperty("confirmPassword");
       expect(formattedError.fieldErrors?.confirmPassword).toContain(
-        "Passwords don't match",
+        "Passwords don't match"
       );
     }
   });
@@ -180,7 +181,7 @@ describe("round2", () => {
     const dummyData = true;
 
     expect(() => round2(dummyData)).toThrowError(
-      "Value is not a number or string",
+      "Value is not a number or string"
     );
   });
 });
@@ -214,5 +215,112 @@ describe("formatCurrency", () => {
   it("should handle invalid numeric strings", () => {
     const result = formatCurrency("not-a-number");
     expect(result).toBe("$NaN");
+  });
+});
+
+describe("formUrlQuery", () => {
+  beforeEach(() => {
+    // Mock window.location.pathname before each test
+    Object.defineProperty(window, "location", {
+      value: {
+        pathname: "/test-path",
+      },
+      writable: true,
+    });
+  });
+
+  it("should add a new query parameter to empty params", () => {
+    const result = formUrlQuery({
+      params: "",
+      key: "page",
+      value: "1",
+    });
+
+    expect(result).toBe("/test-path?page=1");
+  });
+
+  it("should add a new query parameter to existing params", () => {
+    const result = formUrlQuery({
+      params: "category=electronics",
+      key: "page",
+      value: "2",
+    });
+
+    expect(result).toBe("/test-path?category=electronics&page=2");
+  });
+
+  it("should update an existing query parameter", () => {
+    const result = formUrlQuery({
+      params: "page=1&category=electronics",
+      key: "page",
+      value: "3",
+    });
+
+    expect(result).toContain("/test-path?");
+    expect(result).toContain("page=3");
+    expect(result).toContain("category=electronics");
+    // Verify page was updated (not the old value)
+    expect(result).not.toContain("page=1");
+  });
+
+  it("should remove a query parameter when value is null", () => {
+    const result = formUrlQuery({
+      params: "page=1&category=electronics",
+      key: "page",
+      value: null,
+    });
+
+    expect(result).toBe("/test-path?category=electronics");
+  });
+
+  it("should handle multiple query parameters", () => {
+    const result = formUrlQuery({
+      params: "page=1&category=electronics&sort=price",
+      key: "filter",
+      value: "in-stock",
+    });
+
+    expect(result).toContain("/test-path?");
+    expect(result).toContain("page=1");
+    expect(result).toContain("category=electronics");
+    expect(result).toContain("sort=price");
+    expect(result).toContain("filter=in-stock");
+  });
+
+  it("should handle special characters in values", () => {
+    const result = formUrlQuery({
+      params: "",
+      key: "search",
+      value: "laptop & mouse",
+    });
+
+    expect(result).toBe("/test-path?search=laptop%20%26%20mouse");
+  });
+
+  it("should handle empty string value", () => {
+    const result = formUrlQuery({
+      params: "page=1",
+      key: "search",
+      value: "",
+    });
+
+    expect(result).toBe("/test-path?page=1&search=");
+  });
+
+  it("should preserve pathname from window.location", () => {
+    Object.defineProperty(window, "location", {
+      value: {
+        pathname: "/products",
+      },
+      writable: true,
+    });
+
+    const result = formUrlQuery({
+      params: "",
+      key: "page",
+      value: "1",
+    });
+
+    expect(result).toBe("/products?page=1");
   });
 });

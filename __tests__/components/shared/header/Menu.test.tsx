@@ -1,6 +1,6 @@
 import Menu from "@/components/shared/header/Menu";
 import { screen, render } from "@testing-library/react";
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 
 vi.mock("@/components/shared/header/UserButton", () => ({
   default: () => <div>Mocked UserButton</div>,

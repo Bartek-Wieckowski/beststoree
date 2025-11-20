@@ -122,6 +122,29 @@ const CONTENT_PAGE = {
     shipping: "Shipping",
     total: "Total",
   },
+  USER_ORDERS_PAGE: {
+    orders: "Orders",
+    orderId: "Order ID",
+    date: "Date",
+    total: "Total",
+    paid: "Paid",
+    delivered: "Delivered",
+    actions: "Actions",
+    notPaid: "Not Paid",
+    notDelivered: "Not Delivered",
+  },
+  PAGINATION: {
+    previous: "Previous",
+    next: "Next",
+  },
+  USER_PROFILE_PAGE: {
+    title: "Profile",
+    updateProfile: "Update Profile",
+    email: "Email",
+    name: "Name",
+    update: "Update",
+    submitting: "Submitting...",
+  },
 };
 
 export default CONTENT_PAGE;

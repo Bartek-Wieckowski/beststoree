@@ -1,8 +1,3 @@
-// vi.mock("@/lib/actions/product.actions", () => ({
-//   getProductBySlug: vi.fn(),
-//   // getMyCart: vi.fn(),
-// }));
-
 import { render, screen, waitFor, RenderResult } from "@testing-library/react";
 import { describe, expect, it, vi, Mock, beforeEach } from "vitest";
 import ProductDetailsPage from "@/app/(root)/product/[slug]/page";
@@ -11,13 +6,12 @@ import { getMyCart } from "@/lib/actions/cart.actions";
 import sampleData from "@/db/sample-data";
 import { convertTestProduct } from "../mocks/test-data";
 
-// Mock both functions
 vi.mock("@/lib/actions/product.actions", () => ({
-  getProductBySlug: vi.fn()
+  getProductBySlug: vi.fn(),
 }));
 
 vi.mock("@/lib/actions/cart.actions", () => ({
-  getMyCart: vi.fn()
+  getMyCart: vi.fn(),
 }));
 
 const mockedGetProductBySlug = getProductBySlug as Mock;
@@ -44,7 +38,7 @@ describe("ProductDetailsPage()", () => {
     await waitFor(() => {
       expect(screen.getByTestId("product-image-main")).toBeInTheDocument();
       expect(
-        screen.getAllByTestId("product-image-thumbnail").length,
+        screen.getAllByTestId("product-image-thumbnail").length
       ).toBeGreaterThan(0);
     });
   });
@@ -54,13 +48,13 @@ describe("ProductDetailsPage()", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("product-name")).toHaveTextContent(
-        testProduct.name,
+        testProduct.name
       );
       expect(screen.getByTestId("product-brand")).toHaveTextContent(
-        testProduct.brand,
+        testProduct.brand
       );
       expect(screen.getByTestId("product-description")).toHaveTextContent(
-        testProduct.description,
+        testProduct.description
       );
     });
   });
@@ -75,7 +69,7 @@ describe("ProductDetailsPage()", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: /add to cart/i }),
+        screen.getByRole("button", { name: /add to cart/i })
       ).toBeInTheDocument();
     });
   });
@@ -90,7 +84,7 @@ describe("ProductDetailsPage()", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByRole("button", { name: /add to cart/i }),
+        screen.queryByRole("button", { name: /add to cart/i })
       ).not.toBeInTheDocument();
     });
   });
