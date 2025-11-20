@@ -3,6 +3,7 @@ import {
   convertToPlanObject,
   formatCurrency,
   formatError,
+  formatNumber,
   formatNumberWithDecimals,
   formUrlQuery,
   round2,
@@ -183,6 +184,13 @@ describe("round2", () => {
     expect(() => round2(dummyData)).toThrowError(
       "Value is not a number or string"
     );
+  });
+});
+
+describe("formatNumber", () => {
+  it("should format a number correctly", () => {
+    const result = formatNumber(12345.68);
+    expect(result).toBe("12,345.68");
   });
 });
 

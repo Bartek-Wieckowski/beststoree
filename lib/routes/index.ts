@@ -8,6 +8,13 @@ const ROUTES = {
   PAYMENT_METHOD: "/payment-method",
   PLACE_ORDER: "/place-order",
   ORDER: (id: string) => `/order/${id}`,
+  USER_PROFILE: "/user/profile",
+  USER_ORDERS: "/user/orders",
+  ADMIN_OVERVIEW: "/admin/overview",
+  ADMIN_PRODUCTS: "/admin/products",
+  ADMIN_ORDERS: "/admin/orders",
+  ADMIN_USERS: "/admin/users",
+  UNAUTHORIZED: "/unauthorized",
 };
 
 export default ROUTES;

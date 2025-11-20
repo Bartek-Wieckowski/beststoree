@@ -7,20 +7,28 @@ import ROUTES from "@/lib/routes";
 
 const links = [
   {
-    title: "Profile",
-    href: ROUTES.USER_PROFILE,
+    title: "Overview",
+    href: ROUTES.ADMIN_OVERVIEW,
+  },
+  {
+    title: "Products",
+    href: ROUTES.ADMIN_PRODUCTS,
   },
   {
     title: "Orders",
-    href: ROUTES.USER_ORDERS,
+    href: ROUTES.ADMIN_ORDERS,
+  },
+  {
+    title: "Users",
+    href: ROUTES.ADMIN_USERS,
   },
 ];
+
 export default function MainNav({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
-
   return (
     <nav
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}

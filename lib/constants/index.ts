@@ -33,6 +33,8 @@ const DEFAULT_PAYMENT_METHOD = process.env.DEFAULT_PAYMENT_METHOD || "PayPal";
 
 const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 12;
 
+const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
+
 export {
   APP_NAME,
   APP_DESCRIPTION,
@@ -44,4 +46,5 @@ export {
   PAYMENT_METHODS,
   DEFAULT_PAYMENT_METHOD,
   PAGE_SIZE,
+  NUMBER_FORMATTER,
 };

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import ProfilePage from "@/app/user/profile/page";
 
@@ -12,11 +12,9 @@ describe("UserProfilePage", () => {
     render(await ProfilePage());
   });
 
-  it("should render h2 with correct text", async () => {
-    await waitFor(() => {
-      const heading = screen.getByRole("heading", { level: 2 });
-      expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Profile");
-    });
+  it("should render h2 with correct text", () => {
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent("Profile");
   });
 });
