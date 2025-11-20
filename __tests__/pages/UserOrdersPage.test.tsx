@@ -2,7 +2,6 @@ import { render, screen, waitFor, RenderResult } from "@testing-library/react";
 import { describe, it, expect, vi, Mock, beforeEach } from "vitest";
 import OrdersPage from "@/app/user/orders/page";
 import { getMyOrders } from "@/lib/actions/order.actions";
-import CONTENT_PAGE from "@/lib/content-page";
 import { mockOrders } from "../mocks/test-data";
 
 vi.mock("@/lib/actions/order.actions", () => ({
@@ -38,7 +37,7 @@ describe("UserOrdersPage", () => {
     await waitFor(() => {
       const heading = screen.getByRole("heading", { level: 2 });
       expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent(CONTENT_PAGE.USER_ORDERS_PAGE.orders);
+      expect(heading).toHaveTextContent("Orders");
     });
   });
 
@@ -51,24 +50,12 @@ describe("UserOrdersPage", () => {
     await renderOrdersPage();
 
     await waitFor(() => {
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.orderId)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.date)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.total)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.paid)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.delivered)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.actions)
-      ).toBeInTheDocument();
+      expect(screen.getByText("Order ID")).toBeInTheDocument();
+      expect(screen.getByText("Date")).toBeInTheDocument();
+      expect(screen.getByText("Total")).toBeInTheDocument();
+      expect(screen.getByText("Paid")).toBeInTheDocument();
+      expect(screen.getByText("Delivered")).toBeInTheDocument();
+      expect(screen.getByText("Actions")).toBeInTheDocument();
     });
   });
 
@@ -114,12 +101,8 @@ describe("UserOrdersPage", () => {
     await renderOrdersPage("1");
 
     await waitFor(() => {
-      expect(
-        screen.getByText(CONTENT_PAGE.PAGINATION.previous)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(CONTENT_PAGE.PAGINATION.next)
-      ).toBeInTheDocument();
+      expect(screen.getByText("Previous")).toBeInTheDocument();
+      expect(screen.getByText("Next")).toBeInTheDocument();
     });
   });
 
@@ -132,12 +115,8 @@ describe("UserOrdersPage", () => {
     await renderOrdersPage();
 
     await waitFor(() => {
-      expect(
-        screen.queryByText(CONTENT_PAGE.PAGINATION.previous)
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(CONTENT_PAGE.PAGINATION.next)
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Previous")).not.toBeInTheDocument();
+      expect(screen.queryByText("Next")).not.toBeInTheDocument();
     });
   });
 
@@ -151,9 +130,7 @@ describe("UserOrdersPage", () => {
 
     await waitFor(() => {
       // Should show date/time, not "Not Paid"
-      expect(
-        screen.queryByText(CONTENT_PAGE.USER_ORDERS_PAGE.notPaid)
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Not Paid")).not.toBeInTheDocument();
     });
   });
 
@@ -166,9 +143,7 @@ describe("UserOrdersPage", () => {
     await renderOrdersPage();
 
     await waitFor(() => {
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.notPaid)
-      ).toBeInTheDocument();
+      expect(screen.getByText("Not Paid")).toBeInTheDocument();
     });
   });
 
@@ -181,9 +156,7 @@ describe("UserOrdersPage", () => {
     await renderOrdersPage();
 
     await waitFor(() => {
-      expect(
-        screen.getByText(CONTENT_PAGE.USER_ORDERS_PAGE.notDelivered)
-      ).toBeInTheDocument();
+      expect(screen.getByText("Not Delivered")).toBeInTheDocument();
     });
   });
 

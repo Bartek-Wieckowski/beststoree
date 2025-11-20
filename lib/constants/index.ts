@@ -31,7 +31,7 @@ const PAYMENT_METHODS = process.env.PAYMENT_METHODS
   : ["PayPal", "Stripe", "CashOnDelivery"];
 const DEFAULT_PAYMENT_METHOD = process.env.DEFAULT_PAYMENT_METHOD || "PayPal";
 
-const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 2;
+const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 12;
 
 export {
   APP_NAME,

@@ -137,6 +137,14 @@ const CONTENT_PAGE = {
     previous: "Previous",
     next: "Next",
   },
+  USER_PROFILE_PAGE: {
+    title: "Profile",
+    updateProfile: "Update Profile",
+    email: "Email",
+    name: "Name",
+    update: "Update",
+    submitting: "Submitting...",
+  },
 };
 
 export default CONTENT_PAGE;
