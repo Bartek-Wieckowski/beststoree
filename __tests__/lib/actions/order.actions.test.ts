@@ -26,7 +26,7 @@ vi.mock("@/lib/actions/user.actions", () => ({
 }));
 
 describe("Order Actions", () => {
-  describe("createOrder", () => {
+  describe("createOrder()", () => {
     it("should return error when session is missing", async () => {
       (auth as Mock).mockResolvedValue(null);
 
@@ -100,7 +100,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("getOrderById", () => {
+  describe("getOrderById()", () => {
     it("should return null when order does not exist", async () => {
       (prisma.order.findFirst as Mock).mockResolvedValue(null);
 
@@ -126,7 +126,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("getMyOrders", () => {
+  describe("getMyOrders()", () => {
     it("should throw error when session is missing", async () => {
       (auth as Mock).mockResolvedValue(null);
 
@@ -150,7 +150,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("getOrderSummary", () => {
+  describe("getOrderSummary()", () => {
     it("should return summary data", async () => {
       (prisma.order.count as Mock).mockResolvedValue(10);
       (prisma.product.count as Mock).mockResolvedValue(5);
@@ -189,7 +189,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("getAllOrders", () => {
+  describe("getAllOrders()", () => {
     it("should return all orders", async () => {
       (prisma.order.findMany as Mock).mockResolvedValue([
         { id: "order1", userId: "user123" },
@@ -203,7 +203,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("deleteOrder", () => {
+  describe("deleteOrder()", () => {
     it("should delete order", async () => {
       (prisma.order.delete as Mock).mockResolvedValue({ id: "order1" });
 
@@ -213,7 +213,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("updateOrderToPaidCOD", () => {
+  describe("updateOrderToPaidCOD()", () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
@@ -325,7 +325,7 @@ describe("Order Actions", () => {
     });
   });
 
-  describe("deliverOrder", () => {
+  describe("deliverOrder()", () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });

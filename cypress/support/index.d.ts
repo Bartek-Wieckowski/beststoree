@@ -8,5 +8,6 @@ declare namespace Cypress {
     //
     login(): Chainable<void>;
     getAvailableProductCard(): Chainable<JQuery<HTMLElement>>;
+    getProductCardByName(productName: string): Chainable<JQuery<HTMLElement>>;
   }
 }

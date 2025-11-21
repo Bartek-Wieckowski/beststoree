@@ -12,6 +12,8 @@ const ROUTES = {
   USER_ORDERS: "/user/orders",
   ADMIN_OVERVIEW: "/admin/overview",
   ADMIN_PRODUCTS: "/admin/products",
+  ADMIN_PRODUCTS_CREATE: "/admin/products/create",
+  ADMIN_PRODUCTS_EDIT: (id: string) => `/admin/products/${id}`,
   ADMIN_ORDERS: "/admin/orders",
   ADMIN_USERS: "/admin/users",
   UNAUTHORIZED: "/unauthorized",

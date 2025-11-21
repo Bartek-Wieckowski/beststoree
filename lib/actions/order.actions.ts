@@ -1,5 +1,5 @@
 "use server";
-import { convertToPlanObject } from "@/lib/utils";
+import { convertToPlainObject } from "@/lib/utils";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { formatError } from "../utils";
 import { auth } from "@/auth";
@@ -112,7 +112,7 @@ export async function getOrderById(orderId: string) {
     },
   });
 
-  return convertToPlanObject(data);
+  return convertToPlainObject(data);
 }
 
 export async function createPayPalOrder(orderId: string) {

@@ -10,7 +10,7 @@ import { cookies } from "next/headers";
 import { describe, expect, it, vi, Mock } from "vitest";
 
 describe("Cart Actions", () => {
-  describe("addItemToCart", () => {
+  describe("addItemToCart()", () => {
     it("should throws error when sessionCartId is missing", async () => {
       (cookies as Mock).mockResolvedValue({
         get: vi.fn(() => undefined),
@@ -53,7 +53,7 @@ describe("Cart Actions", () => {
     });
   });
 
-  describe("getMyCart", () => {
+  describe("getMyCart()", () => {
     it("should throws error when sessionCartId is missing", async () => {
       (cookies as Mock).mockReturnValue({ get: vi.fn(() => undefined) });
 
@@ -102,7 +102,7 @@ describe("Cart Actions", () => {
     });
   });
 
-  describe("removeItemFromCart", () => {
+  describe("removeItemFromCart()", () => {
     it("should return error when sessionCartId is not found", async () => {
       (cookies as Mock).mockResolvedValue({
         get: vi.fn(() => undefined),

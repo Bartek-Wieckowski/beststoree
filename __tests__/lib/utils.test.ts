@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
-  convertToPlanObject,
+  convertToPlainObject,
   formatCurrency,
   formatError,
   formatNumber,
@@ -12,10 +12,10 @@ import { signInFormSchema, signUpFormSchema } from "@/lib/validators";
 import { Prisma } from "@prisma/client";
 import { AuthError } from "next-auth";
 
-describe("convertToPlanObject", () => {
+describe("convertToPlainObject", () => {
   it("should convert an object to a plan object and back", () => {
     const input = { name: "Test", value: 42 };
-    const result = convertToPlanObject(input);
+    const result = convertToPlainObject(input);
 
     expect(result).toEqual(input);
     expect(result).not.toBe(input);
@@ -23,7 +23,7 @@ describe("convertToPlanObject", () => {
 
   it("should handle arrays", () => {
     const input = [1, 2, 3];
-    const result = convertToPlanObject(input);
+    const result = convertToPlainObject(input);
 
     expect(result).toEqual(input);
     expect(result).not.toBe(input);
@@ -31,7 +31,7 @@ describe("convertToPlanObject", () => {
 
   it("should handle nested objects", () => {
     const input = { user: { name: "Alice", age: 30 } };
-    const result = convertToPlanObject(input);
+    const result = convertToPlainObject(input);
 
     expect(result).toEqual(input);
     expect(result).not.toBe(input);

@@ -16,7 +16,7 @@ vi.mock("next/dist/client/components/redirect-error", () => ({
 }));
 
 describe("User Actions", () => {
-  describe("signInWithCredentials", () => {
+  describe("signInWithCredentials()", () => {
     it("should sign in a user with valid credentials", async () => {
       const formData = new FormData();
       formData.set("email", "test@test.com");
@@ -82,7 +82,7 @@ describe("User Actions", () => {
     });
   });
 
-  describe("signUpUser", () => {
+  describe("signUpUser()", () => {
     it("should sign up a user with valid credentials", async () => {
       const formData = new FormData();
       formData.set("name", "test");
@@ -124,7 +124,7 @@ describe("User Actions", () => {
     });
   });
 
-  describe("signOutUser", () => {
+  describe("signOutUser()", () => {
     it("should sign out a user", async () => {
       await signOutUser();
 
@@ -132,7 +132,7 @@ describe("User Actions", () => {
     });
   });
 
-  describe("getUserById", () => {
+  describe("getUserById()", () => {
     it("should return user when provided with a valid ID", async () => {
       const mockUser = {
         id: "user-123",
@@ -171,7 +171,7 @@ describe("User Actions", () => {
     });
   });
 
-  describe("updateProfile", () => {
+  describe("updateProfile()", () => {
     it("should update a user's profile", async () => {
       const mockUser = {
         id: "user-123",

@@ -6,13 +6,13 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { prisma } from "../prisma";
 import ROUTES from "../routes";
-import { convertToPlanObject, formatError, round2 } from "../utils";
+import { convertToPlainObject, formatError, round2 } from "../utils";
 import { cartItemSchema, insertCartSchema } from "../validators";
 import { Prisma } from "@prisma/client";
 
 const calcPrice = (items: CartItem[]) => {
   const itemsPrice = round2(
-      items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0),
+      items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0)
     ),
     shippingPrice = round2(itemsPrice > 100 ? 0 : 10),
     taxPrice = round2(0.15 * itemsPrice),
@@ -65,7 +65,7 @@ export async function addItemToCart(data: CartItem) {
       };
     } else {
       const existItem = (cart.items as CartItem[]).find(
-        (x) => x.productId === item.productId,
+        (x) => x.productId === item.productId
       );
 
       if (existItem) {
@@ -74,7 +74,7 @@ export async function addItemToCart(data: CartItem) {
         }
 
         (cart.items as CartItem[]).find(
-          (x) => x.productId === item.productId,
+          (x) => x.productId === item.productId
         )!.qty = existItem.qty + 1;
       } else {
         if (product.stock < 1) throw new Error("Not enough stock");
@@ -120,7 +120,7 @@ export async function getMyCart() {
 
   if (!cart) return undefined;
 
-  return convertToPlanObject({
+  return convertToPlainObject({
     ...cart,
     items: cart.items as CartItem[],
     itemsPrice: cart.itemsPrice.toString(),
@@ -144,13 +144,13 @@ export async function removeItemFromCart(productId: string) {
     if (!cart) throw new Error("Cart not found!");
 
     const existItem = (cart.items as CartItem[]).find(
-      (x) => x.productId === productId,
+      (x) => x.productId === productId
     );
     if (!existItem) throw new Error("Item not found");
 
     if (existItem.qty === 1) {
       cart.items = (cart.items as CartItem[]).filter(
-        (x) => x.productId !== existItem.productId,
+        (x) => x.productId !== existItem.productId
       );
     } else {
       (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty =
