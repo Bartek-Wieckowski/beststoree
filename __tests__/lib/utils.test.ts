@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
-  convertToPlanObject,
+  convertToPlainObject,
   formatCurrency,
   formatError,
+  formatNumber,
   formatNumberWithDecimals,
   formUrlQuery,
   round2,
@@ -11,10 +12,10 @@ import { signInFormSchema, signUpFormSchema } from "@/lib/validators";
 import { Prisma } from "@prisma/client";
 import { AuthError } from "next-auth";
 
-describe("convertToPlanObject", () => {
+describe("convertToPlainObject", () => {
   it("should convert an object to a plan object and back", () => {
     const input = { name: "Test", value: 42 };
-    const result = convertToPlanObject(input);
+    const result = convertToPlainObject(input);
 
     expect(result).toEqual(input);
     expect(result).not.toBe(input);
@@ -22,7 +23,7 @@ describe("convertToPlanObject", () => {
 
   it("should handle arrays", () => {
     const input = [1, 2, 3];
-    const result = convertToPlanObject(input);
+    const result = convertToPlainObject(input);
 
     expect(result).toEqual(input);
     expect(result).not.toBe(input);
@@ -30,7 +31,7 @@ describe("convertToPlanObject", () => {
 
   it("should handle nested objects", () => {
     const input = { user: { name: "Alice", age: 30 } };
-    const result = convertToPlanObject(input);
+    const result = convertToPlainObject(input);
 
     expect(result).toEqual(input);
     expect(result).not.toBe(input);
@@ -183,6 +184,13 @@ describe("round2", () => {
     expect(() => round2(dummyData)).toThrowError(
       "Value is not a number or string"
     );
+  });
+});
+
+describe("formatNumber", () => {
+  it("should format a number correctly", () => {
+    const result = formatNumber(12345.68);
+    expect(result).toBe("12,345.68");
   });
 });
 

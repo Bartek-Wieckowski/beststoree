@@ -1,4 +1,4 @@
-import { render, screen, waitFor, RenderResult } from "@testing-library/react";
+import { render, screen, RenderResult } from "@testing-library/react";
 import { describe, it, expect, vi, Mock, beforeEach } from "vitest";
 import OrdersPage from "@/app/user/orders/page";
 import { getMyOrders } from "@/lib/actions/order.actions";
@@ -34,11 +34,9 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      const heading = screen.getByRole("heading", { level: 2 });
-      expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Orders");
-    });
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent("Orders");
   });
 
   it("should render table headers correctly", async () => {
@@ -49,14 +47,12 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      expect(screen.getByText("Order ID")).toBeInTheDocument();
-      expect(screen.getByText("Date")).toBeInTheDocument();
-      expect(screen.getByText("Total")).toBeInTheDocument();
-      expect(screen.getByText("Paid")).toBeInTheDocument();
-      expect(screen.getByText("Delivered")).toBeInTheDocument();
-      expect(screen.getByText("Actions")).toBeInTheDocument();
-    });
+    expect(screen.getByText("Order ID")).toBeInTheDocument();
+    expect(screen.getByText("Date")).toBeInTheDocument();
+    expect(screen.getByText("Total")).toBeInTheDocument();
+    expect(screen.getByText("Paid")).toBeInTheDocument();
+    expect(screen.getByText("Delivered")).toBeInTheDocument();
+    expect(screen.getByText("Actions")).toBeInTheDocument();
   });
 
   it("should render orders when they exist", async () => {
@@ -67,12 +63,10 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      // formatId takes last 6 chars and prepends ".."
-      // "order-1" -> "..rder-1", "order-2" -> "..rder-2"
-      expect(screen.getByText("..rder-1")).toBeInTheDocument();
-      expect(screen.getByText("..rder-2")).toBeInTheDocument();
-    });
+    // formatId takes last 6 chars and prepends ".."
+    // "order-1" -> "..rder-1", "order-2" -> "..rder-2"
+    expect(screen.getByText("..rder-1")).toBeInTheDocument();
+    expect(screen.getByText("..rder-2")).toBeInTheDocument();
   });
 
   it("should render empty table body when no orders", async () => {
@@ -83,13 +77,11 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      const table = screen.getByRole("table");
-      expect(table).toBeInTheDocument();
-      // Table should only have header row, no data rows
-      const rows = screen.getAllByRole("row");
-      expect(rows).toHaveLength(1); // Only header row
-    });
+    const table = screen.getByRole("table");
+    expect(table).toBeInTheDocument();
+    // Table should only have header row, no data rows
+    const rows = screen.getAllByRole("row");
+    expect(rows).toHaveLength(1); // Only header row
   });
 
   it("should render pagination when totalPages > 1", async () => {
@@ -100,10 +92,8 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage("1");
 
-    await waitFor(() => {
-      expect(screen.getByText("Previous")).toBeInTheDocument();
-      expect(screen.getByText("Next")).toBeInTheDocument();
-    });
+    expect(screen.getByText("Previous")).toBeInTheDocument();
+    expect(screen.getByText("Next")).toBeInTheDocument();
   });
 
   it("should not render pagination when totalPages <= 1", async () => {
@@ -114,10 +104,8 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      expect(screen.queryByText("Previous")).not.toBeInTheDocument();
-      expect(screen.queryByText("Next")).not.toBeInTheDocument();
-    });
+    expect(screen.queryByText("Previous")).not.toBeInTheDocument();
+    expect(screen.queryByText("Next")).not.toBeInTheDocument();
   });
 
   it("should render paid status correctly for paid order", async () => {
@@ -128,10 +116,8 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      // Should show date/time, not "Not Paid"
-      expect(screen.queryByText("Not Paid")).not.toBeInTheDocument();
-    });
+    // Should show date/time, not "Not Paid"
+    expect(screen.queryByText("Not Paid")).not.toBeInTheDocument();
   });
 
   it("should render not paid status correctly for unpaid order", async () => {
@@ -142,9 +128,7 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      expect(screen.getByText("Not Paid")).toBeInTheDocument();
-    });
+    expect(screen.getByText("Not Paid")).toBeInTheDocument();
   });
 
   it("should render not delivered status correctly for undelivered order", async () => {
@@ -155,9 +139,7 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      expect(screen.getByText("Not Delivered")).toBeInTheDocument();
-    });
+    expect(screen.getByText("Not Delivered")).toBeInTheDocument();
   });
 
   it("should render Details link for each order", async () => {
@@ -168,10 +150,8 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage();
 
-    await waitFor(() => {
-      const detailsLinks = screen.getAllByText("Details");
-      expect(detailsLinks).toHaveLength(2);
-    });
+    const detailsLinks = screen.getAllByText("Details");
+    expect(detailsLinks).toHaveLength(2);
   });
 
   it("should call getMyOrders with correct page number", async () => {
@@ -182,9 +162,7 @@ describe("UserOrdersPage", () => {
 
     await renderOrdersPage("2");
 
-    await waitFor(() => {
-      expect(mockedGetMyOrders).toHaveBeenCalledWith({ page: 2 });
-    });
+    expect(mockedGetMyOrders).toHaveBeenCalledWith({ page: 2 });
   });
 
   it("should default to page 1 when page is not provided", async () => {
@@ -198,8 +176,6 @@ describe("UserOrdersPage", () => {
     });
     render(Component);
 
-    await waitFor(() => {
-      expect(mockedGetMyOrders).toHaveBeenCalledWith({ page: 1 });
-    });
+    expect(mockedGetMyOrders).toHaveBeenCalledWith({ page: 1 });
   });
 });

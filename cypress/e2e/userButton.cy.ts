@@ -16,8 +16,9 @@ describe("User Button", () => {
   });
 
   it("should make login when user pass correct data and click button to sign in", () => {
+    cy.task("db:createAdminUser");
     cy.visit("/sign-in");
-    cy.get('input[name="email"]').clear().type("admin@example.com");
+    cy.get('input[name="email"]').clear().type("testCypressAdmin@example.com");
     cy.get('input[name="password"]').clear().type("123456");
     cy.getByTestId("sign-in-button").click();
     cy.url().should("not.include", "/sign-in");

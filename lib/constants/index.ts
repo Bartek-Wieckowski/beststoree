@@ -26,12 +26,33 @@ const shippingAddressDefaultValues = {
   country: "",
 };
 
+const productDefaultValues = {
+  name: "",
+  slug: "",
+  category: "",
+  images: [],
+  brand: "",
+  description: "",
+  price: "0",
+  stock: 0,
+  rating: "0",
+  numReviews: "0",
+  isFeatured: false,
+  banner: null,
+};
+
 const PAYMENT_METHODS = process.env.PAYMENT_METHODS
   ? process.env.PAYMENT_METHODS.split(", ")
   : ["PayPal", "Stripe", "CashOnDelivery"];
 const DEFAULT_PAYMENT_METHOD = process.env.DEFAULT_PAYMENT_METHOD || "PayPal";
 
 const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 12;
+
+const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
+
+const USER_ROLES = process.env.USER_ROLES
+  ? process.env.USER_ROLES.split(", ")
+  : ["admin", "user"];
 
 export {
   APP_NAME,
@@ -41,7 +62,10 @@ export {
   signInDefaultValues,
   signUpDefaultValues,
   shippingAddressDefaultValues,
+  productDefaultValues,
   PAYMENT_METHODS,
   DEFAULT_PAYMENT_METHOD,
   PAGE_SIZE,
+  NUMBER_FORMATTER,
+  USER_ROLES,
 };

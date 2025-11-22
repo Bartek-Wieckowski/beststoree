@@ -1,4 +1,6 @@
 describe("Place Order Flow", () => {
+  let testProductId: string;
+
   beforeEach(() => {
     cy.clearCookies();
     cy.task("db:reset");
@@ -6,32 +8,47 @@ describe("Place Order Flow", () => {
 
     cy.task("db:createUser");
 
-    cy.visit("/sign-in");
-    cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
-    cy.get('input[name="password"]').clear().type("123456");
-    cy.getByTestId("sign-in-button").click();
-    cy.url().should("not.include", "/sign-in");
-    cy.url().should("include", "/");
-    cy.getByTestId("user-button").should("be.visible");
-    cy.getAvailableProductCard().click();
-    cy.get('[data-testid="add-to-cart-button"]').click();
+    // Create test product for this test
+    cy.task<{ id: string; slug: string; name: string }>(
+      "db:createTestProduct"
+    ).then((product) => {
+      testProductId = product.id;
 
-    cy.visit("/cart");
-    cy.get('[data-testid="checkout-button"]').click();
+      cy.visit("/sign-in");
+      cy.get('input[name="email"]')
+        .clear()
+        .type("testCypressUser@example.com");
+      cy.get('input[name="password"]').clear().type("123456");
+      cy.getByTestId("sign-in-button").click();
+      cy.url().should("not.include", "/sign-in");
+      cy.url().should("include", "/");
+      cy.getByTestId("user-button").should("be.visible");
 
-    cy.url().should("include", "/shipping-address");
+      // Use test product instead of random product
+      cy.getProductCardByName(product.name).click();
+      cy.get('[data-testid="add-to-cart-button"]').click();
 
-    cy.get('input[name="fullName"]').clear().type("Jan Kowalski");
-    cy.get('input[name="streetAddress"]').clear().type("ul. Testowa 123");
-    cy.get('input[name="city"]').clear().type("Warszawa");
-    cy.get('input[name="postalCode"]').clear().type("00-001");
-    cy.get('input[name="country"]').clear().type("Polska");
-    cy.get('[data-testid="continue-button"]').click();
+      cy.visit("/cart");
+      cy.get('[data-testid="checkout-button"]').click();
 
-    cy.url().should("include", "/payment-method");
+      cy.url().should("include", "/shipping-address");
+
+      cy.get('input[name="fullName"]').clear().type("Jan Kowalski");
+      cy.get('input[name="streetAddress"]').clear().type("ul. Testowa 123");
+      cy.get('input[name="city"]').clear().type("Warszawa");
+      cy.get('input[name="postalCode"]').clear().type("00-001");
+      cy.get('input[name="country"]').clear().type("Polska");
+      cy.get('[data-testid="continue-button"]').click();
+
+      cy.url().should("include", "/payment-method");
+    });
   });
 
   afterEach(() => {
+    // Clean up test product if it was created
+    if (testProductId) {
+      cy.task("db:deleteTestProduct", testProductId);
+    }
     cy.task("db:cleanup");
   });
 

@@ -18,4 +18,7 @@ vi.mock("next/navigation", () => ({
     toString: vi.fn(() => ""),
     get: vi.fn(),
   }),
+  redirect: vi.fn((url: string) => {
+    throw new Error(`Redirected to ${url}`);
+  }),
 }));

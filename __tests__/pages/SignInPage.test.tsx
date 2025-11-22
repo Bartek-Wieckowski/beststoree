@@ -1,4 +1,4 @@
-import { render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { render, RenderResult, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import SignInPage from "@/app/(auth)/sign-in/page";
 
@@ -13,14 +13,12 @@ async function renderSignInPage(): Promise<RenderResult> {
   return render(Component);
 }
 
-describe("SignInPage()", () => {
+describe("SignInPage", () => {
   it("should show sign in title", async () => {
     await renderSignInPage();
 
-    await waitFor(() => {
-      expect(screen.getByTestId("sign-in-title")).toBeInTheDocument();
-      expect(screen.getByTestId("sign-in-title")).toHaveTextContent("Sign In");
-    });
+    expect(screen.getByTestId("sign-in-title")).toBeInTheDocument();
+    expect(screen.getByTestId("sign-in-title")).toHaveTextContent("Sign In");
   });
 
   it("should render credentials form component", async () => {

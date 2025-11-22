@@ -5,12 +5,13 @@ import { AuthError } from "next-auth";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 import qs from "query-string";
+import { NUMBER_FORMATTER } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function convertToPlanObject<T>(value: T): T {
+export function convertToPlainObject<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
 }
 
@@ -96,6 +97,10 @@ export function formatCurrency(amount: number | string | null) {
   } else {
     return "NaN";
   }
+}
+
+export function formatNumber(number: number) {
+  return NUMBER_FORMATTER.format(number);
 }
 
 export function formatId(id: string) {

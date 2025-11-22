@@ -1,4 +1,4 @@
-import { render, screen, waitFor, RenderResult } from "@testing-library/react";
+import { render, screen, RenderResult } from "@testing-library/react";
 import { describe, expect, it, vi, Mock, beforeEach } from "vitest";
 import ProductDetailsPage from "@/app/(root)/product/[slug]/page";
 import { getProductBySlug } from "@/lib/actions/product.actions";
@@ -24,7 +24,7 @@ async function renderProductPage(slug: string): Promise<RenderResult> {
   return render(Component);
 }
 
-describe("ProductDetailsPage()", () => {
+describe("ProductDetailsPage", () => {
   const testProduct = convertTestProduct(sampleData.products[0]);
 
   beforeEach(() => {
@@ -35,28 +35,24 @@ describe("ProductDetailsPage()", () => {
   it("should render ProductImages component", async () => {
     await renderProductPage(testProduct.slug);
 
-    await waitFor(() => {
-      expect(screen.getByTestId("product-image-main")).toBeInTheDocument();
-      expect(
-        screen.getAllByTestId("product-image-thumbnail").length
-      ).toBeGreaterThan(0);
-    });
+    expect(screen.getByTestId("product-image-main")).toBeInTheDocument();
+    expect(
+      screen.getAllByTestId("product-image-thumbnail").length
+    ).toBeGreaterThan(0);
   });
 
   it("should render product details correctly", async () => {
     await renderProductPage(testProduct.slug);
 
-    await waitFor(() => {
-      expect(screen.getByTestId("product-name")).toHaveTextContent(
-        testProduct.name
-      );
-      expect(screen.getByTestId("product-brand")).toHaveTextContent(
-        testProduct.brand
-      );
-      expect(screen.getByTestId("product-description")).toHaveTextContent(
-        testProduct.description
-      );
-    });
+    expect(screen.getByTestId("product-name")).toHaveTextContent(
+      testProduct.name
+    );
+    expect(screen.getByTestId("product-brand")).toHaveTextContent(
+      testProduct.brand
+    );
+    expect(screen.getByTestId("product-description")).toHaveTextContent(
+      testProduct.description
+    );
   });
 
   it("should render Button component when product is in stock", async () => {
@@ -67,11 +63,9 @@ describe("ProductDetailsPage()", () => {
 
     await renderProductPage(testProduct.slug);
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: /add to cart/i })
-      ).toBeInTheDocument();
-    });
+    expect(
+      screen.getByRole("button", { name: /add to cart/i })
+    ).toBeInTheDocument();
   });
 
   it("should not render Button component when product is out of stock", async () => {
@@ -82,10 +76,8 @@ describe("ProductDetailsPage()", () => {
 
     await renderProductPage(testProduct.slug);
 
-    await waitFor(() => {
-      expect(
-        screen.queryByRole("button", { name: /add to cart/i })
-      ).not.toBeInTheDocument();
-    });
+    expect(
+      screen.queryByRole("button", { name: /add to cart/i })
+    ).not.toBeInTheDocument();
   });
 });

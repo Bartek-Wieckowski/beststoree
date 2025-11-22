@@ -3,15 +3,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import React from "react";
+import ROUTES from "@/lib/routes";
 
 const links = [
   {
     title: "Profile",
-    href: "/user/profile",
+    href: ROUTES.USER_PROFILE,
   },
   {
     title: "Orders",
-    href: "/user/orders",
+    href: ROUTES.USER_ORDERS,
   },
 ];
 export default function MainNav({

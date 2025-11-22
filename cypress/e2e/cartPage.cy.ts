@@ -32,14 +32,42 @@ describe("Cart Operations", () => {
     });
 
     it("should redirect to shipping address when user is authenticated", () => {
-      cy.task("db:createUser");
-      cy.get('[data-testid="checkout-button"]').click();
+      // Verify cart has items before checkout
+      cy.get("table").should("contain", "Quantity");
+      cy.get('[data-testid="checkout-button"]').should("be.visible");
 
-      cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
-      cy.get('input[name="password"]').clear().type("123456");
-      cy.getByTestId("sign-in-button").click();
+      // Get sessionCartId cookie before checkout
+      cy.getCookie("sessionCartId")
+        .should("exist")
+        .then((cookie) => {
+          const sessionCartId = cookie?.value;
+          if (!sessionCartId) {
+            throw new Error("sessionCartId cookie not found");
+          }
 
-      cy.url().should("include", "/shipping-address");
+          // Create user before checkout
+          cy.task("db:createUser");
+
+          // Click checkout button - should redirect to sign-in
+          cy.get('[data-testid="checkout-button"]').click();
+          cy.url().should("include", "/sign-in");
+
+          // Verify sessionCartId cookie is still present
+          cy.getCookie("sessionCartId")
+            .should("exist")
+            .and("have.property", "value", sessionCartId);
+
+          // Login
+          cy.get('input[name="email"]')
+            .clear()
+            .type("testCypressUser@example.com");
+          cy.get('input[name="password"]').clear().type("123456");
+          cy.getByTestId("sign-in-button").click();
+
+          // Wait for redirect and cart merge to complete
+          // After login, cart should be merged and user should be redirected to shipping-address
+          cy.url({ timeout: 10000 }).should("include", "/shipping-address");
+        });
     });
   });
 });

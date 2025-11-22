@@ -29,47 +29,69 @@ export default async function UserButton() {
   const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? "U";
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex items-center">
-          <Button
-            data-testid="user-button"
-            variant="ghost"
-            className="relativee w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200"
-          >
-            {firstInitial}
-          </Button>
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <div
-              className="text-sm font-medium leading-none"
-              data-testid="user-name"
-            >
-              {session.user?.name}
-            </div>
-            <div
-              className="text-sm text-muted-foreground leading-none"
-              data-testid="user-email"
-            >
-              {session.user?.email}
-            </div>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuItem className="p-0 mb-1">
-          <form action={signOutUser} className="w-full">
+    <div className="flex gap-2 items-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="flex items-center">
             <Button
-              data-testid="sign-out-button"
-              className="w-full py-4 px-2 h-4 justify-start"
+              data-testid="user-button"
               variant="ghost"
+              className="relativee w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200"
             >
-              Sign Out
+              {firstInitial}
             </Button>
-          </form>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <div
+                className="text-sm font-medium leading-none"
+                data-testid="user-name"
+              >
+                {session.user?.name}
+              </div>
+              <div
+                className="text-sm text-muted-foreground leading-none"
+                data-testid="user-email"
+              >
+                {session.user?.email}
+              </div>
+            </div>
+          </DropdownMenuLabel>
+
+          <DropdownMenuItem>
+            <Link href={ROUTES.USER_PROFILE} className="w-full">
+              {CONTENT_PAGE.USER_BUTTON.userProfile}
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={ROUTES.USER_ORDERS} className="w-full">
+              {CONTENT_PAGE.USER_BUTTON.orderHistory}
+            </Link>
+          </DropdownMenuItem>
+
+          {session?.user?.role === "admin" && (
+            <DropdownMenuItem>
+              <Link href={ROUTES.ADMIN_OVERVIEW} className="w-full">
+                {CONTENT_PAGE.USER_BUTTON.admin}
+              </Link>
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuItem className="p-0 mb-1">
+            <form action={signOutUser} className="w-full">
+              <Button
+                className="w-full py-4 px-2 h-4 justify-start"
+                data-testid="sign-out-button"
+                variant="ghost"
+              >
+                {CONTENT_PAGE.USER_BUTTON.signOut}
+              </Button>
+            </form>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }

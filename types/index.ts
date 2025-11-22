@@ -70,6 +70,11 @@ export type Order = z.infer<typeof insertOrderSchema> & {
 
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
 
+export type SalesDataType = {
+  month: string;
+  totalSales: number;
+}[];
+
 export type TestCypressUser = {
   id: string;
   email: string;
