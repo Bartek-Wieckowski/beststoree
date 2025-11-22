@@ -1,6 +1,7 @@
 import { defineConfig } from "cypress";
 import { PrismaClient } from "@prisma/client";
 import { hash } from "./lib/encrypt";
+import { UTApi } from "uploadthing/server";
 
 const prisma = new PrismaClient();
 
@@ -227,6 +228,42 @@ export default defineConfig({
           return null;
         },
         async "db:deleteTestProductsByName"(productName: string) {
+          // First, get all products to delete their images from uploadthing
+          const products = await prisma.product.findMany({
+            where: {
+              name: {
+                contains: productName,
+              },
+            },
+            select: { images: true, banner: true },
+          });
+
+          // Extract image keys and delete from uploadthing
+          const imagesToDelete: string[] = [];
+          products.forEach((product) => {
+            if (product.images && product.images.length > 0) {
+              product.images.forEach((imageUrl) => {
+                const key = imageUrl.split("/").pop();
+                if (key) imagesToDelete.push(key);
+              });
+            }
+            if (product.banner) {
+              const bannerKey = product.banner.split("/").pop();
+              if (bannerKey) imagesToDelete.push(bannerKey);
+            }
+          });
+
+          // Delete images from uploadthing
+          if (imagesToDelete.length > 0) {
+            try {
+              const utapi = new UTApi();
+              await utapi.deleteFiles([...new Set(imagesToDelete)]);
+            } catch {
+              // Ignore errors - images might already be deleted
+            }
+          }
+
+          // Then delete products from database
           await prisma.product.deleteMany({
             where: {
               name: {
@@ -305,6 +342,67 @@ export default defineConfig({
             },
           });
           return null;
+        },
+        async "uploadthing:deleteProductImages"(productId: string) {
+          try {
+            // Get product from database
+            const product = await prisma.product.findUnique({
+              where: { id: productId },
+              select: { images: true, banner: true },
+            });
+
+            if (!product) {
+              return { success: false, message: "Product not found" };
+            }
+
+            const imagesToDelete: string[] = [];
+
+            // Extract keys from image URLs
+            if (product.images && product.images.length > 0) {
+              product.images.forEach((imageUrl) => {
+                const key = imageUrl.split("/").pop();
+                if (key) imagesToDelete.push(key);
+              });
+            }
+
+            // Extract key from banner URL if exists
+            if (product.banner) {
+              const bannerKey = product.banner.split("/").pop();
+              if (bannerKey) imagesToDelete.push(bannerKey);
+            }
+
+            // Delete from uploadthing
+            if (imagesToDelete.length > 0) {
+              const utapi = new UTApi();
+              await utapi.deleteFiles(imagesToDelete);
+              return {
+                success: true,
+                message: `Deleted ${imagesToDelete.length} image(s)`,
+              };
+            }
+
+            return { success: true, message: "No images to delete" };
+          } catch (error) {
+            const errorMessage =
+              error instanceof Error ? error.message : String(error);
+            return {
+              success: false,
+              message: errorMessage,
+            };
+          }
+        },
+        async "uploadthing:deleteImage"(imageKey: string) {
+          try {
+            if (!imageKey || imageKey.trim() === "") {
+              return { success: false, message: "Image key is empty" };
+            }
+            const utapi = new UTApi();
+            await utapi.deleteFiles(imageKey);
+            return { success: true, message: "Image deleted successfully" };
+          } catch {
+            // Ignore errors - image might already be deleted
+            return { success: true, message: "Image deletion attempted" };
+          }
         },
       });
     },
