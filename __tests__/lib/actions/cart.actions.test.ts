@@ -10,6 +10,10 @@ import { cookies } from "next/headers";
 import { describe, expect, it, vi, Mock } from "vitest";
 
 describe("Cart Actions", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe("addItemToCart()", () => {
     it("should throws error when sessionCartId is missing", async () => {
       (cookies as Mock).mockResolvedValue({

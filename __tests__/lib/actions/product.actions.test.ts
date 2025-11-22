@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, Mock, beforeEach } from "vitest";
-import { prismaMock } from "../../mocks/prisma.mock";
+import { prisma } from "@/lib/prisma";
 import {
   createProduct,
   deleteProduct,
@@ -39,11 +39,11 @@ describe("Product Actions", () => {
 
       const expectedProducts = convertToPlainObject(prismaProducts);
 
-      prismaMock.product.findMany.mockResolvedValue(prismaProducts);
+      (prisma.product.findMany as Mock).mockResolvedValue(prismaProducts);
 
       const result = await getLatestProducts();
 
-      expect(prismaMock.product.findMany).toHaveBeenCalledWith({
+      expect(prisma.product.findMany as Mock).toHaveBeenCalledWith({
         take: LATEST_PRODUCTS_LIMIT,
         orderBy: {
           createdAt: "desc",
@@ -54,7 +54,7 @@ describe("Product Actions", () => {
     });
 
     it("should handle empty results", async () => {
-      prismaMock.product.findMany.mockResolvedValue([]);
+      (prisma.product.findMany as Mock).mockResolvedValue([]);
 
       const result = await getLatestProducts();
 
@@ -64,7 +64,7 @@ describe("Product Actions", () => {
 
     it("should handle database errors", async () => {
       const dbError = new Error("Database connection failed");
-      prismaMock.product.findMany.mockRejectedValue(dbError);
+      (prisma.product.findMany as Mock).mockRejectedValue(dbError);
 
       await expect(getLatestProducts()).rejects.toThrow(
         "Database connection failed"
@@ -84,7 +84,7 @@ describe("Product Actions", () => {
         createdAt: new Date(),
       };
 
-      prismaMock.product.findFirst.mockResolvedValue(prismaProduct);
+      (prisma.product.findFirst as Mock).mockResolvedValue(prismaProduct);
 
       const result = await getProductBySlug(slug);
 
@@ -95,7 +95,7 @@ describe("Product Actions", () => {
 
     it("should handle database errors", async () => {
       const dbError = new Error("Database connection failed");
-      prismaMock.product.findFirst.mockRejectedValue(dbError);
+      (prisma.product.findFirst as Mock).mockRejectedValue(dbError);
 
       await expect(getProductBySlug("non-existent-slug")).rejects.toThrow(
         "Database connection failed"
@@ -114,11 +114,11 @@ describe("Product Actions", () => {
         rating: new Decimal(product.rating),
         createdAt: new Date(),
       };
-      prismaMock.product.findFirst.mockResolvedValue(prismaProduct);
+      (prisma.product.findFirst as Mock).mockResolvedValue(prismaProduct);
 
       const result = await getProductById(productId);
 
-      expect(prismaMock.product.findFirst).toHaveBeenCalledWith({
+      expect(prisma.product.findFirst as Mock).toHaveBeenCalledWith({
         where: { id: productId },
       });
 
@@ -128,11 +128,11 @@ describe("Product Actions", () => {
     });
 
     it("should return null when product not found", async () => {
-      prismaMock.product.findFirst.mockResolvedValue(null);
+      (prisma.product.findFirst as Mock).mockResolvedValue(null);
 
       const result = await getProductById("non-existent-id");
 
-      expect(prismaMock.product.findFirst).toHaveBeenCalledWith({
+      expect(prisma.product.findFirst as Mock).toHaveBeenCalledWith({
         where: { id: "non-existent-id" },
       });
       expect(result).toBeNull();
@@ -140,7 +140,7 @@ describe("Product Actions", () => {
 
     it("should handle database errors", async () => {
       const dbError = new Error("Database connection failed");
-      prismaMock.product.findFirst.mockRejectedValue(dbError);
+      (prisma.product.findFirst as Mock).mockRejectedValue(dbError);
 
       await expect(getProductById("some-id")).rejects.toThrow(
         "Database connection failed"
@@ -163,8 +163,8 @@ describe("Product Actions", () => {
       const totalCount = products.length;
       const expectedTotalPages = Math.ceil(totalCount / limit);
 
-      prismaMock.product.findMany.mockResolvedValue(prismaProducts);
-      prismaMock.product.count.mockResolvedValue(totalCount);
+      (prisma.product.findMany as Mock).mockResolvedValue(prismaProducts);
+      (prisma.product.count as Mock).mockResolvedValue(totalCount);
 
       const result = await getAllProducts({
         query: "",
@@ -195,8 +195,8 @@ describe("Product Actions", () => {
         createdAt: new Date(),
       };
 
-      prismaMock.product.findFirst.mockResolvedValue(prismaProduct);
-      prismaMock.product.delete.mockResolvedValue(prismaProduct);
+      (prisma.product.findFirst as Mock).mockResolvedValue(prismaProduct);
+      (prisma.product.delete as Mock).mockResolvedValue(prismaProduct);
       (deleteImages as Mock).mockResolvedValue({
         success: true,
         message: "Image(s) deleted successfully",
@@ -213,7 +213,7 @@ describe("Product Actions", () => {
       }
 
       expect(deleteImages).toHaveBeenCalledWith(imageKeys);
-      expect(prismaMock.product.delete).toHaveBeenCalledWith({
+      expect(prisma.product.delete as Mock).toHaveBeenCalledWith({
         where: { id },
       });
       expect(result).toEqual({
@@ -223,7 +223,7 @@ describe("Product Actions", () => {
     });
 
     it("should error if product not found", async () => {
-      prismaMock.product.findFirst.mockResolvedValue(null);
+      (prisma.product.findFirst as Mock).mockResolvedValue(null);
 
       const result = await deleteProduct("non-existent-id");
 
@@ -249,7 +249,7 @@ describe("Product Actions", () => {
         price: product.price.toString(),
       };
 
-      prismaMock.product.create.mockResolvedValue({
+      (prisma.product.create as Mock).mockResolvedValue({
         ...product,
         id: product.slug,
         price: new Decimal(product.price),
@@ -259,7 +259,7 @@ describe("Product Actions", () => {
 
       const result = await createProduct(productData);
 
-      expect(prismaMock.product.create).toHaveBeenCalledWith({
+      expect(prisma.product.create as Mock).toHaveBeenCalledWith({
         data: productData,
       });
       expect(result).toEqual({
@@ -288,7 +288,7 @@ describe("Product Actions", () => {
       expect(result.message).toBeDefined();
       expect(typeof result.message).toBe("object");
       expect(result.message).toHaveProperty("fieldErrors");
-      expect(prismaMock.product.create).not.toHaveBeenCalled();
+      expect(prisma.product.create as Mock).not.toHaveBeenCalled();
     });
   });
 
@@ -317,8 +317,8 @@ describe("Product Actions", () => {
         createdAt: new Date(),
       };
 
-      prismaMock.product.findFirst.mockResolvedValue(prismaProduct);
-      prismaMock.product.update.mockResolvedValue(prismaProduct);
+      (prisma.product.findFirst as Mock).mockResolvedValue(prismaProduct);
+      (prisma.product.update as Mock).mockResolvedValue(prismaProduct);
       (deleteImages as Mock).mockResolvedValue({
         success: true,
         message: "Image(s) deleted successfully",
@@ -326,11 +326,11 @@ describe("Product Actions", () => {
 
       const result = await updateProduct(productData);
 
-      expect(prismaMock.product.findFirst).toHaveBeenCalledWith({
+      expect(prisma.product.findFirst as Mock).toHaveBeenCalledWith({
         where: { id: productData.id },
       });
       // Verify update is called with correct data (without id, imagesToBeDeleted, bannerToBeDeleted)
-      expect(prismaMock.product.update).toHaveBeenCalledWith({
+      expect(prisma.product.update as Mock).toHaveBeenCalledWith({
         where: { id: productData.id },
         data: {
           name: productData.name,
@@ -367,14 +367,14 @@ describe("Product Actions", () => {
         price: product.price.toString(),
       };
 
-      prismaMock.product.findFirst.mockResolvedValue(null);
+      (prisma.product.findFirst as Mock).mockResolvedValue(null);
 
       const result = await updateProduct(productData);
 
-      expect(prismaMock.product.findFirst).toHaveBeenCalledWith({
+      expect(prisma.product.findFirst as Mock).toHaveBeenCalledWith({
         where: { id: productData.id },
       });
-      expect(prismaMock.product.update).not.toHaveBeenCalled();
+      expect(prisma.product.update as Mock).not.toHaveBeenCalled();
       expect(deleteImages).not.toHaveBeenCalled();
       expect(result.success).toBe(false);
       expect(result.message).toBeDefined();
@@ -411,8 +411,8 @@ describe("Product Actions", () => {
         createdAt: new Date(),
       };
 
-      prismaMock.product.findFirst.mockResolvedValue(prismaProduct);
-      prismaMock.product.update.mockResolvedValue(prismaProduct);
+      (prisma.product.findFirst as Mock).mockResolvedValue(prismaProduct);
+      (prisma.product.update as Mock).mockResolvedValue(prismaProduct);
       (deleteImages as Mock).mockResolvedValue({
         success: true,
         message: "Image(s) deleted successfully",
@@ -456,8 +456,8 @@ describe("Product Actions", () => {
         createdAt: new Date(),
       };
 
-      prismaMock.product.findFirst.mockResolvedValue(prismaProduct);
-      prismaMock.product.update.mockResolvedValue(prismaProduct);
+      (prisma.product.findFirst as Mock).mockResolvedValue(prismaProduct);
+      (prisma.product.update as Mock).mockResolvedValue(prismaProduct);
       (deleteImages as Mock).mockResolvedValue({
         success: true,
         message: "Image(s) deleted successfully",

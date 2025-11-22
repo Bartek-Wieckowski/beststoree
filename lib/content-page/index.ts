@@ -232,6 +232,32 @@ const CONTENT_PAGE = {
   ADMIN_PRODUCTS_UPDATE_PAGE: {
     updateProduct: "Update Product",
   },
+  ADMIN_USERS_PAGE: {
+    users: "Users",
+    filteredBy: "Filtered by",
+    removeFilter: "Remove Filter",
+    id: "ID",
+    name: "Name",
+    email: "Email",
+    role: "Role",
+    actions: "Actions",
+    edit: "Edit",
+    user: "User",
+    admin: "Admin",
+  },
+  ADMIN_USERS_UPDATE_PAGE: {
+    updateUser: "Update User",
+  },
+  ADMIN_USERS_UPDATE_FORM: {
+    email: "Email",
+    emailPlaceholder: "Enter user email",
+    name: "Name",
+    namePlaceholder: "Enter user name",
+    role: "Role",
+    rolePlaceholder: "Select a role",
+    updateUser: "Update User",
+    submitting: "Submitting...",
+  },
   DELETE_DIALOG: {
     areYouAbsolutelySure: "Are you absolutely sure?",
     thisActionCannotBeUndone: "This action cannot be undone",
@@ -255,6 +281,9 @@ const CONTENT_PAGE = {
   PAYPAL_LOADING_STATE: {
     loading: "Loading PayPal...",
     error: "Error Loading PayPal",
+  },
+  ADMIN_SEARCH: {
+    search: "Search...",
   },
 };
 

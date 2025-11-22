@@ -50,6 +50,10 @@ const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 12;
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
 
+const USER_ROLES = process.env.USER_ROLES
+  ? process.env.USER_ROLES.split(", ")
+  : ["admin", "user"];
+
 export {
   APP_NAME,
   APP_DESCRIPTION,
@@ -63,4 +67,5 @@ export {
   DEFAULT_PAYMENT_METHOD,
   PAGE_SIZE,
   NUMBER_FORMATTER,
+  USER_ROLES,
 };

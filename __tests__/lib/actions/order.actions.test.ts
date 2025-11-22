@@ -26,6 +26,10 @@ vi.mock("@/lib/actions/user.actions", () => ({
 }));
 
 describe("Order Actions", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe("createOrder()", () => {
     it("should return error when session is missing", async () => {
       (auth as Mock).mockResolvedValue(null);
@@ -204,20 +208,39 @@ describe("Order Actions", () => {
   });
 
   describe("deleteOrder()", () => {
-    it("should delete order", async () => {
-      (prisma.order.delete as Mock).mockResolvedValue({ id: "order1" });
+    it("should delete order successfully", async () => {
+      const orderId = "order1";
+      (prisma.order.delete as Mock).mockResolvedValue({ id: orderId });
 
-      const result = await deleteOrder("order1");
+      const result = await deleteOrder(orderId);
 
-      expect(result.success).toBe(true);
+      expect(prisma.order.delete).toHaveBeenCalledWith({
+        where: { id: orderId },
+      });
+      expect(revalidatePath).toHaveBeenCalledWith(ROUTES.ADMIN_ORDERS);
+      expect(result).toEqual({
+        success: true,
+        message: "Order deleted successfully",
+      });
+    });
+
+    it("should return error when deletion fails", async () => {
+      const orderId = "order1";
+      const dbError = new Error("Database error");
+      (prisma.order.delete as Mock).mockRejectedValue(dbError);
+
+      const result = await deleteOrder(orderId);
+
+      expect(prisma.order.delete).toHaveBeenCalledWith({
+        where: { id: orderId },
+      });
+      expect(revalidatePath).not.toHaveBeenCalled();
+      expect(result.success).toBe(false);
+      expect(result.message).toBeDefined();
     });
   });
 
   describe("updateOrderToPaidCOD()", () => {
-    beforeEach(() => {
-      vi.clearAllMocks();
-    });
-
     it("should update order to paid successfully", async () => {
       const mockOrder = {
         id: "order1",
@@ -326,10 +349,6 @@ describe("Order Actions", () => {
   });
 
   describe("deliverOrder()", () => {
-    beforeEach(() => {
-      vi.clearAllMocks();
-    });
-
     it("should mark order as delivered successfully", async () => {
       const mockOrder = {
         id: "order1",
