@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import {
   createProduct,
   deleteProduct,
+  getAllCategories,
   getAllProducts,
   getLatestProducts,
   getProductById,
@@ -472,6 +473,38 @@ describe("Product Actions", () => {
         success: true,
         message: "Product updated successfully",
       });
+    });
+  });
+  describe("getAllCategories()", () => {
+    it("should return all categories with counts", async () => {
+      const categoryCounts = sampleData.products.reduce((acc, product) => {
+        const existing = acc.find((item) => item.category === product.category);
+        if (existing) {
+          existing._count++;
+        } else {
+          acc.push({ category: product.category, _count: 1 });
+        }
+        return acc;
+      }, [] as Array<{ category: string; _count: number }>);
+
+      (prisma.product.groupBy as Mock).mockResolvedValue(categoryCounts);
+
+      const result = await getAllCategories();
+
+      expect(prisma.product.groupBy as Mock).toHaveBeenCalledWith({
+        by: ["category"],
+        _count: true,
+      });
+      expect(result).toEqual(categoryCounts);
+    });
+
+    it("should handle empty results", async () => {
+      (prisma.product.groupBy as Mock).mockResolvedValue([]);
+
+      const result = await getAllCategories();
+
+      expect(result).toEqual([]);
+      expect(result).toHaveLength(0);
     });
   });
 });

@@ -285,6 +285,9 @@ const CONTENT_PAGE = {
   ADMIN_SEARCH: {
     search: "Search...",
   },
+  CATEGORY_DRAWER: {
+    selectCategory: "Select a category",
+  },
 };
 
 export default CONTENT_PAGE;
