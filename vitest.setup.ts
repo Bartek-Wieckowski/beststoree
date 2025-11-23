@@ -1,12 +1,12 @@
-import '@testing-library/jest-dom/vitest';
-import '@testing-library/jest-dom';
-import { afterEach, beforeAll, beforeEach, vi } from 'vitest';
-import { cleanup, render, RenderOptions } from '@testing-library/react';
-import { Providers } from './components/providers/Providers';
-import { ReactElement } from 'react';
-import './__tests__/mocks/prisma.mock';
-import './__tests__/mocks/auth.mock';
-import './__tests__/mocks/next.mock';
+import "@testing-library/jest-dom/vitest";
+import "@testing-library/jest-dom";
+import { afterEach, beforeAll, beforeEach, vi } from "vitest";
+import { cleanup, render, RenderOptions } from "@testing-library/react";
+import { Providers } from "./components/providers/Providers";
+import { ReactElement } from "react";
+import "./__tests__/mocks/prisma.mock";
+import "./__tests__/mocks/auth.mock";
+import "./__tests__/mocks/next.mock";
 
 beforeAll(() => {
   // Mock ResizeObserver
@@ -16,8 +16,22 @@ beforeAll(() => {
     disconnect() {}
   };
 
+  // Mock IntersectionObserver
+  global.IntersectionObserver = class IntersectionObserver {
+    root = null;
+    rootMargin = "";
+    thresholds = [];
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
+    }
+    constructor() {}
+  } as unknown as typeof IntersectionObserver;
+
   // Mock matchMedia
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
       matches: false,
@@ -38,15 +52,15 @@ afterEach(() => {
 });
 
 beforeEach(() => {
-  vi.spyOn(console, 'log').mockImplementation(() => {});
-  vi.spyOn(console, 'error').mockImplementation(() => {});
+  vi.spyOn(console, "log").mockImplementation(() => {});
+  vi.spyOn(console, "error").mockImplementation(() => {});
   vi.clearAllMocks();
 });
 
 const customRender = (
   ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
+  options?: Omit<RenderOptions, "wrapper">
 ) => render(ui, { wrapper: Providers, ...options });
 
-export * from '@testing-library/react';
+export * from "@testing-library/react";
 export { customRender as render };
