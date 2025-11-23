@@ -18,6 +18,7 @@ const ROUTES = {
   ADMIN_USERS: "/admin/users",
   ADMIN_USERS_EDIT: (id: string) => `/admin/users/${id}`,
   UNAUTHORIZED: "/unauthorized",
+  SEARCH: "/search",
   CATEGORY: (category: string) => `/search?category=${category}`,
 };
 

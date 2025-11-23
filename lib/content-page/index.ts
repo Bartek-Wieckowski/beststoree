@@ -285,8 +285,27 @@ const CONTENT_PAGE = {
   ADMIN_SEARCH: {
     search: "Search...",
   },
+  SEARCH_PAGE: {
+    department: "Department",
+    price: "Price",
+    customerRatings: "Customer Ratings",
+    clear: "Clear",
+    sortBy: "Sort by",
+    newest: "Newest",
+    lowest: "Lowest",
+    highest: "Highest",
+    rating: "Rating",
+    any: "Any",
+  },
+  SEARCH: {
+    search: "Search...",
+    all: "All",
+  },
   CATEGORY_DRAWER: {
     selectCategory: "Select a category",
+  },
+  BUTTON: {
+    viewAllProductsButton: "View All Products",
   },
 };
 

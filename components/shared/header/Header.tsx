@@ -4,6 +4,7 @@ import Image from "next/image";
 import ROUTES from "@/lib/routes";
 import Menu from "./Menu";
 import CategoryDrawer from "./CategoryDrawer";
+import Search from "./Search";
 
 export default function Header() {
   return (
@@ -27,6 +28,9 @@ export default function Header() {
               {APP_NAME}
             </span>
           </Link>
+        </div>
+        <div className="hidden md:block">
+          <Search />
         </div>
         <Menu />
       </div>

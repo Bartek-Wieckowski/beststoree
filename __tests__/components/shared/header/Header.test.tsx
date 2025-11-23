@@ -10,6 +10,10 @@ vi.mock("@/components/shared/header/CategoryDrawer", () => ({
   default: () => <div>Mocked CategoryDrawer</div>,
 }));
 
+vi.mock("@/components/shared/header/Search", () => ({
+  default: () => <div>Mocked Search</div>,
+}));
+
 describe("Header()", () => {
   const expectedCompanyName = "bestStoree";
   let companyName: HTMLElement;
