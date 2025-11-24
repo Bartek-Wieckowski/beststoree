@@ -60,6 +60,8 @@ const USER_ROLES = process.env.USER_ROLES
   ? process.env.USER_ROLES.split(", ")
   : ["admin", "user"];
 
+const SENDER_EMAIL = process.env.SENDER_EMAIL || "onboarding@resend.dev";
+
 export {
   APP_NAME,
   APP_DESCRIPTION,
@@ -75,4 +77,5 @@ export {
   PAGE_SIZE,
   NUMBER_FORMATTER,
   USER_ROLES,
+  SENDER_EMAIL,
 };
