@@ -31,15 +31,18 @@ import { toast, useToast } from "@/hooks/use-toast";
 import CONTENT_PAGE from "@/lib/content-page";
 import ROUTES from "@/lib/routes";
 import { useTransition } from "react";
+import StripePayment from "./StripePayment";
 
 export default function OrderDetailsTable({
   order,
   paypalClientId,
   isAdmin,
+  stripeClientSecret,
 }: {
   order: Order;
   paypalClientId: string;
   isAdmin: boolean;
+  stripeClientSecret: string | null;
 }) {
   const {
     id,
@@ -259,6 +262,15 @@ export default function OrderDetailsTable({
                 <div>{CONTENT_PAGE.ORDER_DETAILS_PAGE.total}</div>
                 <div>{formatCurrency(totalPrice)}</div>
               </div>
+
+              {/* Stripe Payment */}
+              {!isPaid && paymentMethod === "Stripe" && stripeClientSecret && (
+                <StripePayment
+                  priceInCents={Number(order.totalPrice) * 100}
+                  orderId={order.id}
+                  clientSecret={stripeClientSecret}
+                />
+              )}
               {/*PayPal Payment*/}
               {!isPaid && paymentMethod === "PayPal" && (
                 <div data-testid="paypal-payment-container">

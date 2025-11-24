@@ -323,6 +323,16 @@ const CONTENT_PAGE = {
     submitReview: "Submit Review",
     submitting: "Submitting...",
   },
+  STRIPE_PAYMENT: {
+    stripeCheckout: "Stripe Checkout",
+    purchasing: "Purchasing...",
+    purchase: "Purchase",
+  },
+  STRIPE_PAYMENT_SUCCESS_PAGE: {
+    thanksForYourPurchase: "Thanks for your purchase",
+    weAreProcessingYourOrder: "We are processing your order.",
+    viewOrder: "View Order",
+  },
 };
 
 export default CONTENT_PAGE;
