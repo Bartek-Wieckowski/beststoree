@@ -2,7 +2,7 @@ import { getOrderById } from "@/lib/actions/order.actions";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import OrderDetailsTable from "./OrderDetailsTable";
-import { ShippingAddress } from "@/types";
+import { PaymentResult, ShippingAddress } from "@/types";
 import { auth } from "@/auth";
 import Stripe from "stripe";
 import ROUTES from "@/lib/routes";
@@ -45,6 +45,7 @@ export default async function OrderPage(props: {
       order={{
         ...order,
         shippingAddress: order.shippingAddress as ShippingAddress,
+        paymentResult: order.paymentResult as PaymentResult,
       }}
       stripeClientSecret={client_secret}
       paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
