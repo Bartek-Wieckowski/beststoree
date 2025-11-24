@@ -1,10 +1,11 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import Link from 'next/link';
-import Image from 'next/image';
-import ROUTES from '@/lib/routes';
-import CONTENT_PAGE from '@/lib/content-page';
-import ProductPrice from './ProductPrice';
-import { Product } from '@/types';
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import Link from "next/link";
+import Image from "next/image";
+import ROUTES from "@/lib/routes";
+import CONTENT_PAGE from "@/lib/content-page";
+import ProductPrice from "./ProductPrice";
+import { Product } from "@/types";
+import ProductRating from "./ProductRating";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
@@ -25,7 +26,9 @@ export default function ProductCard({ product }: { product: Product }) {
           <h2 className="text-sm font-medium">{product.name}</h2>
         </Link>
         <div className="flex-between gap-4">
-          <p data-testid="product-rating">{product.rating} Stars</p>
+          {/* <p data-testid="product-rating">{product.rating} Stars</p>
+           */}
+          <ProductRating value={Number(product.rating)} />
           {product.stock > 0 ? (
             <ProductPrice value={Number(product.price)} />
           ) : (

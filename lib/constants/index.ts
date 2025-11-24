@@ -41,6 +41,12 @@ const productDefaultValues = {
   banner: null,
 };
 
+const reviewFormDefaultValues = {
+  title: "",
+  comment: "",
+  rating: 0,
+};
+
 const PAYMENT_METHODS = process.env.PAYMENT_METHODS
   ? process.env.PAYMENT_METHODS.split(", ")
   : ["PayPal", "Stripe", "CashOnDelivery"];
@@ -63,6 +69,7 @@ export {
   signUpDefaultValues,
   shippingAddressDefaultValues,
   productDefaultValues,
+  reviewFormDefaultValues,
   PAYMENT_METHODS,
   DEFAULT_PAYMENT_METHOD,
   PAGE_SIZE,
