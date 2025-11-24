@@ -7,6 +7,7 @@ import {
   insertProductSchema,
   shippingAddressSchema,
   paymentResultSchema,
+  insertReviewSchema,
 } from "@/lib/validators";
 
 export type FormattedError =
@@ -74,6 +75,12 @@ export type SalesDataType = {
   month: string;
   totalSales: number;
 }[];
+
+export type Review = z.infer<typeof insertReviewSchema> & {
+  id: string;
+  createdAt: Date;
+  user?: { name: string };
+};
 
 export type TestCypressUser = {
   id: string;

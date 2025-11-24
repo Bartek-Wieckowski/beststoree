@@ -34,6 +34,7 @@ const CONTENT_PAGE = {
     status: "Status",
     addToCart: "Add to Cart",
     reviews: "Reviews",
+    customerReviews: "Customer Reviews",
   },
   SIGN_IN_PAGE: {
     signIn: "Sign In",
@@ -306,6 +307,21 @@ const CONTENT_PAGE = {
   },
   BUTTON: {
     viewAllProductsButton: "View All Products",
+  },
+  REVIEW_LIST: {
+    noReviewsYet: "No reviews yet",
+    please: "Please",
+    signIn: "Sign In",
+    toWriteReview: "to write a review",
+  },
+  REVIEW_FORM: {
+    writeReview: "Write a Review",
+    shareYourThoughts: "Share your thoughts with other customers",
+    title: "Title",
+    description: "Description",
+    rating: "Rating",
+    submitReview: "Submit Review",
+    submitting: "Submitting...",
   },
 };
 
