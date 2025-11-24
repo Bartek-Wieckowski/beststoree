@@ -333,6 +333,30 @@ const CONTENT_PAGE = {
     weAreProcessingYourOrder: "We are processing your order.",
     viewOrder: "View Order",
   },
+  ICON_BOXES: {
+    freeShipping: "Free Shipping",
+    freeShippingDescription: "Free shipping on orders above $100",
+    moneyBackGuarantee: "Money Back Guarantee",
+    moneyBackGuaranteeDescription: "Within 30 days of purchase",
+    flexiblePayment: "Flexible Payment",
+    flexiblePaymentDescription: "Pay with credit card, PayPal or COD",
+    support: "24/7 Support",
+    supportDescription: "Get support at any time",
+  },
+  DEAL_COUNTDOWN: {
+    dealOfTheMonth: "Deal Of The Month",
+    dealOfTheMonthDescription:
+      "Get ready for a shopping experience like never before with our Deals of the Month! Every purchase comes with exclusive perks and offers, making this month a celebration of savvy choices and amazing deals. Don't miss out! 🎁🛒",
+    days: "Days",
+    hours: "Hours",
+    minutes: "Minutes",
+    seconds: "Seconds",
+    loadingCountdown: "Loading Countdown...",
+    dealHasEnded: "Deal Has Ended",
+    dealHasEndedDescription:
+      "This deal is no longer available. Check out our latest promotions!",
+    viewProducts: "View Products",
+  },
 };
 
 export default CONTENT_PAGE;

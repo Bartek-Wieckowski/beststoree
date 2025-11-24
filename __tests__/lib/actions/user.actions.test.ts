@@ -16,9 +16,14 @@ import { Session } from "next-auth";
 import sampleData from "@/db/sample-data";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/lib/routes";
+import { getMyCart } from "@/lib/actions/cart.actions";
 
 vi.mock("next/dist/client/components/redirect-error", () => ({
   isRedirectError: vi.fn(),
+}));
+
+vi.mock("@/lib/actions/cart.actions", () => ({
+  getMyCart: vi.fn(),
 }));
 
 describe("User Actions", () => {
@@ -135,9 +140,26 @@ describe("User Actions", () => {
   });
 
   describe("signOutUser()", () => {
-    it("should sign out a user", async () => {
+    it("should sign out a user and delete cart", async () => {
+      const mockCart = {
+        id: "cart-123",
+        items: [],
+        itemsPrice: "0",
+        totalPrice: "0",
+        shippingPrice: "0",
+        taxPrice: "0",
+      };
+
+      (getMyCart as Mock).mockResolvedValue(mockCart);
+      (prisma.cart.delete as Mock).mockResolvedValue(mockCart);
+      (signOut as Mock).mockResolvedValue(undefined);
+
       await signOutUser();
 
+      expect(getMyCart).toHaveBeenCalled();
+      expect(prisma.cart.delete).toHaveBeenCalledWith({
+        where: { id: mockCart.id },
+      });
       expect(signOut).toHaveBeenCalled();
     });
   });

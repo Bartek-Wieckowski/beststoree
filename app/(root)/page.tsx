@@ -6,6 +6,8 @@ import {
 import ProductCarousel from "@/components/shared/product/ProductCarousel";
 import ViewAllProductsButton from "@/components/ViewAllProductsButton";
 // import { Metadata } from 'next';
+import IconBoxes from "@/components/IconBoxes";
+import DealCountdown from "@/components/DealCountdown";
 
 // export const metadata: Metadata = {
 //   title: 'Home',
@@ -21,6 +23,8 @@ export default async function HomePage() {
       )}
       <ProductList data={products} title="Newest Arrivals" limit={4} />
       <ViewAllProductsButton />
+      <DealCountdown />
+      <IconBoxes />
     </>
   );
 }
