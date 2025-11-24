@@ -7,12 +7,18 @@ import { getMyCart } from "./cart.actions";
 import { getUserById } from "./user.actions";
 import ROUTES from "../routes";
 import { insertOrderSchema } from "../validators";
-import { CartItem, PaymentResult, SalesDataType } from "@/types";
+import {
+  CartItem,
+  PaymentResult,
+  SalesDataType,
+  ShippingAddress,
+} from "@/types";
 import { prisma } from "../prisma";
 import { paypal } from "@/lib/paypal";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
 import { Prisma } from "@prisma/client";
+import { sendPurchaseReceipt } from "@/email";
 
 export async function createOrder() {
   try {
@@ -255,13 +261,13 @@ export async function updateOrderToPaid({
 
   if (!updatedOrder) throw new Error("Order not found");
 
-  // sendPurchaseReceipt({
-  //   order: {
-  //     ...updatedOrder,
-  //     shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
-  //     paymentResult: updatedOrder.paymentResult as PaymentResult,
-  //   },
-  // });
+  sendPurchaseReceipt({
+    order: {
+      ...updatedOrder,
+      shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+      paymentResult: updatedOrder.paymentResult as PaymentResult,
+    },
+  });
 }
 
 // Get users orders
