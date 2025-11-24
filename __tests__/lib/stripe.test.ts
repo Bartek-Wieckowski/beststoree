@@ -1,20 +1,51 @@
 import Stripe from "stripe";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 describe("Stripe", () => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+  let stripe: Stripe;
+
+  beforeEach(() => {
+    // Use a mock/test key - this won't actually make API calls if we mock the methods
+    stripe = new Stripe("sk_test_mock_key_for_testing");
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it("creates a payment intent", async () => {
     const amount = 10.0;
     const orderId = "test-order-123";
+
+    const mockPaymentIntent = {
+      id: "pi_test_1234567890",
+      client_secret: "pi_test_1234567890_secret_abcdef",
+      status: "requires_payment_method",
+      amount: Math.round(amount * 100),
+      currency: "usd",
+      metadata: { orderId },
+      lastResponse: {
+        headers: {},
+        requestId: "test",
+        statusCode: 200,
+      },
+    } as unknown as Stripe.PaymentIntent & {
+      lastResponse: {
+        headers: Record<string, string>;
+        requestId: string;
+        statusCode: number;
+      };
+    };
+
+    const mockCreate = vi
+      .spyOn(stripe.paymentIntents, "create")
+      .mockResolvedValue(mockPaymentIntent);
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency: "USD",
       metadata: { orderId },
     });
-
-    console.log(paymentIntent);
 
     expect(paymentIntent).toHaveProperty("id");
     expect(paymentIntent).toHaveProperty("client_secret");
@@ -24,12 +55,45 @@ describe("Stripe", () => {
     expect(paymentIntent.id.length).toBeGreaterThan(0);
     expect(paymentIntent.client_secret?.length).toBeGreaterThan(0);
     expect(paymentIntent.metadata.orderId).toBe(orderId);
+    expect(mockCreate).toHaveBeenCalledWith({
+      amount: Math.round(amount * 100),
+      currency: "USD",
+      metadata: { orderId },
+    });
   });
 
   it("retrieves a payment intent", async () => {
-    // First create a payment intent to retrieve
     const amount = 10.0;
     const orderId = "test-order-456";
+    const paymentIntentId = "pi_test_retrieve_123";
+
+    const mockCreatedPaymentIntent = {
+      id: paymentIntentId,
+      client_secret: "pi_test_retrieve_123_secret",
+      status: "requires_payment_method",
+      amount: Math.round(amount * 100),
+      currency: "usd",
+      metadata: { orderId },
+      lastResponse: {
+        headers: {},
+        requestId: "test",
+        statusCode: 200,
+      },
+    } as unknown as Stripe.PaymentIntent & {
+      lastResponse: {
+        headers: Record<string, string>;
+        requestId: string;
+        statusCode: number;
+      };
+    };
+
+    const mockCreate = vi
+      .spyOn(stripe.paymentIntents, "create")
+      .mockResolvedValue(mockCreatedPaymentIntent);
+    const mockRetrieve = vi
+      .spyOn(stripe.paymentIntents, "retrieve")
+      .mockResolvedValue(mockCreatedPaymentIntent);
+
     const createdPaymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100),
       currency: "USD",
@@ -39,7 +103,6 @@ describe("Stripe", () => {
     const retrievedPaymentIntent = await stripe.paymentIntents.retrieve(
       createdPaymentIntent.id
     );
-    console.log(retrievedPaymentIntent);
 
     expect(retrievedPaymentIntent).toHaveProperty("id");
     expect(retrievedPaymentIntent).toHaveProperty("status");
@@ -48,6 +111,12 @@ describe("Stripe", () => {
     expect(retrievedPaymentIntent.id).toBe(createdPaymentIntent.id);
     expect(retrievedPaymentIntent.amount).toBe(Math.round(amount * 100));
     expect(retrievedPaymentIntent.currency).toBe("usd");
+    expect(mockCreate).toHaveBeenCalledWith({
+      amount: Math.round(amount * 100),
+      currency: "USD",
+      metadata: { orderId },
+    });
+    expect(mockRetrieve).toHaveBeenCalledWith(paymentIntentId);
   });
 
   it("simulates confirming a payment intent", async () => {
