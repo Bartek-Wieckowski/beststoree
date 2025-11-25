@@ -46,6 +46,14 @@ export async function addItemToCart(data: CartItem) {
     if (!product) throw new Error("Product not found");
 
     if (!cart) {
+      // Validate stock before creating new cart
+      if (product.stock < item.qty) {
+        return {
+          success: false,
+          message: `We don't have enough stock of "${product.name}". Available stock: ${product.stock}`,
+        };
+      }
+
       const newCart = insertCartSchema.parse({
         userId: userId,
         items: [item],
@@ -69,18 +77,31 @@ export async function addItemToCart(data: CartItem) {
       );
 
       if (existItem) {
-        if (product.stock < existItem.qty + 1) {
-          throw new Error("Not enough stock");
+        const newQuantity = existItem.qty + 1;
+
+        // Validate stock before updating
+        if (product.stock < newQuantity) {
+          return {
+            success: false,
+            message: `We don't have enough stock of "${product.name}". Available stock: ${product.stock}`,
+          };
         }
 
         (cart.items as CartItem[]).find(
           (x) => x.productId === item.productId
-        )!.qty = existItem.qty + 1;
+        )!.qty = newQuantity;
       } else {
-        if (product.stock < 1) throw new Error("Not enough stock");
+        // Validate stock before adding new item
+        if (product.stock < item.qty) {
+          return {
+            success: false,
+            message: `We don't have enough stock of "${product.name}". Available stock: ${product.stock}`,
+          };
+        }
 
         cart.items.push(item);
       }
+
       await prisma.cart.update({
         where: { id: cart.id },
         data: {

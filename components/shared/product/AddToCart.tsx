@@ -21,10 +21,11 @@ export default function AddToCart({
   const router = useRouter();
   const { toast } = useToast();
 
-  const [isPending, startTransition] = useTransition();
+  const [isAddPending, startAddTransition] = useTransition();
+  const [isRemovePending, startRemoveTransition] = useTransition();
 
   const handleAddToCart = async () => {
-    startTransition(async () => {
+    startAddTransition(async () => {
       const res = await addItemToCart(item);
       if (!res.success) {
         toast({
@@ -50,7 +51,7 @@ export default function AddToCart({
   };
 
   const handleRemoveFromCart = async () => {
-    startTransition(async () => {
+    startRemoveTransition(async () => {
       const res = await removeItemFromCart(item.productId);
 
       toast({
@@ -68,7 +69,7 @@ export default function AddToCart({
   return existItem ? (
     <div>
       <Button type="button" variant="outline" onClick={handleRemoveFromCart}>
-        {isPending ? (
+        {isRemovePending ? (
           <Loader className="w-4 h-4 animate-spin" />
         ) : (
           <Minus className="w-4 h-4" />
@@ -76,7 +77,7 @@ export default function AddToCart({
       </Button>
       <span className="px-2">{existItem.qty}</span>
       <Button type="button" variant="outline" onClick={handleAddToCart}>
-        {isPending ? (
+        {isAddPending ? (
           <Loader className="w-4 h-4 animate-spin" />
         ) : (
           <Plus className="w-4 h-4" />
@@ -90,7 +91,7 @@ export default function AddToCart({
       data-testid="add-to-cart-button"
       onClick={handleAddToCart}
     >
-      {isPending ? (
+      {isAddPending ? (
         <Loader className="w-4 h-4 animate-spin" />
       ) : (
         <Plus className="w-4 h-4" />

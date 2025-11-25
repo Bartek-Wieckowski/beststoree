@@ -1,12 +1,12 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { useTransition } from 'react';
-import { addItemToCart, removeItemFromCart } from '@/lib/actions/cart.actions';
-import { ArrowRight, Loader, Minus, Plus } from 'lucide-react';
-import { Cart, CartItem } from '@/types';
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useTransition } from "react";
+import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.actions";
+import { ArrowRight, Loader, Minus, Plus } from "lucide-react";
+import { Cart, CartItem } from "@/types";
+import Link from "next/link";
+import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -14,12 +14,12 @@ import {
   TableHeader,
   TableRow,
   TableCell,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { formatCurrency } from '@/lib/utils';
-import CONTENT_PAGE from '@/lib/content-page';
-import ROUTES from '@/lib/routes';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
+import CONTENT_PAGE from "@/lib/content-page";
+import ROUTES from "@/lib/routes";
 
 export default function CartTable({ cart }: { cart?: Cart }) {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
       <h1 className="py-4 h2-bold">{CONTENT_PAGE.CART_PAGE.shoppingCart}</h1>
       {!cart || cart.items.length === 0 ? (
         <div>
-          {CONTENT_PAGE.CART_PAGE.cartIsEmpty}{' '}
+          {CONTENT_PAGE.CART_PAGE.cartIsEmpty}{" "}
           <Link href={ROUTES.HOME}>{CONTENT_PAGE.CART_PAGE.goShopping}</Link>
         </div>
       ) : (
@@ -98,7 +98,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                   <Loader className="w-4 h-4 animate-spin" />
                 ) : (
                   <ArrowRight className="w-4 h-4" />
-                )}{' '}
+                )}{" "}
                 {CONTENT_PAGE.CART_PAGE.proceedToCheckout}
               </Button>
             </CardContent>
@@ -108,7 +108,6 @@ export default function CartTable({ cart }: { cart?: Cart }) {
     </>
   );
 }
-
 function AddButton({ item }: { item: CartItem }) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
@@ -124,7 +123,7 @@ function AddButton({ item }: { item: CartItem }) {
 
           if (!res.success) {
             toast({
-              variant: 'destructive',
+              variant: "destructive",
               description: res.message as string,
             });
           }
@@ -155,7 +154,7 @@ function RemoveButton({ item }: { item: CartItem }) {
 
           if (!res.success) {
             toast({
-              variant: 'destructive',
+              variant: "destructive",
               description: res.message as string,
             });
           }
