@@ -98,13 +98,18 @@ jobs:
           UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
           UPLOADTHING_APPID: ${{ secrets.UPLOADTHING_APPID }}
 
+      - name: Copy public folder for standalone mode
+        run: |
+          cp -r public .next/standalone/public
+
       - name: Run E2E tests (Cypress)
         run: |
-          npx start-server-and-test "node .next/standalone/server.js" http://localhost:3000 cypress:run
+          npx start-server-and-test "PORT=3000 node .next/standalone/server.js" http://localhost:3000 cypress:run
 
         env:
           DATABASE_URL: postgresql://testuser:testpass@localhost:5432/beststoree_test
           NODE_ENV: production
+          PORT: 3000
           NEXTAUTH_SECRET: test-secret-for-ci
           NEXTAUTH_URL: http://localhost:3000
           AUTH_TRUST_HOST: true
