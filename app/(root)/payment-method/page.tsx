@@ -4,6 +4,8 @@ import { getUserById } from "@/lib/actions/user.actions";
 import { Metadata } from "next";
 import PaymentMethodForm from "./PaymentMethodForm";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Select Payment Method",
 };

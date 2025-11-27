@@ -87,6 +87,9 @@ jobs:
           NEXTAUTH_URL: http://localhost:3000
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'test-encryption-key-for-ci-minimum-32-chars' }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_test_key_for_ci' }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY || 'sk_test_placeholder' }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET || 'whsec_placeholder' }}
           PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
           PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
           PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
@@ -104,6 +107,9 @@ jobs:
           NEXTAUTH_URL: http://localhost:3000
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'test-encryption-key-for-ci-minimum-32-chars' }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_test_key_for_ci' }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY || 'sk_test_placeholder' }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET || 'whsec_placeholder' }}
           PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
           PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
           PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}

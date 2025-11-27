@@ -13,6 +13,8 @@ import DealCountdown from "@/components/DealCountdown";
 //   title: 'Home',
 // }
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const products = await getLatestProducts();
   const featuredProducts = await getFeaturedProducts();

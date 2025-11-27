@@ -8,6 +8,8 @@ import CheckoutSteps from "@/components/shared/CheckoutSteps";
 import ROUTES from "@/lib/routes";
 import ShippingAddressForm from "./ShippingAddressForm";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Shipping Address",
 };

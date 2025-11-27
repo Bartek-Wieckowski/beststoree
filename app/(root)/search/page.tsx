@@ -34,6 +34,8 @@ const ratings = [4, 3, 2, 1];
 
 const sortOrders = ["newest", "lowest", "highest", "rating"];
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(props: {
   searchParams: Promise<{
     q: string;
