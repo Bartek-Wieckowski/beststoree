@@ -7,6 +7,7 @@ import { authConfig } from "./auth.config";
 import { cookies } from "next/headers";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   pages: {
     signIn: "/sign-in",
     error: "/sign-in",
