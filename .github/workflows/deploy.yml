@@ -144,6 +144,11 @@ jobs:
           node-version: "22"
           cache: "npm"
 
+      - name: Temporarily modify Prisma schema for npm ci (Linux only)
+        run: |
+          # Zmień binaryTargets na tylko native dla npm ci (aby uniknąć próby pobrania FreeBSD binary)
+          sed -i 's/binaryTargets = \["native", "freebsd14"\]/binaryTargets = ["native"]/' prisma/schema.prisma
+
       - name: Install dependencies
         run: |
           npm cache clean --force
@@ -153,6 +158,18 @@ jobs:
       - name: Modify SWC for FreeBSD support
         run: |
           sed -i 's/const shouldLoadWasmFallbackFirst = !disableWasmFallback && unsupportedPlatform && useWasmBinary || isWebContainer;/const shouldLoadWasmFallbackFirst = true;/' node_modules/next/dist/build/swc/index.js
+
+      - name: Restore Prisma schema with FreeBSD binary target
+        run: |
+          # Przywróć binaryTargets z freebsd14 przed generowaniem Prisma Client
+          sed -i 's/binaryTargets = \["native"\]/binaryTargets = ["native", "freebsd14"]/' prisma/schema.prisma
+
+      - name: Generate Prisma Client with FreeBSD binary
+        run: |
+          # Generuj Prisma Client z FreeBSD binary target (z ignorowaniem brakującego checksum)
+          PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1 npx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Build application (with production secrets)
         run: npm run build
@@ -222,13 +239,11 @@ jobs:
             tar -xzf deploy.tar.gz
             rm deploy.tar.gz
 
-            # Przywróć binaryTargets dla FreeBSD przed generowaniem na serwerze
-            sed -i '\''s/binaryTargets = \["native"\]/binaryTargets = ["native", "freebsd14"]/'\'' prisma/schema.prisma
-
             # Migracje produkcyjne
             DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma migrate deploy
-            # Generuj Prisma Client dla FreeBSD z ignorowaniem brakującego checksum
-            PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1 DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma generate
+            
+            # Prisma Client został już wygenerowany podczas buildowania z FreeBSD binary
+            # Jeśli potrzebne, można tutaj zregenerować, ale powinno działać z tym co jest w node_modules
 
             devil www restart ${{ secrets.DOMAIN_NAME }}
           '
