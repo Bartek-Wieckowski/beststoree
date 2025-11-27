@@ -16,6 +16,7 @@ import { Session } from "next-auth";
 import { describe, expect, it, vi, Mock, beforeEach } from "vitest";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/lib/routes";
+import { sendPurchaseReceipt } from "@/email";
 
 vi.mock("@/lib/actions/cart.actions", () => ({
   getMyCart: vi.fn(),
@@ -23,6 +24,10 @@ vi.mock("@/lib/actions/cart.actions", () => ({
 
 vi.mock("@/lib/actions/user.actions", () => ({
   getUserById: vi.fn(),
+}));
+
+vi.mock("@/email", () => ({
+  sendPurchaseReceipt: vi.fn().mockResolvedValue(undefined),
 }));
 
 describe("Order Actions", () => {
@@ -257,6 +262,14 @@ describe("Order Actions", () => {
         paidAt: new Date(),
         orderitems: mockOrder.orderitems,
         user: { name: "Test User", email: "test@example.com" },
+        shippingAddress: {
+          fullName: "Test User",
+          address: "123 Test St",
+          city: "Test City",
+          postalCode: "12345",
+          country: "Test Country",
+        },
+        paymentResult: null,
       };
 
       // Mock findFirst - pierwsze wywołanie (sprawdzenie zamówienia)
@@ -288,6 +301,13 @@ describe("Order Actions", () => {
       });
       expect(prisma.$transaction).toHaveBeenCalled();
       expect(revalidatePath).toHaveBeenCalledWith(ROUTES.ORDER("order1"));
+      expect(sendPurchaseReceipt).toHaveBeenCalledWith({
+        order: expect.objectContaining({
+          id: "order1",
+          user: { name: "Test User", email: "test@example.com" },
+          shippingAddress: mockUpdatedOrder.shippingAddress,
+        }),
+      });
     });
 
     it("should return error when order does not exist", async () => {

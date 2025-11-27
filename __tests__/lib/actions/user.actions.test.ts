@@ -130,12 +130,24 @@ describe("User Actions", () => {
       formData.set("password", "password");
       formData.set("confirmPassword", "password");
 
-      vi.mocked(signIn).mockRejectedValue(new Error("Redirect error"));
+      const redirectError = new Error("Redirect error");
+      (prisma.user.create as Mock).mockResolvedValue({
+        id: "user-123",
+        name: "test",
+        email: "test@example.com",
+        password: "hashed-password",
+        image: null,
+        address: {},
+        emailVerified: null,
+        role: "user",
+        paymentMethod: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      vi.mocked(signIn).mockRejectedValue(redirectError);
       vi.mocked(isRedirectError).mockReturnValue(true);
 
-      await expect(signUpUser(null, formData)).rejects.toThrow(
-        new Error("Redirect error")
-      );
+      await expect(signUpUser(null, formData)).rejects.toThrow(redirectError);
     });
   });
 

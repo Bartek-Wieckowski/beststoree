@@ -30,6 +30,13 @@ jobs:
         run: npm run test -- --run
         env:
           NODE_ENV: test
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'test-encryption-key-for-ci-minimum-32-chars' }}
+          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_test_key_for_ci' }}
+          NEXTAUTH_SECRET: test-secret-for-ci
+          NEXTAUTH_URL: http://localhost:3000
 
   test-e2e:
     runs-on: ubuntu-latest
@@ -78,6 +85,8 @@ jobs:
           NODE_ENV: production
           NEXTAUTH_SECRET: test-secret-for-ci
           NEXTAUTH_URL: http://localhost:3000
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'test-encryption-key-for-ci-minimum-32-chars' }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_test_key_for_ci' }}
           PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
           PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
           PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
@@ -93,6 +102,8 @@ jobs:
           NODE_ENV: production
           NEXTAUTH_SECRET: test-secret-for-ci
           NEXTAUTH_URL: http://localhost:3000
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'test-encryption-key-for-ci-minimum-32-chars' }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_test_key_for_ci' }}
           PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
           PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
           PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
@@ -138,7 +149,6 @@ jobs:
 
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          NEXTAUTH_URL_INTERNAL: ${{ secrets.NEXTAUTH_URL_INTERNAL }}
 
           PAYMENT_METHODS: ${{ secrets.PAYMENT_METHODS }}
           DEFAULT_PAYMENT_METHOD: ${{ secrets.DEFAULT_PAYMENT_METHOD }}
