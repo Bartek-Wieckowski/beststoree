@@ -1,0 +1,200 @@
+name: Deploy to Hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          npm cache clean --force
+          npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run unit tests (Vitest)
+        run: npm run test -- --run
+        env:
+          NODE_ENV: test
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: beststoree_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          npm cache clean --force
+          npm ci
+
+      - name: Setup test database
+        run: |
+          # Migracje
+          DATABASE_URL="postgresql://testuser:testpass@localhost:5432/beststoree_test" npx prisma migrate deploy
+          DATABASE_URL="postgresql://testuser:testpass@localhost:5432/beststoree_test" npx prisma generate
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/beststoree_test
+
+      - name: Build application
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/beststoree_test
+          NODE_ENV: production
+          NEXTAUTH_SECRET: test-secret-for-ci
+          NEXTAUTH_URL: http://localhost:3000
+          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
+          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
+          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
+          UPLOADTHING_APPID: ${{ secrets.UPLOADTHING_APPID }}
+
+      - name: Run E2E tests (Cypress)
+        run: |
+          npx start-server-and-test start http://localhost:3000 cypress:run
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/beststoree_test
+          NODE_ENV: production
+          NEXTAUTH_SECRET: test-secret-for-ci
+          NEXTAUTH_URL: http://localhost:3000
+          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
+          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
+          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
+          UPLOADTHING_APPID: ${{ secrets.UPLOADTHING_APPID }}
+
+  deploy:
+    needs: [test-unit, test-e2e]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          npm cache clean --force
+          npm ci
+          npm install @next/swc-wasm-nodejs
+
+      - name: Modify SWC for FreeBSD support
+        run: |
+          sed -i 's/const shouldLoadWasmFallbackFirst = !disableWasmFallback && unsupportedPlatform && useWasmBinary || isWebContainer;/const shouldLoadWasmFallbackFirst = true;/' node_modules/next/dist/build/swc/index.js
+
+      - name: Build application (with production secrets)
+        run: npm run build
+        env:
+          NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+          NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
+          NEXT_PUBLIC_APP_DESCRIPTION: ${{ secrets.NEXT_PUBLIC_APP_DESCRIPTION }}
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_URL_INTERNAL: ${{ secrets.NEXTAUTH_URL_INTERNAL }}
+
+          PAYMENT_METHODS: ${{ secrets.PAYMENT_METHODS }}
+          DEFAULT_PAYMENT_METHOD: ${{ secrets.DEFAULT_PAYMENT_METHOD }}
+
+          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
+
+          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
+          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
+          UPLOADTHING_APPID: ${{ secrets.UPLOADTHING_APPID }}
+
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.HOST_SSH_KEY_P }}
+          known_hosts: unnecessary
+          if_key_exists: replace
+
+      - name: Deploy to Server
+        run: |
+          tar -czf deploy.tar.gz \
+            .next \
+            public \
+            node_modules \
+            package.json \
+            package-lock.json \
+            next.config.ts \
+            prisma \
+            auth.ts \
+            auth.config.ts \
+            middleware.ts \
+            tailwind.config.ts \
+            postcss.config.mjs \
+            tsconfig.json \
+            components.json
+
+          scp -o StrictHostKeyChecking=no deploy.tar.gz \
+            ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST }}:~/domains/${{ secrets.DOMAIN_NAME }}/public_nodejs/
+
+          ssh -o StrictHostKeyChecking=no ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST }} '
+            cd ~/domains/${{ secrets.DOMAIN_NAME }}/public_nodejs/
+
+            tar -xzf deploy.tar.gz
+            rm deploy.tar.gz
+
+            # Migracje produkcyjne
+            DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma migrate deploy
+            DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma generate
+
+            devil www restart ${{ secrets.DOMAIN_NAME }}
+          '
