@@ -159,18 +159,6 @@ jobs:
         run: |
           sed -i 's/const shouldLoadWasmFallbackFirst = !disableWasmFallback && unsupportedPlatform && useWasmBinary || isWebContainer;/const shouldLoadWasmFallbackFirst = true;/' node_modules/next/dist/build/swc/index.js
 
-      - name: Restore Prisma schema with FreeBSD binary target
-        run: |
-          # Przywróć binaryTargets z freebsd14 przed generowaniem Prisma Client
-          sed -i 's/binaryTargets = \["native"\]/binaryTargets = ["native", "freebsd14"]/' prisma/schema.prisma
-
-      - name: Generate Prisma Client with FreeBSD binary
-        run: |
-          # Generuj Prisma Client z FreeBSD binary target (z ignorowaniem brakującego checksum)
-          PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1 npx prisma generate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
       - name: Build application (with production secrets)
         run: npm run build
         env:
@@ -242,8 +230,10 @@ jobs:
             # Migracje produkcyjne
             DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma migrate deploy
             
-            # Prisma Client został już wygenerowany podczas buildowania z FreeBSD binary
-            # Jeśli potrzebne, można tutaj zregenerować, ale powinno działać z tym co jest w node_modules
+            # Prisma Client został wygenerowany podczas buildowania z native binary (Linux)
+            # FreeBSD może mieć Linux compatibility layer, więc native binary może działać
+            # Jeśli nie działa, trzeba będzie skompilować binary lokalnie na FreeBSD
+            # lub użyć innego rozwiązania (np. Docker z Linux)
 
             devil www restart ${{ secrets.DOMAIN_NAME }}
           '
