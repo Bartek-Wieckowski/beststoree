@@ -2,6 +2,7 @@ import { defineConfig } from "cypress";
 import { PrismaClient } from "@prisma/client";
 import { hash } from "./lib/encrypt";
 import { UTApi } from "uploadthing/server";
+import sampleData from "./db/sample-data";
 
 const prisma = new PrismaClient();
 
@@ -52,6 +53,11 @@ export default defineConfig({
           return null;
         },
         async "db:seed"() {
+          // Seed products from sample data
+          await prisma.product.deleteMany();
+          await prisma.product.createMany({
+            data: sampleData.products,
+          });
           return null;
         },
         async "db:cleanup"() {
@@ -407,5 +413,11 @@ export default defineConfig({
       });
     },
     baseUrl: "http://localhost:3000/",
+    defaultCommandTimeout: 10000,
+    requestTimeout: 10000,
+    responseTimeout: 10000,
+    viewportWidth: 1280,
+    viewportHeight: 720,
+    chromeWebSecurity: false,
   },
 });
