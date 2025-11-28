@@ -50,3 +50,28 @@ jobs:
       - name: Trigger Vercel Deploy Hook
         run: |
           curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
+
+  # INSTRUKCJA: Aby Vercel nie budował automatycznie przy pushu na main:
+  #
+  # 1. Przejdź do Vercel Dashboard -> Twój projekt -> Settings -> Git
+  # 2. W sekcji "Ignored Build Step" dodaj następujący skrypt:
+  #
+  #    if [[ "$VERCEL_GIT_COMMIT_REF" == "main" ]]; then
+  #      # Blokuj automatyczne buildy dla main - build będzie wywoływany przez Deploy Hook
+  #      echo "🛑 - Automatyczny build zablokowany dla main branch"
+  #      exit 0;
+  #    else
+  #      # Pozwól na automatyczne buildy dla innych branchy (preview deployments)
+  #      echo "✅ - Build może się wykonać (preview deployment)"
+  #      exit 1;
+  #    fi
+  #
+  # 3. Upewnij się, że masz ustawiony VERCEL_DEPLOY_HOOK w GitHub Secrets:
+  #    - Vercel Dashboard -> Project Settings -> Git -> Deploy Hooks
+  #    - Utwórz nowy hook dla production
+  #    - Skopiuj URL i dodaj jako secret VERCEL_DEPLOY_HOOK w GitHub
+  #
+  # Wtedy:
+  # - Push na main -> GitHub Actions uruchamia testy
+  # - Jeśli testy przejdą -> wywołuje Deploy Hook -> Vercel buduje i deployuje
+  # - Jeśli testy nie przejdą -> Deploy Hook się nie wywoła -> brak deployu
