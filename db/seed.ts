@@ -1,6 +1,6 @@
-import { prisma } from '@/lib/prisma';
-import sampleData from './sample-data';
-import { hash } from '@/lib/encrypt';
+import { prisma } from "@/lib/prisma";
+import sampleData from "./sample-data";
+import { hash } from "@/lib/encrypt";
 
 export async function main() {
   try {
@@ -27,9 +27,9 @@ export async function main() {
     }
     await prisma.user.createMany({ data: users });
 
-    console.log('Database seeded successfully');
+    console.log("Database seeded successfully");
   } catch (error) {
-    console.error('Error seeding database:', error);
+    console.error("Error seeding database:", error);
     throw error;
   } finally {
     await prisma.$disconnect();

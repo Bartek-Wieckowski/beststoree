@@ -1,4 +1,4 @@
-name: Deploy to Hosting
+name: Test and Deploy to Vercel
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  test-unit:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -19,25 +20,56 @@ jobs:
           node-version: "22"
           cache: "npm"
 
-      - name: Install dependencies (without Prisma generate)
+      - name: Install dependencies
         run: |
           npm cache clean --force
-          npm ci --ignore-scripts
-          npm install @next/swc-wasm-nodejs
+          npm ci
 
-      - name: Modify SWC for FreeBSD support
-        run: |
-          sed -i 's/const shouldLoadWasmFallbackFirst = !disableWasmFallback && unsupportedPlatform && useWasmBinary || isWebContainer;/const shouldLoadWasmFallbackFirst = true;/' node_modules/next/dist/build/swc/index.js
+      - name: Run linter
+        run: npm run lint
 
-      - name: Build application WITHOUT Prisma Client (will be generated on server)
-        run: |
-          # Stwórz mock Prisma Client żeby build przeszedł
-          mkdir -p node_modules/.prisma/client
-          echo "module.exports = { PrismaClient: class PrismaClient {} }" > node_modules/.prisma/client/index.js
-
-          npm run build
+      - name: Run unit tests (Vitest)
+        run: npm run test -- --run
         env:
-          NODE_ENV: production
+          NODE_ENV: test
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY || 'test-encryption-key-for-ci-minimum-32-chars' }}
+          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_test_key_for_ci' }}
+          NEXTAUTH_SECRET: test-secret-for-ci
+          NEXTAUTH_URL: http://localhost:3000
+
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: [test-unit]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
           NEXT_PUBLIC_APP_DESCRIPTION: ${{ secrets.NEXT_PUBLIC_APP_DESCRIPTION }}
@@ -60,48 +92,8 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
 
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.HOST_SSH_KEY_P }}
-          known_hosts: unnecessary
-          if_key_exists: replace
-
-      - name: Deploy to Server
-        run: |
-          tar -czf deploy.tar.gz \
-            .next \
-            public \
-            package.json \
-            package-lock.json \
-            next.config.ts \
-            prisma \
-            auth.ts \
-            auth.config.ts \
-            middleware.ts \
-            tailwind.config.ts \
-            postcss.config.mjs \
-            tsconfig.json \
-            components.json
-
-          scp -o StrictHostKeyChecking=no deploy.tar.gz \
-            ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST }}:~/domains/${{ secrets.DOMAIN_NAME }}/public_nodejs/
-
-          ssh -o StrictHostKeyChecking=no ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST }} '
-            cd ~/domains/${{ secrets.DOMAIN_NAME }}/public_nodejs/
-
-            tar -xzf deploy.tar.gz
-            rm deploy.tar.gz
-
-            # Zainstaluj zależności produkcyjne
-            npm ci --production
-            npm install @next/swc-wasm-nodejs
-
-            # TUTAJ Prisma wygeneruje odpowiednią binarkę dla FreeBSD
-            npx prisma generate
-
-            # Migracje produkcyjne
-            DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma migrate deploy
-
-            devil www restart ${{ secrets.DOMAIN_NAME }}
-          '
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
