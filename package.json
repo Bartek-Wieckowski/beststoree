@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:test": "AUTH_URL=http://localhost:3000 NEXTAUTH_URL=http://localhost:3000 NEXT_PUBLIC_SERVER_URL=http://localhost:3000 AUTH_TRUST_HOST=true next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

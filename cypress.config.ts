@@ -413,11 +413,5 @@ export default defineConfig({
       });
     },
     baseUrl: "http://localhost:3000/",
-    defaultCommandTimeout: 10000,
-    requestTimeout: 10000,
-    responseTimeout: 10000,
-    viewportWidth: 1280,
-    viewportHeight: 720,
-    chromeWebSecurity: false,
   },
 });

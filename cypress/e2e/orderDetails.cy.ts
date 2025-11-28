@@ -28,7 +28,11 @@ describe("Order Details Page - PayPal Payment", () => {
       cy.get('[data-testid="add-to-cart-button"]').click();
 
       cy.visit("/cart");
-      cy.get('[data-testid="checkout-button"]').click();
+      
+      // Wait for cart page to load and verify checkout button is available
+      cy.url().should("include", "/cart");
+      cy.get("table", { timeout: 10000 }).should("be.visible");
+      cy.get('[data-testid="checkout-button"]', { timeout: 10000 }).should("be.visible").click();
 
       cy.url().should("include", "/shipping-address");
 

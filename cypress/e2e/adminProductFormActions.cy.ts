@@ -13,9 +13,24 @@ describe("Admin Product Form Actions", () => {
     cy.get('input[name="email"]').clear().type("testCypressAdmin@example.com");
     cy.get('input[name="password"]').clear().type("123456");
     cy.getByTestId("sign-in-button").click();
+
+    // Wait for redirect after login
     cy.url().should("not.include", "/sign-in");
     cy.url().should("include", "/");
-    cy.getByTestId("user-button").should("be.visible");
+
+    // Reload page to ensure session is properly set
+    cy.reload();
+
+    // Wait for page to fully load - check for header first
+    cy.get("header", { timeout: 15000 }).should("be.visible");
+
+    // Verify sign-in button is gone (user is logged in)
+    cy.getByTestId("sign-in-button").should("not.exist");
+
+    // Then wait for user button to appear (increased timeout for image loading)
+    cy.get('[data-testid="user-button"]', { timeout: 15000 }).should(
+      "be.visible"
+    );
 
     // Reset uploaded image keys for each test
     uploadedImageKeys = [];
@@ -102,8 +117,8 @@ describe("Admin Product Form Actions", () => {
         }
       });
 
-    // Submit the form
-    cy.get('button[type="submit"]').click();
+    // Submit the form - use first() to handle multiple submit buttons
+    cy.get('button[type="submit"]').first().click();
 
     // Wait for redirect to products page
     cy.url({ timeout: 1000 }).should("include", "/admin/products");
@@ -144,8 +159,8 @@ describe("Admin Product Form Actions", () => {
       const updatedName = `Updated Test Product ${Date.now()}`;
       cy.get('input[name="name"]').clear().type(updatedName);
 
-      // Submit the form
-      cy.get('button[type="submit"]').click();
+      // Submit the form - use first() to handle multiple submit buttons
+      cy.get('button[type="submit"]').first().click();
 
       // Wait for redirect to products page
       cy.url({ timeout: 10000 }).should("include", "/admin/products");

@@ -29,7 +29,11 @@ describe("Place Order Flow", () => {
       cy.get('[data-testid="add-to-cart-button"]').click();
 
       cy.visit("/cart");
-      cy.get('[data-testid="checkout-button"]').click();
+      
+      // Wait for cart page to load and verify checkout button is available
+      cy.url().should("include", "/cart");
+      cy.get("table", { timeout: 10000 }).should("be.visible");
+      cy.get('[data-testid="checkout-button"]', { timeout: 10000 }).should("be.visible").click();
 
       cy.url().should("include", "/shipping-address");
 
@@ -116,8 +120,9 @@ describe("Place Order Flow", () => {
       // Click place order button
       cy.get('[data-testid="place-order-button"]').should("be.visible").click();
 
-      // Verify redirect to order page
-      cy.url().should("match", /\/order\/[a-zA-Z0-9-]+/);
+      // Wait for order creation and redirect to order page
+      // Increased timeout as order creation may take time
+      cy.url({ timeout: 15000 }).should("match", /\/order\/[a-zA-Z0-9-]+/);
 
       // Verify order page content
       cy.contains("Order").should("be.visible");

@@ -14,7 +14,11 @@ describe("Cart Operations", () => {
     cy.getAvailableProductCard().click();
     cy.get('[data-testid="add-to-cart-button"]').click();
     cy.get('[data-testid="cart-button"]').click();
-    cy.get("table").should("contain", "Quantity");
+    
+    // Wait for cart page to load and table to appear
+    cy.url().should("include", "/cart");
+    cy.get("table", { timeout: 10000 }).should("be.visible").should("contain", "Quantity");
+    
     cy.get('[data-testid="increase-quantity"]').click();
     cy.get('[data-testid="quantity"]').should("contain", "2");
   });
@@ -24,10 +28,14 @@ describe("Cart Operations", () => {
       cy.getAvailableProductCard().click();
       cy.get('[data-testid="add-to-cart-button"]').click();
       cy.visit("/cart");
+      
+      // Wait for cart page to load and verify items are in cart
+      cy.url().should("include", "/cart");
+      cy.get("table", { timeout: 10000 }).should("be.visible");
     });
 
     it("should redirect to login when user is not authenticated", () => {
-      cy.get('[data-testid="checkout-button"]').click();
+      cy.get('[data-testid="checkout-button"]', { timeout: 10000 }).should("be.visible").click();
       cy.url().should("include", "/sign-in");
     });
 
