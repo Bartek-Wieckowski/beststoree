@@ -3,8 +3,18 @@ import { PrismaClient } from "@prisma/client";
 import { hash } from "./lib/encrypt";
 import { UTApi } from "uploadthing/server";
 import sampleData from "./db/sample-data";
+import { config } from "dotenv";
+import { resolve } from "path";
 
-const prisma = new PrismaClient();
+// Load .env.local for Cypress if DATABASE_URL is not set and file exists
+import { existsSync } from "fs";
+
+if (!process.env.DATABASE_URL && existsSync(resolve(__dirname, ".env.local"))) {
+  const result = config({ path: resolve(__dirname, ".env.local") });
+  if (result.error) {
+    console.warn("Warning: Could not load .env.local:", result.error);
+  }
+}
 
 export default defineConfig({
   e2e: {
@@ -14,6 +24,17 @@ export default defineConfig({
     responseTimeout: 15000,
     pageLoadTimeout: 30000,
     setupNodeEvents(on) {
+      // Ensure env vars are loaded before creating Prisma Client (only if .env.local exists)
+      if (
+        !process.env.DATABASE_URL &&
+        existsSync(resolve(__dirname, ".env.local"))
+      ) {
+        config({ path: resolve(__dirname, ".env.local") });
+      }
+
+      // Create Prisma Client after env vars are loaded
+      const prisma = new PrismaClient();
+
       on("task", {
         async "db:reset"() {
           // Delete carts with null userId

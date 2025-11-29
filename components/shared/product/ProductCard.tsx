@@ -8,12 +8,16 @@ import { Product } from "@/types";
 import ProductRating from "./ProductRating";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const firstImage = product.images?.find(img => img && img.trim() !== '');
+  
+  if (!firstImage) return null;
+
   return (
     <Card className="w-full max-w-sm" data-testid="product-card">
       <CardHeader className="p-0 items-center">
         <Link href={ROUTES.PRODUCT(product.slug)}>
           <Image
-            src={product.images[0]}
+            src={firstImage}
             alt={product.name}
             height={300}
             width={300}

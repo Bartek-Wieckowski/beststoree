@@ -10,7 +10,7 @@ describe("ProductCarousel()", () => {
     .filter((product) => product.isFeatured && product.banner)
     .map((product) => ({
       ...product,
-      banner: `/${product.banner}`,
+      banner: product.banner?.startsWith('/') ? product.banner : `/${product.banner}`,
     }));
   const testProducts = convertTestProductArray(featuredProducts);
 
