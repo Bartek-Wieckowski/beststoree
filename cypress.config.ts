@@ -10,10 +10,7 @@ import { resolve } from "path";
 import { existsSync } from "fs";
 
 if (!process.env.DATABASE_URL && existsSync(resolve(__dirname, ".env.local"))) {
-  const result = config({ path: resolve(__dirname, ".env.local") });
-  if (result.error) {
-    console.warn("Warning: Could not load .env.local:", result.error);
-  }
+  config({ path: resolve(__dirname, ".env.local") });
 }
 
 export default defineConfig({
@@ -24,15 +21,7 @@ export default defineConfig({
     responseTimeout: 15000,
     pageLoadTimeout: 30000,
     setupNodeEvents(on) {
-      // Ensure env vars are loaded before creating Prisma Client (only if .env.local exists)
-      if (
-        !process.env.DATABASE_URL &&
-        existsSync(resolve(__dirname, ".env.local"))
-      ) {
-        config({ path: resolve(__dirname, ".env.local") });
-      }
-
-      // Create Prisma Client after env vars are loaded
+      // Create Prisma Client - DATABASE_URL should be set via env vars (CI) or .env.local (local)
       const prisma = new PrismaClient();
 
       on("task", {
