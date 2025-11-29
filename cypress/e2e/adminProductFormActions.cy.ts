@@ -102,8 +102,8 @@ describe("Admin Product Form Actions", () => {
     // Wait for page to load and URL to be correct
     cy.url({ timeout: 15000 }).should("include", "/admin/products");
 
-    // Wait for page content to load (header or table)
-    cy.get("header", { timeout: 10000 }).should("be.visible");
+    // Wait for page content to load - check for h1 title or create button
+    cy.get("h1", { timeout: 10000 }).should("be.visible");
 
     // Wait for create product button to be visible and clickable
     cy.get('[data-testid="create-product-button"]', { timeout: 10000 })
