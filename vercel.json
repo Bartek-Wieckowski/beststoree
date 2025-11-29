@@ -1,8 +1,7 @@
 {
   "git": {
     "deploymentEnabled": {
-      "main": false,
-      "run-test-e2e-prod": false
+      "main": false
     }
   }
 }
