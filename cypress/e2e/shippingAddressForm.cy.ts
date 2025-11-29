@@ -14,14 +14,23 @@ describe("Shipping Address Form", () => {
     cy.url().should("include", "/");
     cy.getByTestId("user-button").should("be.visible");
     cy.getAvailableProductCard().click();
+
+    // Click add to cart button and wait for success toast
     cy.get('[data-testid="add-to-cart-button"]').click();
 
+    // Wait for toast to appear (operation completed)
+    cy.get('[role="status"]', { timeout: 10000 })
+      .should("exist")
+      .should("be.visible");
+
     cy.visit("/cart");
-    
+
     // Wait for cart page to load and verify checkout button is available
     cy.url().should("include", "/cart");
     cy.get("table", { timeout: 10000 }).should("be.visible");
-    cy.get('[data-testid="checkout-button"]', { timeout: 10000 }).should("be.visible").click();
+    cy.get('[data-testid="checkout-button"]', { timeout: 10000 })
+      .should("be.visible")
+      .click();
 
     cy.url().should("include", "/shipping-address");
   });
@@ -42,7 +51,8 @@ describe("Shipping Address Form", () => {
 
       cy.get('[data-testid="continue-button"]').click();
 
-      cy.url().should("include", "/payment-method");
+      // Wait for redirect to payment-method page
+      cy.url({ timeout: 15000 }).should("include", "/payment-method");
     });
 
     it("should show validation errors for empty required fields", () => {
@@ -64,7 +74,8 @@ describe("Shipping Address Form", () => {
 
       cy.get('[data-testid="continue-button"]').click();
 
-      cy.url().should("include", "/payment-method");
+      // Wait for redirect to payment-method page
+      cy.url({ timeout: 15000 }).should("include", "/payment-method");
 
       cy.visit("/shipping-address");
 

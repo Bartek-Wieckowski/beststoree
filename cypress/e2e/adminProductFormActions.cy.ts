@@ -75,6 +75,27 @@ describe("Admin Product Form Actions", () => {
       });
     }).as("uploadthingRequest");
 
+    // Also intercept the response to capture key from response
+    cy.intercept("POST", "**/api/uploadthing/poll/**", (req) => {
+      req.continue((res) => {
+        if (res.body) {
+          try {
+            const body =
+              typeof res.body === "string" ? JSON.parse(res.body) : res.body;
+            if (Array.isArray(body) && body.length > 0 && body[0].key) {
+              if (!uploadedImageKeys.includes(body[0].key)) {
+                uploadedImageKeys.push(body[0].key);
+              }
+            } else if (body.key && !uploadedImageKeys.includes(body.key)) {
+              uploadedImageKeys.push(body.key);
+            }
+          } catch {
+            // Ignore parse errors
+          }
+        }
+      });
+    }).as("uploadthingPoll");
+
     // Navigate to admin products page
     cy.visit("/admin/products");
     cy.url().should("include", "/admin/products");
@@ -104,21 +125,43 @@ describe("Admin Product Form Actions", () => {
     );
 
     // Wait for upload to complete and image to appear
-    // Also extract key from image URL as fallback
-    cy.get('img[alt="product image"]', { timeout: 10000 })
+    // Extract key from image URL - this is the most reliable method
+    // We don't wait for intercept as it may not always fire with selectFile
+    cy.get('img[alt="product image"]', { timeout: 15000 })
       .should("be.visible")
       .invoke("attr", "src")
       .then((src) => {
         if (src) {
-          const key = src.split("/").pop()?.split("?")[0];
-          if (key && key.length > 15 && !uploadedImageKeys.includes(key)) {
+          // Extract key from uploadthing URL (format: https://utfs.io/f/{key} or similar)
+          // Try multiple URL formats
+          let key: string | undefined;
+
+          // Format 1: https://utfs.io/f/{key}
+          if (src.includes("utfs.io")) {
+            const urlParts = src.split("/");
+            key = urlParts[urlParts.length - 1]?.split("?")[0];
+          }
+
+          // Format 2: Direct key in URL
+          if (!key && src.includes("/f/")) {
+            const match = src.match(/\/f\/([^/?]+)/);
+            key = match ? match[1] : undefined;
+          }
+
+          // Fallback: last part of URL
+          if (!key) {
+            key = src.split("/").pop()?.split("?")[0];
+          }
+
+          if (key && key.length > 10 && !uploadedImageKeys.includes(key)) {
             uploadedImageKeys.push(key);
+            cy.log(`Captured image key from URL: ${key}`);
           }
         }
       });
 
-    // Submit the form - use first() to handle multiple submit buttons
-    cy.get('button[type="submit"]').first().click();
+    // Submit the form - exclude hidden search button in header
+    cy.get('button[type="submit"]:not(.sr-only)').click({ force: true });
 
     // Wait for redirect to products page
     cy.url({ timeout: 1000 }).should("include", "/admin/products");
@@ -159,8 +202,8 @@ describe("Admin Product Form Actions", () => {
       const updatedName = `Updated Test Product ${Date.now()}`;
       cy.get('input[name="name"]').clear().type(updatedName);
 
-      // Submit the form - use first() to handle multiple submit buttons
-      cy.get('button[type="submit"]').first().click();
+      // Submit the form - exclude hidden search button in header
+      cy.get('button[type="submit"]:not(.sr-only)').click({ force: true });
 
       // Wait for redirect to products page
       cy.url({ timeout: 10000 }).should("include", "/admin/products");

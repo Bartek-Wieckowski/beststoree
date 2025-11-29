@@ -12,30 +12,56 @@ describe("Cart Operations", () => {
 
   it("should add product to cart and update quantity", () => {
     cy.getAvailableProductCard().click();
+
+    // Click add to cart button and wait for success toast
     cy.get('[data-testid="add-to-cart-button"]').click();
+
+    // Wait for toast to appear (operation completed)
+    cy.get('[role="status"]', { timeout: 10000 })
+      .should("exist")
+      .should("be.visible");
+
     cy.get('[data-testid="cart-button"]').click();
-    
+
     // Wait for cart page to load and table to appear
     cy.url().should("include", "/cart");
-    cy.get("table", { timeout: 10000 }).should("be.visible").should("contain", "Quantity");
-    
+    cy.get("table", { timeout: 10000 })
+      .should("be.visible")
+      .should("contain", "Quantity");
+
     cy.get('[data-testid="increase-quantity"]').click();
+
+    // Wait for toast to appear (quantity update completed)
+    cy.get('[role="status"]', { timeout: 10000 })
+      .should("exist")
+      .should("be.visible");
+
     cy.get('[data-testid="quantity"]').should("contain", "2");
   });
 
   describe("Checkout Process", () => {
     beforeEach(() => {
       cy.getAvailableProductCard().click();
+
+      // Click add to cart button and wait for success toast
       cy.get('[data-testid="add-to-cart-button"]').click();
+
+      // Wait for toast to appear (operation completed)
+      cy.get('[role="status"]', { timeout: 10000 })
+        .should("exist")
+        .should("be.visible");
+
       cy.visit("/cart");
-      
+
       // Wait for cart page to load and verify items are in cart
       cy.url().should("include", "/cart");
       cy.get("table", { timeout: 10000 }).should("be.visible");
     });
 
     it("should redirect to login when user is not authenticated", () => {
-      cy.get('[data-testid="checkout-button"]', { timeout: 10000 }).should("be.visible").click();
+      cy.get('[data-testid="checkout-button"]', { timeout: 10000 })
+        .should("be.visible")
+        .click();
       cy.url().should("include", "/sign-in");
     });
 
