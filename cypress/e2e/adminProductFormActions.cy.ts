@@ -98,11 +98,26 @@ describe("Admin Product Form Actions", () => {
 
     // Navigate to admin products page
     cy.visit("/admin/products");
-    cy.url().should("include", "/admin/products");
+
+    // Wait for page to load and URL to be correct
+    cy.url({ timeout: 15000 }).should("include", "/admin/products");
+
+    // Wait for page content to load (header or table)
+    cy.get("header", { timeout: 10000 }).should("be.visible");
+
+    // Wait for create product button to be visible and clickable
+    cy.get('[data-testid="create-product-button"]', { timeout: 10000 })
+      .should("be.visible")
+      .should("not.be.disabled");
 
     // Click create product button
     cy.get('[data-testid="create-product-button"]').click();
-    cy.url().should("include", "/admin/products/create");
+
+    // Wait for redirect to create page with increased timeout for CI
+    cy.url({ timeout: 15000 }).should("include", "/admin/products/create");
+
+    // Wait for create page to load
+    cy.get("h2", { timeout: 10000 }).should("be.visible");
 
     // Fill in the form
     const productName = `Test Product ${Date.now()}`;

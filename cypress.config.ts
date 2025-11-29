@@ -8,6 +8,11 @@ const prisma = new PrismaClient();
 
 export default defineConfig({
   e2e: {
+    // Increase default timeouts for CI environments
+    defaultCommandTimeout: 10000,
+    requestTimeout: 15000,
+    responseTimeout: 15000,
+    pageLoadTimeout: 30000,
     setupNodeEvents(on) {
       on("task", {
         async "db:reset"() {
