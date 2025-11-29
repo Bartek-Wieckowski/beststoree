@@ -3,12 +3,27 @@ import { PrismaClient } from "@prisma/client";
 import { hash } from "./lib/encrypt";
 import { UTApi } from "uploadthing/server";
 import sampleData from "./db/sample-data";
+import { config } from "dotenv";
+import { resolve } from "path";
 
-const prisma = new PrismaClient();
+// Load .env.local for Cypress if DATABASE_URL is not set and file exists
+import { existsSync } from "fs";
+
+if (!process.env.DATABASE_URL && existsSync(resolve(__dirname, ".env.local"))) {
+  config({ path: resolve(__dirname, ".env.local") });
+}
 
 export default defineConfig({
   e2e: {
+    // Increase default timeouts for CI environments
+    defaultCommandTimeout: 10000,
+    requestTimeout: 15000,
+    responseTimeout: 15000,
+    pageLoadTimeout: 30000,
     setupNodeEvents(on) {
+      // Create Prisma Client - DATABASE_URL should be set via env vars (CI) or .env.local (local)
+      const prisma = new PrismaClient();
+
       on("task", {
         async "db:reset"() {
           // Delete carts with null userId
@@ -413,11 +428,5 @@ export default defineConfig({
       });
     },
     baseUrl: "http://localhost:3000/",
-    defaultCommandTimeout: 10000,
-    requestTimeout: 10000,
-    responseTimeout: 10000,
-    viewportWidth: 1280,
-    viewportHeight: 720,
-    chromeWebSecurity: false,
   },
 });

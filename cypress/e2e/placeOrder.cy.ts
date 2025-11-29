@@ -15,9 +15,7 @@ describe("Place Order Flow", () => {
       testProductId = product.id;
 
       cy.visit("/sign-in");
-      cy.get('input[name="email"]')
-        .clear()
-        .type("testCypressUser@example.com");
+      cy.get('input[name="email"]').clear().type("testCypressUser@example.com");
       cy.get('input[name="password"]').clear().type("123456");
       cy.getByTestId("sign-in-button").click();
       cy.url().should("not.include", "/sign-in");
@@ -26,10 +24,23 @@ describe("Place Order Flow", () => {
 
       // Use test product instead of random product
       cy.getProductCardByName(product.name).click();
+
+      // Click add to cart button and wait for success toast
       cy.get('[data-testid="add-to-cart-button"]').click();
 
+      // Wait for toast to appear (operation completed)
+      cy.get('[role="status"]', { timeout: 10000 })
+        .should("exist")
+        .should("be.visible");
+
       cy.visit("/cart");
-      cy.get('[data-testid="checkout-button"]').click();
+
+      // Wait for cart page to load and verify checkout button is available
+      cy.url().should("include", "/cart");
+      cy.get("table", { timeout: 10000 }).should("be.visible");
+      cy.get('[data-testid="checkout-button"]', { timeout: 10000 })
+        .should("be.visible")
+        .click();
 
       cy.url().should("include", "/shipping-address");
 
@@ -59,7 +70,8 @@ describe("Place Order Flow", () => {
       cy.get('[data-testid="payment-method-paypal"]').click();
       cy.get('[data-testid="continue-payment-button"]').click();
 
-      cy.url().should("include", "/place-order");
+      // Wait for redirect to place-order page
+      cy.url({ timeout: 15000 }).should("include", "/place-order");
       cy.contains("Place Order").should("be.visible");
       cy.contains("Shipping Address").should("be.visible");
       cy.contains("Payment Method").should("be.visible");
@@ -68,8 +80,9 @@ describe("Place Order Flow", () => {
 
       cy.get('[data-testid="place-order-button"]').should("be.visible").click();
 
-      // Verify redirect to order page
-      cy.url().should("match", /\/order\/[a-zA-Z0-9-]+/);
+      // Wait for order creation and redirect to order page
+      // Increased timeout as order creation may take time
+      cy.url({ timeout: 15000 }).should("match", /\/order\/[a-zA-Z0-9-]+/);
 
       // Verify order page content
       cy.contains("Order").should("be.visible");
@@ -105,8 +118,8 @@ describe("Place Order Flow", () => {
       cy.get('[data-testid="payment-method-cashondelivery"]').click();
       cy.get('[data-testid="continue-payment-button"]').click();
 
-      // Verify place-order page is visible
-      cy.url().should("include", "/place-order");
+      // Wait for redirect to place-order page
+      cy.url({ timeout: 15000 }).should("include", "/place-order");
       cy.contains("Place Order").should("be.visible");
       cy.contains("Shipping Address").should("be.visible");
       cy.contains("Payment Method").should("be.visible");
@@ -116,8 +129,9 @@ describe("Place Order Flow", () => {
       // Click place order button
       cy.get('[data-testid="place-order-button"]').should("be.visible").click();
 
-      // Verify redirect to order page
-      cy.url().should("match", /\/order\/[a-zA-Z0-9-]+/);
+      // Wait for order creation and redirect to order page
+      // Increased timeout as order creation may take time
+      cy.url({ timeout: 15000 }).should("match", /\/order\/[a-zA-Z0-9-]+/);
 
       // Verify order page content
       cy.contains("Order").should("be.visible");

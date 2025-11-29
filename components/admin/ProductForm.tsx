@@ -375,7 +375,7 @@ export default function ProductForm({
                 <Card className="p-0 pt-2">
                   <CardContent className="space-y-2 min-h-48">
                     <div className="flex-start space-x-2">
-                      {images.map((image: string) => (
+                      {images.filter(img => img && img.trim() !== '').map((image: string) => (
                         <div key={image} className="border relative rounded-md">
                           <Image
                             src={image}

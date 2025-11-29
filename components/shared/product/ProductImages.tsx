@@ -5,19 +5,23 @@ import { cn } from '@/lib/utils';
 
 export default function ProductImages({ images }: { images: string[] }){
   const [current, setCurrent] = useState(0);
+  const validImages = images.filter(img => img && img.trim() !== '');
+  const currentImage = validImages[current] || validImages[0];
+
+  if (!currentImage) return null;
 
   return (
     <div className='space-y-4'>
       <Image
         data-testid='product-image-main'
-        src={images[current]}
+        src={currentImage}
         alt='product image'
         width={1000}
         height={1000}
         className='min-h-[300px] object-cover object-center'
       />
       <div className='flex'>
-        {images.map((image, index) => (
+        {validImages.map((image, index) => (
           <div
             key={image}
             onClick={() => setCurrent(index)}

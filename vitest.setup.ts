@@ -8,6 +8,12 @@ import "./__tests__/mocks/prisma.mock";
 import "./__tests__/mocks/auth.mock";
 import "./__tests__/mocks/next.mock";
 
+// Set ENCRYPTION_KEY for tests if not already set
+if (!process.env.ENCRYPTION_KEY) {
+  process.env.ENCRYPTION_KEY =
+    "test-encryption-key-for-vitest-minimum-32-chars";
+}
+
 beforeAll(() => {
   // Mock ResizeObserver
   global.ResizeObserver = class {

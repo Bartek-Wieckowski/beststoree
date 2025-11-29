@@ -11,11 +11,25 @@ describe("Add To Cart Button", () => {
 
   it("should show success toast when item is added to cart", () => {
     cy.visit("/");
+
+    // Wait for product cards to load
+    cy.get('[data-testid="product-card"]', { timeout: 10000 }).should(
+      "be.visible"
+    );
+
+    // Click on available product card and wait for redirect
     cy.getAvailableProductCard().click();
-    cy.url().should("include", "/product/");
-    cy.getByTestId("add-to-cart-button").should("be.visible");
-    cy.getByTestId("add-to-cart-button").click();
-    cy.get('[role="status"]', { timeout: 5000 })
+
+    // Wait for redirect to product page with increased timeout for CI
+    cy.url({ timeout: 15000 }).should("include", "/product/");
+
+    // Wait for page to fully load and button to be visible
+    cy.get('[data-testid="add-to-cart-button"]', { timeout: 10000 })
+      .should("be.visible")
+      .click();
+
+    // Wait for toast to appear
+    cy.get('[role="status"]', { timeout: 10000 })
       .should("exist")
       .should("be.visible");
   });

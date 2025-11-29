@@ -29,27 +29,29 @@ export default function ProductCarousel({ data }: { data: Product[] }) {
       ]}
     >
       <CarouselContent>
-        {data.map((product: Product) => (
-          <CarouselItem key={product.id}>
-            <Link href={ROUTES.PRODUCT(product.slug)}>
-              <div className="relative mx-auto">
-                <Image
-                  src={product.banner!}
-                  alt={product.name}
-                  height="0"
-                  width="0"
-                  sizes="100vw"
-                  className="w-full h-auto"
-                />
-                <div className="absolute inset-0 flex items-end justify-center">
-                  <h2 className="bg-gray-900 bg-opacity-50 text-2xl font-bold px-2 text-white">
-                    {product.name}
-                  </h2>
+        {data
+          .filter(product => product.banner && product.banner.trim() !== '')
+          .map((product: Product) => (
+            <CarouselItem key={product.id}>
+              <Link href={ROUTES.PRODUCT(product.slug)}>
+                <div className="relative mx-auto">
+                  <Image
+                    src={product.banner!}
+                    alt={product.name}
+                    height="0"
+                    width="0"
+                    sizes="100vw"
+                    className="w-full h-auto"
+                  />
+                  <div className="absolute inset-0 flex items-end justify-center">
+                    <h2 className="bg-gray-900 bg-opacity-50 text-2xl font-bold px-2 text-white">
+                      {product.name}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </CarouselItem>
-        ))}
+              </Link>
+            </CarouselItem>
+          ))}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />

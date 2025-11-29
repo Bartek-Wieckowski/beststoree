@@ -33,10 +33,10 @@ describe("Admin Users Update Form Actions", () => {
 
     cy.contains("Cypress User").should("be.visible");
 
-    cy.contains("tr", "Cypress User")
-      .find('a[href*="/admin/users/"]')
-      .first()
-      .click();
+    // Find the edit link - ensure we get only one element
+    cy.contains("tr", "Cypress User").within(() => {
+      cy.get('a[href*="/admin/users/"]').first().click();
+    });
 
     cy.url().should("include", `/admin/users/${testUserId}`);
 
@@ -49,7 +49,8 @@ describe("Admin Users Update Form Actions", () => {
     const updatedName = "Updated Cypress User";
     cy.get('input[name="name"]').clear().type(updatedName);
 
-    cy.get('button[type="submit"]').click();
+    // Submit the form - exclude hidden search button in header
+    cy.get('button[type="submit"]:not(.sr-only)').click({ force: true });
 
     cy.url({ timeout: 10000 }).should("include", "/admin/users");
 

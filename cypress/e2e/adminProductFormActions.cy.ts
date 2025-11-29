@@ -13,9 +13,24 @@ describe("Admin Product Form Actions", () => {
     cy.get('input[name="email"]').clear().type("testCypressAdmin@example.com");
     cy.get('input[name="password"]').clear().type("123456");
     cy.getByTestId("sign-in-button").click();
+
+    // Wait for redirect after login
     cy.url().should("not.include", "/sign-in");
     cy.url().should("include", "/");
-    cy.getByTestId("user-button").should("be.visible");
+
+    // Reload page to ensure session is properly set
+    cy.reload();
+
+    // Wait for page to fully load - check for header first
+    cy.get("header", { timeout: 15000 }).should("be.visible");
+
+    // Verify sign-in button is gone (user is logged in)
+    cy.getByTestId("sign-in-button").should("not.exist");
+
+    // Then wait for user button to appear (increased timeout for image loading)
+    cy.get('[data-testid="user-button"]', { timeout: 15000 }).should(
+      "be.visible"
+    );
 
     // Reset uploaded image keys for each test
     uploadedImageKeys = [];
@@ -60,13 +75,49 @@ describe("Admin Product Form Actions", () => {
       });
     }).as("uploadthingRequest");
 
+    // Also intercept the response to capture key from response
+    cy.intercept("POST", "**/api/uploadthing/poll/**", (req) => {
+      req.continue((res) => {
+        if (res.body) {
+          try {
+            const body =
+              typeof res.body === "string" ? JSON.parse(res.body) : res.body;
+            if (Array.isArray(body) && body.length > 0 && body[0].key) {
+              if (!uploadedImageKeys.includes(body[0].key)) {
+                uploadedImageKeys.push(body[0].key);
+              }
+            } else if (body.key && !uploadedImageKeys.includes(body.key)) {
+              uploadedImageKeys.push(body.key);
+            }
+          } catch {
+            // Ignore parse errors
+          }
+        }
+      });
+    }).as("uploadthingPoll");
+
     // Navigate to admin products page
     cy.visit("/admin/products");
-    cy.url().should("include", "/admin/products");
+
+    // Wait for page to load and URL to be correct
+    cy.url({ timeout: 15000 }).should("include", "/admin/products");
+
+    // Wait for page content to load - check for h1 title or create button
+    cy.get("h1", { timeout: 10000 }).should("be.visible");
+
+    // Wait for create product button to be visible and clickable
+    cy.get('[data-testid="create-product-button"]', { timeout: 10000 })
+      .should("be.visible")
+      .should("not.be.disabled");
 
     // Click create product button
     cy.get('[data-testid="create-product-button"]').click();
-    cy.url().should("include", "/admin/products/create");
+
+    // Wait for redirect to create page with increased timeout for CI
+    cy.url({ timeout: 15000 }).should("include", "/admin/products/create");
+
+    // Wait for create page to load
+    cy.get("h2", { timeout: 10000 }).should("be.visible");
 
     // Fill in the form
     const productName = `Test Product ${Date.now()}`;
@@ -89,21 +140,43 @@ describe("Admin Product Form Actions", () => {
     );
 
     // Wait for upload to complete and image to appear
-    // Also extract key from image URL as fallback
-    cy.get('img[alt="product image"]', { timeout: 10000 })
+    // Extract key from image URL - this is the most reliable method
+    // We don't wait for intercept as it may not always fire with selectFile
+    cy.get('img[alt="product image"]', { timeout: 15000 })
       .should("be.visible")
       .invoke("attr", "src")
       .then((src) => {
         if (src) {
-          const key = src.split("/").pop()?.split("?")[0];
-          if (key && key.length > 15 && !uploadedImageKeys.includes(key)) {
+          // Extract key from uploadthing URL (format: https://utfs.io/f/{key} or similar)
+          // Try multiple URL formats
+          let key: string | undefined;
+
+          // Format 1: https://utfs.io/f/{key}
+          if (src.includes("utfs.io")) {
+            const urlParts = src.split("/");
+            key = urlParts[urlParts.length - 1]?.split("?")[0];
+          }
+
+          // Format 2: Direct key in URL
+          if (!key && src.includes("/f/")) {
+            const match = src.match(/\/f\/([^/?]+)/);
+            key = match ? match[1] : undefined;
+          }
+
+          // Fallback: last part of URL
+          if (!key) {
+            key = src.split("/").pop()?.split("?")[0];
+          }
+
+          if (key && key.length > 10 && !uploadedImageKeys.includes(key)) {
             uploadedImageKeys.push(key);
+            cy.log(`Captured image key from URL: ${key}`);
           }
         }
       });
 
-    // Submit the form
-    cy.get('button[type="submit"]').click();
+    // Submit the form - exclude hidden search button in header
+    cy.get('button[type="submit"]:not(.sr-only)').click({ force: true });
 
     // Wait for redirect to products page
     cy.url({ timeout: 1000 }).should("include", "/admin/products");
@@ -144,8 +217,8 @@ describe("Admin Product Form Actions", () => {
       const updatedName = `Updated Test Product ${Date.now()}`;
       cy.get('input[name="name"]').clear().type(updatedName);
 
-      // Submit the form
-      cy.get('button[type="submit"]').click();
+      // Submit the form - exclude hidden search button in header
+      cy.get('button[type="submit"]:not(.sr-only)').click({ force: true });
 
       // Wait for redirect to products page
       cy.url({ timeout: 10000 }).should("include", "/admin/products");

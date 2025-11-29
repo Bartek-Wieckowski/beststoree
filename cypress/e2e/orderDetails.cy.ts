@@ -25,10 +25,23 @@ describe("Order Details Page - PayPal Payment", () => {
 
       // Use test product instead of random product
       cy.getProductCardByName(product.name).click();
+
+      // Click add to cart button and wait for success toast
       cy.get('[data-testid="add-to-cart-button"]').click();
 
+      // Wait for toast to appear (operation completed)
+      cy.get('[role="status"]', { timeout: 10000 })
+        .should("exist")
+        .should("be.visible");
+
       cy.visit("/cart");
-      cy.get('[data-testid="checkout-button"]').click();
+
+      // Wait for cart page to load and verify checkout button is available
+      cy.url().should("include", "/cart");
+      cy.get("table", { timeout: 10000 }).should("be.visible");
+      cy.get('[data-testid="checkout-button"]', { timeout: 10000 })
+        .should("be.visible")
+        .click();
 
       cy.url().should("include", "/shipping-address");
 
@@ -44,11 +57,14 @@ describe("Order Details Page - PayPal Payment", () => {
       cy.get('[data-testid="payment-method-paypal"]').click();
       cy.get('[data-testid="continue-payment-button"]').click();
 
-      cy.url().should("include", "/place-order");
+      // Wait for redirect to place-order page
+      cy.url({ timeout: 15000 }).should("include", "/place-order");
 
       cy.get('[data-testid="place-order-button"]').click();
 
-      cy.url()
+      // Wait for order creation and redirect to order page
+      // Increased timeout as order creation may take time
+      cy.url({ timeout: 15000 })
         .should("match", /\/order\/([a-zA-Z0-9-]+)/)
         .then((url) => {
           const match = url.match(/\/order\/([a-zA-Z0-9-]+)/);

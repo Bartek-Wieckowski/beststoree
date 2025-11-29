@@ -56,12 +56,14 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                         href={ROUTES.PRODUCT(item.slug)}
                         className="flex items-center"
                       >
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          width={50}
-                          height={50}
-                        />
+                        {item.image && item.image.trim() !== '' && (
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            width={50}
+                            height={50}
+                          />
+                        )}
                         <span className="px-2">{item.name}</span>
                       </Link>
                     </TableCell>
