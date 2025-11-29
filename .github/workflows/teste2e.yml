@@ -45,27 +45,15 @@ jobs:
         env:
           DATABASE_URL: postgresql://testuser:testpass@localhost:5432/beststoree_test
 
-      - name: Install PostgreSQL client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
-
-      - name: Wait for database to be ready
-        run: |
-          echo "Waiting for database to be ready..."
-          until pg_isready -h localhost -p 5432 -U testuser; do
-            echo "Database not ready yet, waiting..."
-            sleep 1
-          done
-          echo "Database is ready!"
-
       - name: Run E2E tests (Cypress) on dev server
         run: |
-          npx start-server-and-test dev:test http://localhost:3000 30000 npx cypress run
+          npx start-server-and-test dev:test http://localhost:3000 cypress:run
         env:
           DATABASE_URL: postgresql://testuser:testpass@localhost:5432/beststoree_test
           NODE_ENV: development
-          NEXTAUTH_SECRET: test-secret-for-ci-minimum-32-characters-long
+          NEXTAUTH_SECRET: test-secret-for-ci
           NEXTAUTH_URL: http://localhost:3000
-          AUTH_SECRET: test-secret-for-ci-minimum-32-characters-long
+          AUTH_SECRET: test-secret-for-ci
           AUTH_URL: http://localhost:3000
           AUTH_TRUST_HOST: true
           AUTH_COOKIE_NAME: authjs.session-token
@@ -78,10 +66,9 @@ jobs:
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY || 'sk_test_placeholder' }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET || 'whsec_placeholder' }}
-          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL || 'https://api-m.sandbox.paypal.com' }}
-          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID || 'test_client_id' }}
-          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET || 'test_app_secret' }}
-          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN || 'test_token' }}
-          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET || 'test_secret' }}
-          UPLOADTHING_APPID: ${{ secrets.UPLOADTHING_APPID || 'test_appid' }}
-          CI: true
+          PAYPAL_API_URL: ${{ secrets.PAYPAL_API_URL }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_APP_SECRET: ${{ secrets.PAYPAL_APP_SECRET }}
+          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
+          UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
+          UPLOADTHING_APPID: ${{ secrets.UPLOADTHING_APPID }}
