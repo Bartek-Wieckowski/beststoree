@@ -1,6 +1,6 @@
 import { render, screen, act } from "@testing-library/react";
 import { describe, expect, it, afterEach, vi } from "vitest";
-import DealCountdown from "@/components/DealCountdown";
+import DealCountdown from "@/components/PromotionCountdown";
 import CONTENT_PAGE from "@/lib/content-page";
 
 describe("DealCountdown()", () => {

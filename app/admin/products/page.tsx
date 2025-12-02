@@ -91,7 +91,9 @@ export default async function AdminProductsPage({
               <TableCell className="text-right">
                 {formatCurrency(product.price)}
               </TableCell>
-              <TableCell>{product.category}</TableCell>
+              <TableCell>
+                {product.category?.name || "N/A"}
+              </TableCell>
               <TableCell>{product.stock}</TableCell>
               <TableCell>{product.rating}</TableCell>
               <TableCell className="flex gap-1">

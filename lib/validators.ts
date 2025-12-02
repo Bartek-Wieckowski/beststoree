@@ -12,7 +12,7 @@ const currency = z
 export const insertProductSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   slug: z.string().min(3, "Slug must be at least 3 characters"),
-  category: z.string().min(3, "Category must be at least 3 characters"),
+  categoryId: z.string().min(1, "Category is required"),
   brand: z.string().min(3, "Brand must be at least 3 characters"),
   description: z.string().min(3, "Description must be at least 3 characters"),
   stock: z.coerce.number(),
@@ -20,6 +20,9 @@ export const insertProductSchema = z.object({
   isFeatured: z.boolean(),
   banner: z.string().nullable(),
   price: currency,
+  hasVariants: z.boolean().default(false),
+  sizes: z.array(z.string()).default([]),
+  colors: z.array(z.string()).default([]),
 });
 
 export const updateProductSchema = insertProductSchema.extend({
@@ -54,6 +57,8 @@ export const cartItemSchema = z.object({
   qty: z.number().int().nonnegative("Quantity must be a positive number"),
   image: z.string().min(1, "Image is required"),
   price: currency,
+  size: z.string().optional().nullable(),
+  color: z.string().optional().nullable(),
 });
 
 export const insertCartSchema = z.object({
@@ -104,6 +109,8 @@ export const insertOrderItemSchema = z.object({
   name: z.string(),
   price: currency,
   qty: z.number(),
+  size: z.string().optional().nullable(),
+  color: z.string().optional().nullable(),
 });
 
 export const paymentResultSchema = z.object({
@@ -133,4 +140,22 @@ export const insertReviewSchema = z.object({
     .int()
     .min(1, "Rating must be at least 1")
     .max(5, "Rating must be at most 5"),
+});
+
+export const insertCategorySchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  slug: z.string().min(3, "Slug must be at least 3 characters"),
+  icon: z.string().optional().nullable(),
+});
+
+export const updateCategorySchema = insertCategorySchema.extend({
+  id: z.string().min(1, "Id is required"),
+});
+
+export const insertPromotionSchema = z.object({
+  productId: z.string().min(1, "Product is required"),
+  endDate: z.coerce.date({
+    required_error: "Promotion end date is required",
+  }),
+  isEnabled: z.boolean().default(true),
 });

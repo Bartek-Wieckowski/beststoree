@@ -4,7 +4,7 @@ import { getUserById } from "@/lib/actions/user.actions";
 import { Metadata } from "next";
 import PaymentMethodForm from "./PaymentMethodForm";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Select Payment Method",
@@ -19,9 +19,9 @@ export default async function PaymentMethodPage() {
   const user = await getUserById(userId);
 
   return (
-    <>
+    <div className="wrapper">
       <CheckoutSteps current={2} />
       <PaymentMethodForm preferredPaymentMethod={user.paymentMethod} />
-    </>
+    </div>
   );
 }

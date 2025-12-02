@@ -3,10 +3,15 @@
 import { useToast } from "@/hooks/use-toast";
 import { productDefaultValues } from "@/lib/constants";
 import { insertProductSchema, updateProductSchema } from "@/lib/validators";
-import { Product } from "@/types";
+import { Category, Product } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
+import {
+  ControllerRenderProps,
+  Resolver,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -30,15 +35,24 @@ import { useState, useEffect, useRef } from "react";
 import { Trash } from "lucide-react";
 import { deleteImages } from "@/lib/actions/image.actions";
 import CONTENT_PAGE from "@/lib/content-page";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function ProductForm({
   type,
   product,
   productId,
+  categories = [],
 }: {
   type: "Create" | "Update";
   product?: Product;
   productId?: string;
+  categories?: Category[];
 }) {
   const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
   const [bannerToBeDeleted, setBannerToBeDeleted] = useState<string | null>(
@@ -62,20 +76,32 @@ export default function ProductForm({
     newlyAddedBannerRef.current = newlyAddedBanner;
   }, [newlyAddedBanner]);
 
-  const form = useForm<z.infer<typeof insertProductSchema>>({
+  // Use z.output to get the type after defaults are applied
+  type FormData = z.output<typeof insertProductSchema>;
+
+  const form = useForm<FormData>({
     resolver: zodResolver(
       type === "Create" ? insertProductSchema : updateProductSchema
-    ),
+    ) as unknown as Resolver<FormData>,
     defaultValues:
-      product && type === "Update" ? product : productDefaultValues,
+      product && type === "Update"
+        ? {
+            ...product,
+            categoryId: product.categoryId || product.category?.id || "",
+            hasVariants: product.hasVariants ?? false,
+            sizes: product.sizes ?? [],
+            colors: product.colors ?? [],
+          }
+        : productDefaultValues,
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof insertProductSchema>> = async (
-    values
-  ) => {
+  const onSubmit: SubmitHandler<FormData> = async (values) => {
+    // Parse values to ensure defaults are applied
+    const parsedValues = insertProductSchema.parse(values);
+
     // On Create
     if (type === "Create") {
-      const res = await createProduct(values);
+      const res = await createProduct(parsedValues);
 
       if (!res.success) {
         toast({
@@ -100,12 +126,13 @@ export default function ProductForm({
         return;
       }
 
-      const res = await updateProduct({
-        ...values,
+      const parsedUpdateValues = updateProductSchema.parse({
+        ...parsedValues,
         id: productId,
         imagesToBeDeleted,
         bannerToBeDeleted,
       });
+      const res = await updateProduct(parsedUpdateValues);
 
       if (!res.success) {
         toast({
@@ -129,6 +156,25 @@ export default function ProductForm({
   const images = form.watch("images");
   const isFeatured = form.watch("isFeatured");
   const banner = form.watch("banner");
+
+  // Auto-generate slug from name (for both Create and Update modes)
+  const handleNameChange = (value: string) => {
+    form.setValue("name", value);
+    // Auto-generate slug from name if name is not empty
+    if (value && value.trim().length > 0) {
+      const slug = slugify(value, { lower: true, strict: true });
+      form.setValue("slug", slug);
+    }
+  };
+
+  // Generate slug from name (can be used manually via button)
+  const handleGenerateSlug = () => {
+    const name = form.getValues("name");
+    if (name && name.trim().length > 0) {
+      const slug = slugify(name, { lower: true, strict: true });
+      form.setValue("slug", slug);
+    }
+  };
 
   const handleImageRemove = async (removedImage: string) => {
     // Check if this is a newly added image (not yet saved to database)
@@ -217,6 +263,7 @@ export default function ProductForm({
                       CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterProductName
                     }
                     {...field}
+                    onChange={(e) => handleNameChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -246,12 +293,7 @@ export default function ProductForm({
                     <Button
                       type="button"
                       className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 mt-2"
-                      onClick={() => {
-                        form.setValue(
-                          "slug",
-                          slugify(form.getValues("name"), { lower: true })
-                        );
-                      }}
+                      onClick={handleGenerateSlug}
                     >
                       {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.generate}
                     </Button>
@@ -266,25 +308,40 @@ export default function ProductForm({
           {/* Category */}
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({
               field,
             }: {
               field: ControllerRenderProps<
                 z.infer<typeof insertProductSchema>,
-                "category"
+                "categoryId"
               >;
             }) => (
               <FormItem className="w-full">
                 <FormLabel>
                   {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.category}
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder={CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterCategory}
-                    {...field}
-                  />
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || ""}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={
+                          CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterCategory
+                        }
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -375,27 +432,32 @@ export default function ProductForm({
                 <Card className="p-0 pt-2">
                   <CardContent className="space-y-2 min-h-48">
                     <div className="flex-start space-x-2">
-                      {images.filter(img => img && img.trim() !== '').map((image: string) => (
-                        <div key={image} className="border relative rounded-md">
-                          <Image
-                            src={image}
-                            alt="product image"
-                            className="w-20 h-20 object-cover object-center rounded-sm"
-                            width={100}
-                            height={100}
-                          />
-                          <Button
-                            variant={"destructive"}
-                            className="absolute top-1 right-1 w-7 h-7 rounded-full"
-                            onClick={() => handleImageRemove(image)}
+                      {images
+                        .filter((img) => img && img.trim() !== "")
+                        .map((image: string) => (
+                          <div
+                            key={image}
+                            className="border relative rounded-md"
                           >
-                            <Trash
-                              className="w-5 h-5"
-                              style={{ color: "white" }}
+                            <Image
+                              src={image}
+                              alt="product image"
+                              className="w-20 h-20 object-cover object-center rounded-sm"
+                              width={100}
+                              height={100}
                             />
-                          </Button>
-                        </div>
-                      ))}
+                            <Button
+                              variant={"destructive"}
+                              className="absolute top-1 right-1 w-7 h-7 rounded-full"
+                              onClick={() => handleImageRemove(image)}
+                            >
+                              <Trash
+                                className="w-5 h-5"
+                                style={{ color: "white" }}
+                              />
+                            </Button>
+                          </div>
+                        ))}
                       <FormControl>
                         <UploadButton
                           endpoint={"imageUploader"}
@@ -490,6 +552,152 @@ export default function ProductForm({
                     });
                   }}
                 />
+              )}
+            </CardContent>
+          </Card>
+        </div>
+        <div className="flex flex-col gap-5">
+          {/* Has Variants */}
+          <Card>
+            <CardContent className="space-y-4 pt-6">
+              <FormField
+                control={form.control}
+                name="hasVariants"
+                render={({ field }) => (
+                  <FormItem className="space-x-2 flex items-center">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Product has variants (sizes/colors)</FormLabel>
+                  </FormItem>
+                )}
+              />
+              {form.watch("hasVariants") && (
+                <div className="space-y-4 mt-4">
+                  {/* Sizes */}
+                  <FormField
+                    control={form.control}
+                    name="sizes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Sizes</FormLabel>
+                        <FormControl>
+                          <div className="space-y-2">
+                            <div className="flex gap-2">
+                              <Input
+                                placeholder="Add size (e.g., S, M, L)"
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    const value = e.currentTarget.value
+                                      .trim()
+                                      .toUpperCase();
+                                    const currentSizes = field.value || [];
+                                    if (
+                                      value &&
+                                      !currentSizes.includes(value)
+                                    ) {
+                                      field.onChange([...currentSizes, value]);
+                                      e.currentTarget.value = "";
+                                    }
+                                  }
+                                }}
+                              />
+                            </div>
+                            {(field.value || []).length > 0 && (
+                              <div className="flex flex-wrap gap-2">
+                                {(field.value || []).map((size, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md"
+                                  >
+                                    <span className="text-stone-900 ">
+                                      {size}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        field.onChange(
+                                          field.value.filter(
+                                            (_, i) => i !== index
+                                          )
+                                        );
+                                      }}
+                                      className="text-red-500 hover:text-red-700"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* Colors */}
+                  <FormField
+                    control={form.control}
+                    name="colors"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Colors</FormLabel>
+                        <FormControl>
+                          <div className="space-y-2">
+                            <Input
+                              placeholder="Add color name (e.g., Red, Blue, Navy, Forest Green)"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  const value = e.currentTarget.value
+                                    .trim()
+                                    .toUpperCase();
+                                  const currentColors = field.value || [];
+                                  if (value && !currentColors.includes(value)) {
+                                    field.onChange([...currentColors, value]);
+                                    e.currentTarget.value = "";
+                                  }
+                                }
+                              }}
+                            />
+                            {(field.value || []).length > 0 && (
+                              <div className="flex flex-wrap gap-2">
+                                {(field.value || []).map((color, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md"
+                                  >
+                                    <span>{color}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const currentColors = field.value || [];
+                                        field.onChange(
+                                          currentColors.filter(
+                                            (_, i) => i !== index
+                                          )
+                                        );
+                                      }}
+                                      className="text-red-500 hover:text-red-700"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               )}
             </CardContent>
           </Card>

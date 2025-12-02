@@ -8,7 +8,7 @@ import CheckoutSteps from "@/components/shared/CheckoutSteps";
 import ROUTES from "@/lib/routes";
 import ShippingAddressForm from "./ShippingAddressForm";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shipping Address",
@@ -27,9 +27,9 @@ export default async function ShippingAddressPage() {
   const user = await getUserById(userId);
 
   return (
-    <>
+    <div className="wrapper">
       <CheckoutSteps current={1} />
       <ShippingAddressForm address={user.address as ShippingAddress} />
-    </>
+    </div>
   );
 }

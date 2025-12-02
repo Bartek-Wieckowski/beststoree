@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { notFound } from "next/navigation";
-import AddToCart from "@/components/shared/product/AddToCart";
+import ProductVariantSelector from "@/components/shared/product/ProductVariantSelector";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import ReviewList from "./ReviewList";
 import { auth } from "@/auth";
@@ -27,7 +27,7 @@ export default async function ProductDetailsPage(props: {
   const cart = await getMyCart();
 
   return (
-    <>
+    <div className="wrapper">
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="col-span-2">
@@ -37,7 +37,7 @@ export default async function ProductDetailsPage(props: {
             <div className="flex flex-col gap-6">
               <p>
                 <span data-testid="product-brand">{product.brand}</span>{" "}
-                {product.category}
+                {product.category?.name || ""}
               </p>
               <h1 className="h3-bold" data-testid="product-name">
                 {product.name}
@@ -88,19 +88,7 @@ export default async function ProductDetailsPage(props: {
                   </div>
                 </div>
                 {product.stock > 0 && (
-                  <div className="flex-center">
-                    <AddToCart
-                      cart={cart}
-                      item={{
-                        image: product.images[0],
-                        productId: product.id,
-                        slug: product.slug,
-                        qty: 1,
-                        name: product.name,
-                        price: product.price,
-                      }}
-                    />
-                  </div>
+                  <ProductVariantSelector product={product} cart={cart} />
                 )}
               </CardContent>
             </Card>
@@ -117,6 +105,6 @@ export default async function ProductDetailsPage(props: {
           productSlug={product.slug}
         />
       </section>
-    </>
+    </div>
   );
 }

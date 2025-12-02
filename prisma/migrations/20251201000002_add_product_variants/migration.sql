@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN "hasVariants" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN "sizes" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN "colors" TEXT[] DEFAULT ARRAY[]::TEXT[];
+

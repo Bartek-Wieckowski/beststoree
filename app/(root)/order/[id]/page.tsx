@@ -41,15 +41,17 @@ export default async function OrderPage(props: {
   }
 
   return (
-    <OrderDetailsTable
-      order={{
-        ...order,
-        shippingAddress: order.shippingAddress as ShippingAddress,
-        paymentResult: order.paymentResult as PaymentResult,
-      }}
-      stripeClientSecret={client_secret}
-      paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
-      isAdmin={session?.user?.role === "admin" || false}
-    />
+    <div className="wrapper">
+      <OrderDetailsTable
+        order={{
+          ...order,
+          shippingAddress: order.shippingAddress as ShippingAddress,
+          paymentResult: order.paymentResult as PaymentResult,
+        }}
+        stripeClientSecret={client_secret}
+        paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
+        isAdmin={session?.user?.role === "admin" || false}
+      />
+    </div>
   );
 }

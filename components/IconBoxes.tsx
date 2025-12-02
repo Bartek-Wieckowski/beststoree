@@ -4,7 +4,7 @@ import CONTENT_PAGE from "@/lib/content-page";
 
 export default function IconBoxes() {
   return (
-    <div>
+    <div className="wrapper">
       <Card>
         <CardContent className="grid md:grid-cols-4 gap-4 p-4">
           <div className="space-y-2">

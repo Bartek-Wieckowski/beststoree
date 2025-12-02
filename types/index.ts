@@ -8,6 +8,8 @@ import {
   shippingAddressSchema,
   paymentResultSchema,
   insertReviewSchema,
+  insertCategorySchema,
+  insertPromotionSchema,
 } from "@/lib/validators";
 
 export type FormattedError =
@@ -48,6 +50,12 @@ export type Product = z.infer<typeof insertProductSchema> & {
   rating: string;
   numReviews: number;
   createdAt: Date;
+  dealEndDate?: Date | string | null;
+  category?: {
+    id: string;
+    name: string;
+    slug: string;
+  } | null;
 };
 
 export type Cart = z.infer<typeof insertCartSchema>;
@@ -80,6 +88,27 @@ export type Review = z.infer<typeof insertReviewSchema> & {
   id: string;
   createdAt: Date;
   user?: { name: string };
+};
+
+export type Category = z.infer<typeof insertCategorySchema> & {
+  id: string;
+  _count: {
+    products: number;
+  };
+};
+
+export type Promotion = z.infer<typeof insertPromotionSchema> & {
+  id: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  product: Product & {
+    images: string[];
+    category?: {
+      id: string;
+      name: string;
+      slug: string;
+    } | null;
+  };
 };
 
 export type TestCypressUser = {

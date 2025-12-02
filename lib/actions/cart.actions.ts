@@ -72,8 +72,12 @@ export async function addItemToCart(data: CartItem) {
         message: `${product.name} added to cart`,
       };
     } else {
+      // Find existing item matching productId, size, and color
       const existItem = (cart.items as CartItem[]).find(
-        (x) => x.productId === item.productId
+        (x) =>
+          x.productId === item.productId &&
+          x.size === item.size &&
+          x.color === item.color
       );
 
       if (existItem) {
@@ -88,7 +92,10 @@ export async function addItemToCart(data: CartItem) {
         }
 
         (cart.items as CartItem[]).find(
-          (x) => x.productId === item.productId
+          (x) =>
+            x.productId === item.productId &&
+            x.size === item.size &&
+            x.color === item.color
         )!.qty = newQuantity;
       } else {
         // Validate stock before adding new item
@@ -151,7 +158,11 @@ export async function getMyCart() {
   });
 }
 
-export async function removeItemFromCart(productId: string) {
+export async function removeItemFromCart(
+  productId: string,
+  size?: string | null,
+  color?: string | null
+) {
   try {
     const sessionCartId = (await cookies()).get("sessionCartId")?.value;
     if (!sessionCartId) throw new Error("Cart session not found");
@@ -164,18 +175,31 @@ export async function removeItemFromCart(productId: string) {
     const cart = await getMyCart();
     if (!cart) throw new Error("Cart not found!");
 
+    // Find item matching productId, size, and color
     const existItem = (cart.items as CartItem[]).find(
-      (x) => x.productId === productId
+      (x) =>
+        x.productId === productId &&
+        x.size === (size ?? null) &&
+        x.color === (color ?? null)
     );
     if (!existItem) throw new Error("Item not found");
 
     if (existItem.qty === 1) {
       cart.items = (cart.items as CartItem[]).filter(
-        (x) => x.productId !== existItem.productId
+        (x) =>
+          !(
+            x.productId === productId &&
+            x.size === (size ?? null) &&
+            x.color === (color ?? null)
+          )
       );
     } else {
-      (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty =
-        existItem.qty - 1;
+      (cart.items as CartItem[]).find(
+        (x) =>
+          x.productId === productId &&
+          x.size === (size ?? null) &&
+          x.color === (color ?? null)
+      )!.qty = existItem.qty - 1;
     }
 
     await prisma.cart.update({

@@ -22,7 +22,7 @@ import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import PlaceOrderForm from "./PlaceOrderForm";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Place Order",
@@ -44,7 +44,7 @@ export default async function PlaceOrderPage() {
   const userAddress = user.address as ShippingAddress;
 
   return (
-    <>
+    <div className="wrapper">
       <CheckoutSteps current={3} />
       <h1 className="py-4 text-2xl">
         {CONTENT_PAGE.PLACE_ORDER_PAGE.placeOrder}
@@ -158,6 +158,6 @@ export default async function PlaceOrderPage() {
           </Card>
         </div>
       </div>
-    </>
+    </div>
   );
 }

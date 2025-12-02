@@ -1,5 +1,6 @@
 import ProductForm from "@/components/admin/ProductForm";
 import { getProductById } from "@/lib/actions/product.actions";
+import { getAllCategories } from "@/lib/actions/category.actions";
 import { requireAdmin } from "@/lib/admin-guard";
 import CONTENT_PAGE from "@/lib/content-page";
 import { Metadata } from "next";
@@ -19,6 +20,7 @@ export default async function AdminProductUpdatePage(props: {
   const { id } = await props.params;
 
   const product = await getProductById(id);
+  const categories = await getAllCategories();
 
   if (!product) return notFound();
 
@@ -28,7 +30,12 @@ export default async function AdminProductUpdatePage(props: {
         {CONTENT_PAGE.ADMIN_PRODUCTS_UPDATE_PAGE.updateProduct}
       </h1>
 
-      <ProductForm type="Update" product={product} productId={product.id} />
+      <ProductForm
+        type="Update"
+        product={product}
+        productId={product.id}
+        categories={categories}
+      />
     </div>
   );
 }

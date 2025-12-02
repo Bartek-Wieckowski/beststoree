@@ -14,9 +14,11 @@ import { useTransition } from "react";
 export default function AddToCart({
   cart,
   item,
+  disabled = false,
 }: {
   cart?: Cart;
   item: CartItem;
+  disabled?: boolean;
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -52,7 +54,11 @@ export default function AddToCart({
 
   const handleRemoveFromCart = async () => {
     startRemoveTransition(async () => {
-      const res = await removeItemFromCart(item.productId);
+      const res = await removeItemFromCart(
+        item.productId,
+        item.size,
+        item.color
+      );
 
       toast({
         variant: res.success ? "default" : "destructive",
@@ -63,12 +69,24 @@ export default function AddToCart({
     });
   };
 
+  // Find existing item - match by productId, size, and color
   const existItem =
-    cart && cart.items.find((x) => x.productId === item.productId);
+    cart &&
+    cart.items.find(
+      (x) =>
+        x.productId === item.productId &&
+        x.size === item.size &&
+        x.color === item.color
+    );
 
   return existItem ? (
-    <div>
-      <Button type="button" variant="outline" onClick={handleRemoveFromCart}>
+    <div className="flex items-center gap-2">
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleRemoveFromCart}
+        disabled={isRemovePending}
+      >
         {isRemovePending ? (
           <Loader className="w-4 h-4 animate-spin" />
         ) : (
@@ -76,7 +94,12 @@ export default function AddToCart({
         )}
       </Button>
       <span className="px-2">{existItem.qty}</span>
-      <Button type="button" variant="outline" onClick={handleAddToCart}>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleAddToCart}
+        disabled={isAddPending || disabled}
+      >
         {isAddPending ? (
           <Loader className="w-4 h-4 animate-spin" />
         ) : (
@@ -90,6 +113,7 @@ export default function AddToCart({
       type="button"
       data-testid="add-to-cart-button"
       onClick={handleAddToCart}
+      disabled={isAddPending || disabled}
     >
       {isAddPending ? (
         <Loader className="w-4 h-4 animate-spin" />

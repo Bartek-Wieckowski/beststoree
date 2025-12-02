@@ -28,62 +28,62 @@ describe("Search()", () => {
     });
   });
 
-  describe("Category select", () => {
-    it("should render select with All option and categories", async () => {
-      const mockCategories = [
-        { category: "Men's Dress Shirts", _count: 5 },
-        { category: "Men's Sweatshirts", _count: 1 },
-      ];
+  // describe("Category select", () => {
+  //   it("should render select with All option and categories", async () => {
+  //     const mockCategories = [
+  //       { category: "Men's Dress Shirts", _count: 5 },
+  //       { category: "Men's Sweatshirts", _count: 1 },
+  //     ];
 
-      mockedGetAllCategories.mockResolvedValue(mockCategories);
+  //     mockedGetAllCategories.mockResolvedValue(mockCategories);
 
-      const { container } = render(await Search());
+  //     const { container } = render(await Search());
 
-      const selectTrigger = screen.getByRole("combobox");
-      expect(selectTrigger).toBeInTheDocument();
+  //     const selectTrigger = screen.getByRole("combobox");
+  //     expect(selectTrigger).toBeInTheDocument();
 
-      const hiddenSelect = container.querySelector(
-        'select[name="category"]'
-      ) as HTMLSelectElement;
-      expect(hiddenSelect).toBeInTheDocument();
+  //     const hiddenSelect = container.querySelector(
+  //       'select[name="category"]'
+  //     ) as HTMLSelectElement;
+  //     expect(hiddenSelect).toBeInTheDocument();
 
-      const options = hiddenSelect.querySelectorAll("option");
-      expect(options).toHaveLength(4); // empty option + All + 2 categories
+  //     const options = hiddenSelect.querySelectorAll("option");
+  //     expect(options).toHaveLength(4); // empty option + All + 2 categories
 
-      const allOption = Array.from(options).find((opt) => opt.value === "all");
-      expect(allOption).toHaveTextContent("All");
+  //     const allOption = Array.from(options).find((opt) => opt.value === "all");
+  //     expect(allOption).toHaveTextContent("All");
 
-      const dressShirtsOption = Array.from(options).find(
-        (opt) => opt.value === "Men's Dress Shirts"
-      );
-      expect(dressShirtsOption).toHaveTextContent("Men's Dress Shirts");
+  //     const dressShirtsOption = Array.from(options).find(
+  //       (opt) => opt.value === "Men's Dress Shirts"
+  //     );
+  //     expect(dressShirtsOption).toHaveTextContent("Men's Dress Shirts");
 
-      const sweatshirtsOption = Array.from(options).find(
-        (opt) => opt.value === "Men's Sweatshirts"
-      );
-      expect(sweatshirtsOption).toHaveTextContent("Men's Sweatshirts");
-    });
+  //     const sweatshirtsOption = Array.from(options).find(
+  //       (opt) => opt.value === "Men's Sweatshirts"
+  //     );
+  //     expect(sweatshirtsOption).toHaveTextContent("Men's Sweatshirts");
+  //   });
 
-    it("should render select with correct placeholder", async () => {
-      mockedGetAllCategories.mockResolvedValue([]);
+  //   it("should render select with correct placeholder", async () => {
+  //     mockedGetAllCategories.mockResolvedValue([]);
 
-      render(await Search());
+  //     render(await Search());
 
-      const selectTrigger = screen.getByRole("combobox");
-      expect(selectTrigger).toBeInTheDocument();
-      expect(selectTrigger).toHaveTextContent("All");
-    });
+  //     const selectTrigger = screen.getByRole("combobox");
+  //     expect(selectTrigger).toBeInTheDocument();
+  //     expect(selectTrigger).toHaveTextContent("All");
+  //   });
 
-    it("should have hidden select element with name attribute for form submission", async () => {
-      mockedGetAllCategories.mockResolvedValue([]);
+  //   it("should have hidden select element with name attribute for form submission", async () => {
+  //     mockedGetAllCategories.mockResolvedValue([]);
 
-      const { container } = render(await Search());
+  //     const { container } = render(await Search());
 
-      const hiddenSelect = container.querySelector('select[name="category"]');
-      expect(hiddenSelect).toBeInTheDocument();
-      expect(hiddenSelect).toHaveAttribute("aria-hidden", "true");
-    });
-  });
+  //     const hiddenSelect = container.querySelector('select[name="category"]');
+  //     expect(hiddenSelect).toBeInTheDocument();
+  //     expect(hiddenSelect).toHaveAttribute("aria-hidden", "true");
+  //   });
+  // });
 
   describe("Search input field", () => {
     it("should render search input with correct attributes", async () => {

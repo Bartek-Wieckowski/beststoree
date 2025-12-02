@@ -29,7 +29,7 @@ const shippingAddressDefaultValues = {
 const productDefaultValues = {
   name: "",
   slug: "",
-  category: "",
+  categoryId: "",
   images: [],
   brand: "",
   description: "",
@@ -39,6 +39,9 @@ const productDefaultValues = {
   numReviews: "0",
   isFeatured: false,
   banner: null,
+  hasVariants: false,
+  sizes: [],
+  colors: [],
 };
 
 const reviewFormDefaultValues = {

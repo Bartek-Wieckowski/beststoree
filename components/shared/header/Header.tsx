@@ -3,15 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import ROUTES from "@/lib/routes";
 import Menu from "./Menu";
-import CategoryDrawer from "./CategoryDrawer";
+// import CategoryDrawer from "./CategoryDrawer";
 import Search from "./Search";
 
 export default function Header() {
   return (
-    <header className="w-full border-b">
-      <div className="wrapper flex-between">
+    <header className="w-full wrapper">
+      <div className="flex items-center justify-between border-b border-gray-200 pb-4">
         <div className="flex-start">
-          <CategoryDrawer />
+          {/* <CategoryDrawer /> */}
           <Link
             href={ROUTES.HOME}
             className="flex-start ml-4"

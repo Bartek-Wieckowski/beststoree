@@ -15,12 +15,20 @@ const links = [
     href: ROUTES.ADMIN_PRODUCTS,
   },
   {
+    title: "Categories",
+    href: ROUTES.ADMIN_CATEGORIES,
+  },
+  {
     title: "Orders",
     href: ROUTES.ADMIN_ORDERS,
   },
   {
     title: "Users",
     href: ROUTES.ADMIN_USERS,
+  },
+  {
+    title: "Promotion",
+    href: ROUTES.ADMIN_PROMOTION,
   },
 ];
 

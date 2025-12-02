@@ -1,5 +1,5 @@
-import { APP_NAME } from '@/lib/constants';
-import CONTENT_PAGE from '@/lib/content-page';
+import { APP_NAME } from "@/lib/constants";
+import CONTENT_PAGE from "@/lib/content-page";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();

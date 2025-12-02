@@ -49,8 +49,10 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cart.items.map((item) => (
-                  <TableRow key={item.slug}>
+                {cart.items.map((item, index) => (
+                  <TableRow
+                    key={`${item.productId}-${item.size || ""}-${item.color || ""}-${index}`}
+                  >
                     <TableCell>
                       <Link
                         href={ROUTES.PRODUCT(item.slug)}
@@ -64,7 +66,16 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                             height={50}
                           />
                         )}
-                        <span className="px-2">{item.name}</span>
+                        <div className="px-2">
+                          <span>{item.name}</span>
+                          {(item.size || item.color) && (
+                            <div className="text-xs text-muted-foreground">
+                              {item.size && <span>Size: {item.size}</span>}
+                              {item.size && item.color && <span> • </span>}
+                              {item.color && <span>Color: {item.color}</span>}
+                            </div>
+                          )}
+                        </div>
                       </Link>
                     </TableCell>
                     <TableCell className="flex-center gap-2">
@@ -152,7 +163,11 @@ function RemoveButton({ item }: { item: CartItem }) {
       type="button"
       onClick={() =>
         startTransition(async () => {
-          const res = await removeItemFromCart(item.productId);
+          const res = await removeItemFromCart(
+            item.productId,
+            item.size,
+            item.color
+          );
 
           if (!res.success) {
             toast({

@@ -36,7 +36,7 @@ export default async function UserButton() {
             <Button
               data-testid="user-button"
               variant="ghost"
-              className="relativee w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200"
+              className="relativee w-8 h-8 rounded-full ml-2 flex items-center justify-center bg-gray-200 dark:text-stone-900 dark:hover:text-white"
             >
               {firstInitial}
             </Button>
