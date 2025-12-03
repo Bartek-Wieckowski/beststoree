@@ -41,8 +41,7 @@ export default async function OrderPage(props: {
   }
 
   return (
-    <div className="wrapper">
-      <OrderDetailsTable
+    <OrderDetailsTable
         order={{
           ...order,
           shippingAddress: order.shippingAddress as ShippingAddress,
@@ -52,6 +51,5 @@ export default async function OrderPage(props: {
         paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
         isAdmin={session?.user?.role === "admin" || false}
       />
-    </div>
   );
 }

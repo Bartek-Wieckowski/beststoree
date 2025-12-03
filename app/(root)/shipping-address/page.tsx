@@ -27,9 +27,9 @@ export default async function ShippingAddressPage() {
   const user = await getUserById(userId);
 
   return (
-    <div className="wrapper">
+    <>
       <CheckoutSteps current={1} />
       <ShippingAddressForm address={user.address as ShippingAddress} />
-    </div>
+    </>
   );
 }

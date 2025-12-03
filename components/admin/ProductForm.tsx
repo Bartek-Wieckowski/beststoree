@@ -672,7 +672,9 @@ export default function ProductForm({
                                     key={index}
                                     className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md"
                                   >
-                                    <span>{color}</span>
+                                    <span className="text-stone-900">
+                                      {color}
+                                    </span>
                                     <button
                                       type="button"
                                       onClick={() => {

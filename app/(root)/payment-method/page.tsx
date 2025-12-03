@@ -19,9 +19,9 @@ export default async function PaymentMethodPage() {
   const user = await getUserById(userId);
 
   return (
-    <div className="wrapper">
+    <>
       <CheckoutSteps current={2} />
       <PaymentMethodForm preferredPaymentMethod={user.paymentMethod} />
-    </div>
+    </>
   );
 }

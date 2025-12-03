@@ -130,128 +130,126 @@ export default async function SearchPage({
   const cart = await getMyCart();
 
   return (
-    <div className="wrapper">
-      <div className="grid md:grid-cols-5 md:gap-5">
-        <div className="filter-links">
-          {/* Category Links */}
-          <div className="text-xl mb-2 mt-3">
-            {CONTENT_PAGE.SEARCH_PAGE.department}
-          </div>
-          <div>
-            <ul className="space-y-1">
-              <li>
-                <Link
-                  className={`${
-                    (category === "all" || category === "") && "font-bold"
-                  }`}
-                  href={getFilterUrl({ c: "all" })}
-                >
-                  {CONTENT_PAGE.SEARCH_PAGE.any}
-                </Link>
-              </li>
-              {categories.map((cat) => (
-                <li key={cat.id}>
-                  <Link
-                    className={`${category === cat.slug && "font-bold"}`}
-                    href={getFilterUrl({ c: cat.slug })}
-                  >
-                    {cat.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* Price Links */}
-          <div className="text-xl mb-2 mt-8">
-            {CONTENT_PAGE.SEARCH_PAGE.price}
-          </div>
-          <div>
-            <ul className="space-y-1">
-              <li>
-                <Link
-                  className={`${price === "all" && "font-bold"}`}
-                  href={getFilterUrl({ p: "all" })}
-                >
-                  {CONTENT_PAGE.SEARCH_PAGE.any}
-                </Link>
-              </li>
-              {prices.map((p) => (
-                <li key={p.value}>
-                  <Link
-                    className={`${price === p.value && "font-bold"}`}
-                    href={getFilterUrl({ p: p.value })}
-                  >
-                    {p.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* Rating Links */}
-          <div className="text-xl mb-2 mt-8">
-            {CONTENT_PAGE.SEARCH_PAGE.customerRatings}
-          </div>
-          <div>
-            <ul className="space-y-1">
-              <li>
-                <Link
-                  className={`${rating === "all" && "font-bold"}`}
-                  href={getFilterUrl({ r: "all" })}
-                >
-                  {CONTENT_PAGE.SEARCH_PAGE.any}
-                </Link>
-              </li>
-              {ratings.map((r) => (
-                <li key={r}>
-                  <Link
-                    className={`${rating === r.toString() && "font-bold"}`}
-                    href={getFilterUrl({ r: `${r}` })}
-                  >
-                    {`${r} stars & up`}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+    <div className="grid md:grid-cols-5 md:gap-5">
+      <div className="filter-links">
+        {/* Category Links */}
+        <div className="text-xl mb-2 mt-3">
+          {CONTENT_PAGE.SEARCH_PAGE.department}
         </div>
-        <div className="md:col-span-4 space-y-4">
-          <div className="flex-between flex-col md:flex-row my-4">
-            <div className="flex items-center">
-              {q !== "all" && q !== "" && "Query: " + q}
-              {category !== "all" && category !== "" && "Category: " + category}
-              {price !== "all" && " Price: " + price}
-              {rating !== "all" && " Rating: " + rating + " stars & up"}
-              &nbsp;
-              {(q !== "all" && q !== "") ||
-              (category !== "all" && category !== "") ||
-              rating !== "all" ||
-              price !== "all" ? (
-                <Button variant={"link"} asChild>
-                  <Link href="/search">Clear</Link>
-                </Button>
-              ) : null}
-            </div>
-            <div>
-              {CONTENT_PAGE.SEARCH_PAGE.sortBy}{" "}
-              {sortOrders.map((s) => (
+        <div>
+          <ul className="space-y-1">
+            <li>
+              <Link
+                className={`${
+                  (category === "all" || category === "") && "font-bold"
+                }`}
+                href={getFilterUrl({ c: "all" })}
+              >
+                {CONTENT_PAGE.SEARCH_PAGE.any}
+              </Link>
+            </li>
+            {categories.map((cat) => (
+              <li key={cat.id}>
                 <Link
-                  key={s}
-                  className={`mx-2 ${sort == s && "font-bold"}`}
-                  href={getFilterUrl({ s })}
+                  className={`${category === cat.slug && "font-bold"}`}
+                  href={getFilterUrl({ c: cat.slug })}
                 >
-                  {s}
+                  {cat.name}
                 </Link>
-              ))}
-            </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Price Links */}
+        <div className="text-xl mb-2 mt-8">
+          {CONTENT_PAGE.SEARCH_PAGE.price}
+        </div>
+        <div>
+          <ul className="space-y-1">
+            <li>
+              <Link
+                className={`${price === "all" && "font-bold"}`}
+                href={getFilterUrl({ p: "all" })}
+              >
+                {CONTENT_PAGE.SEARCH_PAGE.any}
+              </Link>
+            </li>
+            {prices.map((p) => (
+              <li key={p.value}>
+                <Link
+                  className={`${price === p.value && "font-bold"}`}
+                  href={getFilterUrl({ p: p.value })}
+                >
+                  {p.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Rating Links */}
+        <div className="text-xl mb-2 mt-8">
+          {CONTENT_PAGE.SEARCH_PAGE.customerRatings}
+        </div>
+        <div>
+          <ul className="space-y-1">
+            <li>
+              <Link
+                className={`${rating === "all" && "font-bold"}`}
+                href={getFilterUrl({ r: "all" })}
+              >
+                {CONTENT_PAGE.SEARCH_PAGE.any}
+              </Link>
+            </li>
+            {ratings.map((r) => (
+              <li key={r}>
+                <Link
+                  className={`${rating === r.toString() && "font-bold"}`}
+                  href={getFilterUrl({ r: `${r}` })}
+                >
+                  {`${r} stars & up`}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="md:col-span-4 space-y-4">
+        <div className="flex-between flex-col md:flex-row my-4">
+          <div className="flex items-center">
+            {q !== "all" && q !== "" && "Query: " + q}
+            {category !== "all" && category !== "" && "Category: " + category}
+            {price !== "all" && " Price: " + price}
+            {rating !== "all" && " Rating: " + rating + " stars & up"}
+            &nbsp;
+            {(q !== "all" && q !== "") ||
+            (category !== "all" && category !== "") ||
+            rating !== "all" ||
+            price !== "all" ? (
+              <Button variant={"link"} asChild>
+                <Link href="/search">Clear</Link>
+              </Button>
+            ) : null}
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {products.data.length === 0 && (
-              <div>{CONTENT_PAGE.PRODUCT_LIST.noProductsFound}</div>
-            )}
-            {products.data.map((product) => (
-              <ProductCard key={product.id} product={product} cart={cart} />
+          <div>
+            {CONTENT_PAGE.SEARCH_PAGE.sortBy}{" "}
+            {sortOrders.map((s) => (
+              <Link
+                key={s}
+                className={`mx-2 ${sort == s && "font-bold"}`}
+                href={getFilterUrl({ s })}
+              >
+                {s}
+              </Link>
             ))}
           </div>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {products.data.length === 0 && (
+            <div>{CONTENT_PAGE.PRODUCT_LIST.noProductsFound}</div>
+          )}
+          {products.data.map((product) => (
+            <ProductCard key={product.id} product={product} cart={cart} />
+          ))}
         </div>
       </div>
     </div>

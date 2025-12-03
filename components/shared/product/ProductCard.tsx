@@ -12,8 +12,17 @@ import ProductRating from "./ProductRating";
 import ProductVariants from "./ProductVariants";
 import AddToCart from "./AddToCart";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
+import { Plus, Heart, Scale } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useWishlist } from "@/hooks/use-wishlist";
+import { useComparison } from "@/hooks/use-comparison";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function ProductCard({
   product,
@@ -25,6 +34,20 @@ export default function ProductCard({
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    isLoaded: wishlistLoaded,
+  } = useWishlist();
+  const {
+    addToComparison,
+    removeFromComparison,
+    isInComparison,
+    canAddProduct,
+    isLoaded: comparisonLoaded,
+  } = useComparison();
+  const { toast } = useToast();
 
   const firstImage = product.images?.find((img) => img && img.trim() !== "");
 
@@ -62,60 +85,106 @@ export default function ProductCard({
             className="transition-transform group-hover:scale-105"
           />
         </Link>
+        {wishlistLoaded && comparisonLoaded && (
+          <div className="absolute top-2 left-2 z-10 flex gap-2">
+            <Button
+              type="button"
+              size="icon"
+              variant="secondary"
+              className={cn(
+                "h-8 w-8 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity",
+                isInWishlist(product.id) &&
+                  "opacity-100 bg-red-50 hover:bg-red-100"
+              )}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isInWishlist(product.id)) {
+                  const result = removeFromWishlist(product.id);
+                  toast({ description: result.message });
+                } else {
+                  const result = addToWishlist(product);
+                  toast({
+                    description: result.message,
+                    variant: result.success ? "default" : "destructive",
+                  });
+                }
+              }}
+            >
+              <Heart
+                className={cn(
+                  "h-4 w-4",
+                  isInWishlist(product.id) && "fill-red-500 text-red-500"
+                )}
+              />
+            </Button>
+            <Button
+              type="button"
+              size="icon"
+              variant="secondary"
+              className={cn(
+                "h-8 w-8 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity",
+                isInComparison(product.id) &&
+                  "opacity-100 bg-blue-50 hover:bg-blue-100"
+              )}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isInComparison(product.id)) {
+                  const result = removeFromComparison(product.id);
+                  toast({ description: result.message });
+                } else {
+                  const canAdd = canAddProduct(product);
+                  if (!canAdd.canAdd) {
+                    let message = "";
+                    switch (canAdd.reason) {
+                      case "max_limit":
+                        message = CONTENT_PAGE.COMPARISON.maxItems;
+                        break;
+                      case "different_category":
+                        message = CONTENT_PAGE.COMPARISON.differentCategory;
+                        break;
+                      case "already_added":
+                        message = CONTENT_PAGE.COMPARISON.alreadyAdded;
+                        break;
+                      default:
+                        message = "Cannot add product to comparison";
+                    }
+                    toast({ description: message, variant: "destructive" });
+                    return;
+                  }
+                  const result = addToComparison(product);
+                  toast({
+                    description: result.message,
+                    variant: result.success ? "default" : "destructive",
+                  });
+                }
+              }}
+            >
+              <Scale
+                className={cn(
+                  "h-4 w-4",
+                  isInComparison(product.id) && "fill-blue-500 text-blue-500"
+                )}
+              />
+            </Button>
+          </div>
+        )}
         {product.stock > 0 && (
           <div className="absolute bottom-2 right-2 z-10">
-            {!showQuickAdd ? (
-              <Button
-                type="button"
-                size="sm"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowQuickAdd(true);
-                }}
-                className="shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Quick Add
-              </Button>
-            ) : (
-              <div
-                className="bg-white p-3 rounded-lg shadow-xl border min-w-[220px] space-y-3"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-sm">Quick Add</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 w-6 p-0"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowQuickAdd(false);
-                    }}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-                {isVariantRequired && (
-                  <ProductVariants
-                    sizes={sizes}
-                    colors={colors}
-                    selectedSize={selectedSize}
-                    selectedColor={selectedColor}
-                    onSizeChange={setSelectedSize}
-                    onColorChange={setSelectedColor}
-                  />
-                )}
-                <AddToCart
-                  cart={cart}
-                  item={cartItem}
-                  disabled={isVariantRequired && !isVariantSelected}
-                />
-              </div>
-            )}
+            <Button
+              type="button"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowQuickAdd(true);
+              }}
+              className="shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Quick Add
+            </Button>
           </div>
         )}
       </CardHeader>
@@ -134,6 +203,31 @@ export default function ProductCard({
           )}
         </div>
       </CardContent>
+
+      <Dialog open={showQuickAdd} onOpenChange={setShowQuickAdd}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Quick Add - {product.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {isVariantRequired && (
+              <ProductVariants
+                sizes={sizes}
+                colors={colors}
+                selectedSize={selectedSize}
+                selectedColor={selectedColor}
+                onSizeChange={setSelectedSize}
+                onColorChange={setSelectedColor}
+              />
+            )}
+            <AddToCart
+              cart={cart}
+              item={cartItem}
+              disabled={isVariantRequired && !isVariantSelected}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

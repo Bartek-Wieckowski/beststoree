@@ -58,7 +58,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                         href={ROUTES.PRODUCT(item.slug)}
                         className="flex items-center"
                       >
-                        {item.image && item.image.trim() !== '' && (
+                        {item.image && item.image.trim() !== "" && (
                           <Image
                             src={item.image}
                             alt={item.name}

@@ -92,7 +92,7 @@ export type Review = z.infer<typeof insertReviewSchema> & {
 
 export type Category = z.infer<typeof insertCategorySchema> & {
   id: string;
-  _count: {
+  _count?: {
     products: number;
   };
 };

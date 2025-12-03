@@ -75,18 +75,18 @@ export default function ProductVariants({
                   className={cn(
                     "flex items-center gap-2 px-3 py-2 rounded-md border-2 transition-all",
                     isSelected
-                      ? "border-primary bg-primary/10 ring-2 ring-primary ring-offset-2"
-                      : "border-gray-300 hover:border-gray-400 bg-white"
+                      ? "border-primary bg-primary/10 ring-2 ring-primary ring-offset-2 ring-offset-background"
+                      : "border-border hover:border-primary/50 bg-background hover:bg-accent"
                   )}
                   title={color}
                 >
                   {isHexColor && (
                     <div
-                      className="w-5 h-5 rounded-full border border-gray-300"
+                      className="w-5 h-5 rounded-full border border-border"
                       style={{ backgroundColor: colorValue }}
                     />
                   )}
-                  <span className="text-sm font-medium">{color}</span>
+                  <span className="text-sm font-medium text-foreground">{color}</span>
                 </button>
               );
             })}

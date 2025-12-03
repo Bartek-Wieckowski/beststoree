@@ -24,6 +24,28 @@ export async function getAllCategories() {
   return convertToPlainObject(data);
 }
 
+export async function getCategoriesWithProducts() {
+  const data = await prisma.category.findMany({
+    where: {
+      products: {
+        some: {},
+      },
+    },
+    include: {
+      _count: {
+        select: {
+          products: true,
+        },
+      },
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return convertToPlainObject(data);
+}
+
 export async function getCategoryById(id: string) {
   const data = await prisma.category.findFirst({
     where: { id },

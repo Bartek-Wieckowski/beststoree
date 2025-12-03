@@ -1,32 +1,19 @@
-"use client";
-
 import CONTENT_PAGE from "@/lib/content-page";
 import ProductCard from "./ProductCard";
 import { Product, Cart } from "@/types";
-import { useEffect, useState } from "react";
-import { getMyCart } from "@/lib/actions/cart.actions";
 
 export default function ProductList({
   data,
   title,
   limit,
-  cart: initialCart,
+  cart,
 }: {
   data: Product[];
   title?: string;
   limit?: number;
   cart?: Cart;
 }) {
-  const [cart, setCart] = useState<Cart | undefined>(initialCart);
   const limitedData = limit ? data.slice(0, limit) : data;
-
-  useEffect(() => {
-    if (!initialCart) {
-      getMyCart()
-        .then(setCart)
-        .catch(() => {});
-    }
-  }, [initialCart]);
 
   return (
     <div className="mt-10">

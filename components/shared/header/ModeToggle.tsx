@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -9,14 +9,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
-} from '@/components/ui/dropdown-menu';
-import { useTheme } from 'next-themes';
-import { SunIcon, MoonIcon, SunMoon } from 'lucide-react';
-import CONTENT_PAGE from '@/lib/content-page';
+} from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
+import { SunIcon, MoonIcon, SunMoon } from "lucide-react";
+import CONTENT_PAGE from "@/lib/content-page";
 
-export default function ModeToggle() {
+type ModeToggleProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
+
+export default function ModeToggle({
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+}: ModeToggleProps = {}) {
   const [mounted, setMounted] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = controlledOnOpenChange || setInternalOpen;
 
   useEffect(() => {
     setMounted(true);
@@ -25,16 +36,17 @@ export default function ModeToggle() {
   if (!mounted) return null;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="focus-visible:ring-0 focus-visible:ring-offset-0"
+          size="icon"
+          className="relative overflow-visible outline-none focus:!outline-none focus-visible:!outline-none focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0 active:!outline-none"
           data-testid="theme-toggle"
         >
-          {theme === 'system' ? (
+          {theme === "system" ? (
             <SunMoon data-testid="sun-moon-icon" />
-          ) : theme === 'dark' ? (
+          ) : theme === "dark" ? (
             <MoonIcon data-testid="moon-icon" />
           ) : (
             <SunIcon data-testid="sun-icon" />
@@ -47,20 +59,20 @@ export default function ModeToggle() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
-          checked={theme === 'light'}
-          onClick={() => setTheme('light')}
+          checked={theme === "light"}
+          onClick={() => setTheme("light")}
         >
           {CONTENT_PAGE.MODE_TOGGLE.light}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
-          checked={theme === 'dark'}
-          onClick={() => setTheme('dark')}
+          checked={theme === "dark"}
+          onClick={() => setTheme("dark")}
         >
           {CONTENT_PAGE.MODE_TOGGLE.dark}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
-          checked={theme === 'system'}
-          onClick={() => setTheme('system')}
+          checked={theme === "system"}
+          onClick={() => setTheme("system")}
         >
           {CONTENT_PAGE.MODE_TOGGLE.system}
         </DropdownMenuCheckboxItem>

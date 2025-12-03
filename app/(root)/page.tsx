@@ -10,8 +10,9 @@ import { Metadata } from "next";
 import IconBoxes from "@/components/IconBoxes";
 import PromotionCountdown from "@/components/PromotionCountdown";
 import CategoryList from "@/components/shared/CategoryList";
-import { getAllCategories } from "@/lib/actions/category.actions";
+import { getCategoriesWithProducts } from "@/lib/actions/category.actions";
 import { getTotalProductsCount } from "@/lib/actions/product.actions";
+import { getMyCart } from "@/lib/actions/cart.actions";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -22,10 +23,11 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const latestProducts = await getLatestProducts();
   const featuredProducts = await getFeaturedProducts();
-  const categories = await getAllCategories();
+  const categories = await getCategoriesWithProducts();
   const totalProductsCount = await getTotalProductsCount();
   const allProducts = await getAllProductsForHome();
   const promotion = await getPromotion();
+  const cart = await getMyCart();
 
   return (
     <>
@@ -38,18 +40,17 @@ export default async function HomePage() {
           totalProductsCount={totalProductsCount}
         />
       )}
-      <div className="wrapper">
-        <ProductList data={latestProducts} title="Newest Arrivals" limit={4} />
-      </div>
-      <div className="px-4 grid grid-cols-1 xl:grid-cols-4 gap-4 lg:gap-8 my-10">
-        <div className="lg:col-span-3">
-          <ProductList data={allProducts} title="All Products" />
-        </div>
-        <aside className="xl:col-span-1">
-          <PromotionCountdown promotion={promotion} />
-        </aside>
-      </div>
-      <IconBoxes />
+      <section className="flex flex-col gap-20">
+        <ProductList
+          data={latestProducts}
+          title="Newest Arrivals"
+          limit={4}
+          cart={cart}
+        />
+        <ProductList data={allProducts} title="All Products" cart={cart} />
+        <IconBoxes />
+      </section>
+      <PromotionCountdown promotion={promotion} />
     </>
   );
 }

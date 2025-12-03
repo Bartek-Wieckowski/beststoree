@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ProductVariants from "./ProductVariants";
 import AddToCart from "./AddToCart";
+import ProductActions from "./ProductActions";
 import { Cart, CartItem } from "@/types";
 import { Product } from "@/types";
 
@@ -59,7 +60,7 @@ export default function ProductVariantSelector({
           disabled={isVariantRequired && !isVariantSelected}
         />
       )}
+      <ProductActions product={product} />
     </div>
   );
 }
-

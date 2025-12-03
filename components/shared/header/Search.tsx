@@ -14,7 +14,7 @@ export default function Search() {
           placeholder={CONTENT_PAGE.SEARCH.search}
           className="md:w-[6.25rem] lg:w-[18.75rem]"
         />
-        <Button>
+        <Button className="block md:hidden">
           <SearchIcon />
         </Button>
       </div>

@@ -9,9 +9,5 @@ export const metadata = {
 
 export default async function CartPage() {
   const cart = await getMyCart();
-  return (
-    <div className="wrapper">
-      <CartTable cart={cart} />
-    </div>
-  );
+  return <CartTable cart={cart} />;
 }

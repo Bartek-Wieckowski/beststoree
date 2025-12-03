@@ -27,7 +27,7 @@ export default async function ProductDetailsPage(props: {
   const cart = await getMyCart();
 
   return (
-    <div className="wrapper">
+    <>
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="col-span-2">
@@ -105,6 +105,6 @@ export default async function ProductDetailsPage(props: {
           productSlug={product.slug}
         />
       </section>
-    </div>
+    </>
   );
 }

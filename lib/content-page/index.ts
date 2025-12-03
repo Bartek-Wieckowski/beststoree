@@ -2,6 +2,8 @@ const CONTENT_PAGE = {
   HEADER: {
     cart: "Cart",
     signIn: "Sign In",
+    wishlist: "Wishlist",
+    comparison: "Comparison",
   },
   FOOTER: {
     allRightsReserved: "All Rights Reserved",
@@ -35,6 +37,10 @@ const CONTENT_PAGE = {
     addToCart: "Add to Cart",
     reviews: "Reviews",
     customerReviews: "Customer Reviews",
+    addToWishlist: "Add to Wishlist",
+    removeFromWishlist: "Remove from Wishlist",
+    addToComparison: "Add to Comparison",
+    removeFromComparison: "Remove from Comparison",
   },
   SIGN_IN_PAGE: {
     signIn: "Sign In",
@@ -356,6 +362,31 @@ const CONTENT_PAGE = {
     dealHasEndedDescription:
       "This deal is no longer available. Check out our latest promotions!",
     viewProducts: "View Products",
+  },
+  WISHLIST: {
+    title: "Wishlist",
+    empty: "Your wishlist is empty",
+    goShopping: "Go Shopping",
+    remove: "Remove",
+    viewProduct: "View Product",
+  },
+  COMPARISON: {
+    title: "Product Comparison",
+    empty: "No products to compare",
+    addProducts: "Add products from the same category to compare",
+    clear: "Clear Comparison",
+    remove: "Remove",
+    viewProduct: "View Product",
+    name: "Name",
+    price: "Price",
+    brand: "Brand",
+    rating: "Rating",
+    stock: "Stock",
+    description: "Description",
+    category: "Category",
+    maxItems: "Maximum 4 products can be compared",
+    differentCategory: "You can only compare products from the same category",
+    alreadyAdded: "Product already in comparison",
   },
 };
 
