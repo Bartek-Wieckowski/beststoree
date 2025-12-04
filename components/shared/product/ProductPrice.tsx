@@ -13,7 +13,7 @@ export default function ProductPrice({
 
   return (
     <p
-      className={cn("text-2xl", className)}
+      className={cn("text-2xl w-fit", className)}
       data-testid="product-price-wrapper"
     >
       <span className="text-xs align-super">

@@ -39,8 +39,10 @@ export default function ProductVariants({
   return (
     <div className="space-y-4">
       {hasSizes && (
-        <div>
-          <Label htmlFor="size-select">{CONTENT_PAGE.GLOBAL.size}</Label>
+        <div className="space-y-2">
+          <Label htmlFor="size-select" className="text-sm font-medium">
+            {CONTENT_PAGE.GLOBAL.size}
+          </Label>
           <Select
             value={selectedSize || ""}
             onValueChange={(value) => onSizeChange(value || null)}
@@ -60,9 +62,11 @@ export default function ProductVariants({
       )}
 
       {hasColors && (
-        <div>
-          <Label>{CONTENT_PAGE.GLOBAL.color}</Label>
-          <div className="flex flex-wrap gap-2 mt-2">
+        <div className="space-y-2">
+          <Label htmlFor="color-select" className="text-sm font-medium">
+            {CONTENT_PAGE.GLOBAL.color}
+          </Label>
+          <div className="flex flex-wrap gap-2">
             {colors.map((color) => {
               const colorValue = getColorValue(color);
               const isSelected = selectedColor === color;
@@ -74,22 +78,23 @@ export default function ProductVariants({
                   type="button"
                   onClick={() => onColorChange(isSelected ? null : color)}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-md border-2 transition-all",
+                    "flex items-center gap-2 px-3 py-2 rounded-md border-2 transition-all text-sm font-medium",
                     isSelected
-                      ? "border-primary bg-primary/10 ring-2 ring-primary ring-offset-2 ring-offset-background"
+                      ? "border-primary bg-primary/10 ring-2 ring-primary ring-offset-1"
                       : "border-border hover:border-primary/50 bg-background hover:bg-accent"
                   )}
                   title={color}
                 >
                   {isHexColor && (
                     <div
-                      className="w-5 h-5 rounded-full border border-border"
+                      className={cn(
+                        "w-4 h-4 rounded-full border shrink-0",
+                        isSelected ? "border-primary" : "border-border"
+                      )}
                       style={{ backgroundColor: colorValue }}
                     />
                   )}
-                  <span className="text-sm font-medium text-foreground">
-                    {color}
-                  </span>
+                  <span className="text-foreground">{color}</span>
                 </button>
               );
             })}

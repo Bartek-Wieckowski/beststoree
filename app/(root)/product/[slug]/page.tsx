@@ -29,56 +29,57 @@ export default async function ProductDetailsPage(props: {
   return (
     <>
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-5">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          {/* Images - left column on desktop */}
+          <div>
             <ProductImages images={product.images} />
           </div>
-          <div className="col-span-2 p-5">
-            <div className="flex flex-col gap-6">
-              <p>
+
+          {/* Right column - Product Info + Purchase Card */}
+          <div className="flex flex-col gap-6">
+            {/* Product Info */}
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
                 <span data-testid="product-brand">{product.brand}</span>{" "}
                 {product.category?.name || ""}
               </p>
               <h1 className="h3-bold" data-testid="product-name">
                 {product.name}
               </h1>
-              {/* <p>
-                {product.rating} of {product.numReviews}{" "}
-                {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews}
-              </p> */}
-              <ProductRating value={Number(product.rating)} />
-              <p>
-                {product.numReviews}{" "}
-                {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews}
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-3">
+                <ProductRating value={Number(product.rating)} />
+                <p className="text-sm text-muted-foreground">
+                  {product.numReviews}{" "}
+                  {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews}
+                </p>
+              </div>
+              <div>
                 <ProductPrice
                   value={Number(product.price)}
-                  className="w-24 rounded-full bg-green-100 text-green-700 px-5 py-2"
+                  className="rounded-full bg-green-100 text-green-700 px-5 py-2 inline-block"
                 />
               </div>
             </div>
-            <div className="mt-10">
-              <h2 className="font-semibold">
-                {CONTENT_PAGE.GLOBAL.description}
-              </h2>
-              <p data-testid="product-description">{product.description}</p>
-            </div>
-          </div>
-          <div>
-            <Card>
-              <CardContent className="p-4">
-                <div className="mb-2 flex justify-between">
-                  <div>{CONTENT_PAGE.GLOBAL.price}</div>
-                  <div>
-                    <ProductPrice value={Number(product.price)} />
-                  </div>
+
+            {/* Purchase Card */}
+            <Card className="lg:sticky lg:top-4">
+              <CardContent className="p-5 space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">
+                    {CONTENT_PAGE.GLOBAL.price}
+                  </span>
+                  <ProductPrice value={Number(product.price)} />
                 </div>
-                <div className="mb-2 flex justify-between">
-                  <div>{CONTENT_PAGE.GLOBAL.status}</div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">
+                    {CONTENT_PAGE.GLOBAL.status}
+                  </span>
                   <div>
                     {product.stock > 0 ? (
-                      <Badge variant="outline">
+                      <Badge
+                        variant="outline"
+                        className="bg-green-50 text-green-700 border-green-200"
+                      >
                         {CONTENT_PAGE.GLOBAL.inStock}
                       </Badge>
                     ) : (
@@ -93,6 +94,19 @@ export default async function ProductDetailsPage(props: {
                 )}
               </CardContent>
             </Card>
+
+            {/* Description - below purchase card */}
+            <div className="pt-4 border-t">
+              <h2 className="font-semibold mb-2">
+                {CONTENT_PAGE.GLOBAL.description}
+              </h2>
+              <p
+                className="text-muted-foreground"
+                data-testid="product-description"
+              >
+                {product.description}
+              </p>
+            </div>
           </div>
         </div>
       </section>

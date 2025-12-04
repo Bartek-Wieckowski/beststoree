@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-svh">
       <Image
         src="/images/logo.png"
         width={48}

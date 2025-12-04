@@ -238,7 +238,7 @@ export default function OrderDetailsTable({
             </CardContent>
           </Card>
         </div>
-        <div>
+        <div className="mt-5 md:mt-0 col-span-2 md:col-span-1">
           <Card>
             <CardContent className="p-4 gap-4 space-y-4">
               <div className="flex justify-between">

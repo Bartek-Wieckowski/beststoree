@@ -1,8 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { getOrderById } from "@/lib/actions/order.actions";
-import CONTENT_PAGE from "@/lib/content-page";
 import ROUTES from "@/lib/routes";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import Stripe from "stripe";
 
@@ -32,23 +29,11 @@ export default async function SuccessPage({
 
   const isSuccess = paymentIntent.status === "succeeded";
 
-  if (!isSuccess) return redirect(ROUTES.ORDER(id));
+  // Redirect to root order page after successful payment
+  if (isSuccess) {
+    return redirect(ROUTES.ORDER(id));
+  }
 
-  return (
-    <div className="max-w-4xl w-full mx-auto space-y-8">
-      <div className="flex flex-col gap-6 items-center">
-        <h1 className="h1-bold">
-          {CONTENT_PAGE.PAGE.STRIPE_PAYMENT_SUCCESS.thanksForYourPurchase}
-        </h1>
-        <div>
-          {CONTENT_PAGE.PAGE.STRIPE_PAYMENT_SUCCESS.weAreProcessingYourOrder}
-        </div>
-        <Button asChild>
-          <Link href={ROUTES.ORDER(id)}>
-            {CONTENT_PAGE.PAGE.STRIPE_PAYMENT_SUCCESS.viewOrder}
-          </Link>
-        </Button>
-      </div>
-    </div>
-  );
+  // If payment failed, redirect back to checkout order page
+  return redirect(ROUTES.ORDER(id));
 }

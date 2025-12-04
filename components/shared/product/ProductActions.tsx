@@ -99,48 +99,58 @@ export default function ProductActions({ product }: { product: Product }) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-fit">
       <Button
         type="button"
-        variant="outline"
+        variant={isInWishlist(product.id) ? "default" : "outline"}
         size="sm"
         onClick={handleWishlistToggle}
         className={cn(
-          "flex-1 justify-start",
-          isInWishlist(product.id) &&
-            "bg-red-50 border-red-200 hover:bg-red-100 text-stone-900 hover:text-stone-900 text-[0.75rem]"
+          "group w-full justify-start gap-2 transition-all",
+          isInWishlist(product.id)
+            ? "bg-red-500 hover:bg-red-600 text-white border-red-500"
+            : "hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-200 dark:hover:border-red-800 hover:text-red-700 dark:hover:text-red-400 text-foreground"
         )}
       >
         <Heart
           className={cn(
-            "w-4 h-4 mr-2",
-            isInWishlist(product.id) && "fill-red-500 text-red-500"
+            "w-4 h-4 shrink-0 transition-colors",
+            isInWishlist(product.id)
+              ? "fill-white text-white"
+              : "text-foreground group-hover:text-red-700 dark:group-hover:text-red-400"
           )}
         />
-        {isInWishlist(product.id)
-          ? CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.removeFromWishlist
-          : CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToWishlist}
+        <span className="text-sm">
+          {isInWishlist(product.id)
+            ? CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.removeFromWishlist
+            : CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToWishlist}
+        </span>
       </Button>
       <Button
         type="button"
-        variant="outline"
+        variant={isInComparison(product.id) ? "default" : "outline"}
         size="sm"
         onClick={handleComparisonToggle}
         className={cn(
-          "flex-1 justify-start",
-          isInComparison(product.id) &&
-            "bg-blue-50 border-blue-200 hover:bg-blue-100 text-stone-900 hover:text-stone-900 text-[0.75rem]"
+          "group w-full justify-start gap-2 transition-all",
+          isInComparison(product.id)
+            ? "bg-blue-500 hover:bg-blue-600 text-white border-blue-500"
+            : "hover:bg-blue-50 dark:hover:bg-blue-950 hover:border-blue-200 dark:hover:border-blue-800 hover:text-blue-700 dark:hover:text-blue-400 text-foreground"
         )}
       >
         <Scale
           className={cn(
-            "w-4 h-4 mr-2",
-            isInComparison(product.id) && "fill-blue-500 text-blue-500"
+            "w-4 h-4 shrink-0 transition-colors",
+            isInComparison(product.id)
+              ? "fill-white text-white"
+              : "text-foreground group-hover:text-blue-700 dark:group-hover:text-blue-400"
           )}
         />
-        {isInComparison(product.id)
-          ? CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.removeFromComparison
-          : CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToComparison}
+        <span className="text-sm">
+          {isInComparison(product.id)
+            ? CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.removeFromComparison
+            : CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToComparison}
+        </span>
       </Button>
     </div>
   );

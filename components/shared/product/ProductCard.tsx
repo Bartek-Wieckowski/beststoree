@@ -124,7 +124,7 @@ export default function ProductCard({
               message = CONTENT_PAGE.COMPONENT.COMPARISON.alreadyAdded;
               break;
             default:
-              message = "Cannot add product to comparison";
+              message = CONTENT_PAGE.COMPONENT.COMPARISON.cannotAddProduct;
           }
           toast({ description: message, variant: "destructive" });
           return;

@@ -35,7 +35,7 @@ export default function ProductCarousel({ data }: { data: Product[] }) {
             .map((product: Product) => (
               <CarouselItem key={product.id}>
                 <Link href={ROUTES.PRODUCT(product.slug)}>
-                  <div className="relative mx-auto h-[21.875rem]">
+                  <div className="relative mx-auto h-[15.625rem] md:h-[21.875rem] overflow-hidden rounded-lg">
                     <Image
                       src={product.banner!}
                       alt={product.name}
@@ -44,8 +44,8 @@ export default function ProductCarousel({ data }: { data: Product[] }) {
                       sizes="100vw"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 flex items-end justify-center">
-                      <h2 className="bg-gray-900 bg-opacity-50 text-2xl font-bold px-2 text-white">
+                    <div className="absolute inset-0 flex items-end justify-center pb-4 md:pb-6">
+                      <h2 className="bg-gray-900 bg-opacity-50 text-lg md:text-2xl font-bold px-3 py-2 md:px-4 md:py-2 text-white rounded">
                         {product.name}
                       </h2>
                     </div>

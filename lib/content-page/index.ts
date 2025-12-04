@@ -152,6 +152,7 @@ const CONTENT_PAGE = {
       shoppingCart: "Shopping Cart",
       cartIsEmpty: "Cart is empty.",
       proceedToCheckout: "Proceed to Checkout",
+      clearAllCart: "Clear All Cart",
     },
     SHIPPING_ADDRESS: {
       shippingAddress: "Shipping Address",

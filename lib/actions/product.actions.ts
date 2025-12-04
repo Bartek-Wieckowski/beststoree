@@ -9,6 +9,7 @@ import ROUTES from "../routes";
 import { insertProductSchema, updateProductSchema } from "../validators";
 import { z } from "zod";
 import { deleteImages } from "./image.actions";
+import CONTENT_PAGE from "../content-page";
 
 export async function getLatestProducts() {
   const data = await prisma.product.findMany({
@@ -88,10 +89,12 @@ export async function getAllProducts({
 }) {
   // Query filter
   const queryFilter: Prisma.ProductWhereInput =
-    query && query !== "all"
+    query &&
+    query.trim() !== "" &&
+    query.trim().toLowerCase() !== CONTENT_PAGE.GLOBAL.all.toLowerCase()
       ? {
           name: {
-            contains: query,
+            contains: query.trim(),
             mode: "insensitive",
           } as Prisma.StringFilter,
         }
@@ -99,7 +102,9 @@ export async function getAllProducts({
 
   // Category filter - use slug from category relation
   const categoryFilter: Prisma.ProductWhereInput =
-    category && category !== "all"
+    category &&
+    category.trim() !== "" &&
+    category.trim().toLowerCase() !== CONTENT_PAGE.GLOBAL.all.toLowerCase()
       ? {
           category: {
             slug: category,
@@ -109,7 +114,10 @@ export async function getAllProducts({
 
   // Price filter
   const priceFilter: Prisma.ProductWhereInput =
-    price && price !== "all"
+    price &&
+    price.trim() !== "" &&
+    price.trim().toLowerCase() !== CONTENT_PAGE.GLOBAL.all.toLowerCase() &&
+    price.includes("-")
       ? {
           price: {
             gte: Number(price.split("-")[0]),
@@ -119,8 +127,10 @@ export async function getAllProducts({
       : {};
 
   // Rating filter
-  const ratingFilter =
-    rating && rating !== "all"
+  const ratingFilter: Prisma.ProductWhereInput =
+    rating &&
+    rating.trim() !== "" &&
+    rating.trim().toLowerCase() !== CONTENT_PAGE.GLOBAL.all.toLowerCase()
       ? {
           rating: {
             gte: Number(rating),
