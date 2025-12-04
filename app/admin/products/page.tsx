@@ -77,7 +77,7 @@ export default async function AdminProductsPage({
             <TableHead>{CONTENT_PAGE.GLOBAL.category}</TableHead>
             <TableHead>{CONTENT_PAGE.GLOBAL.stock}</TableHead>
             <TableHead>{CONTENT_PAGE.GLOBAL.rating}</TableHead>
-            <TableHead className="w-[100px]">
+            <TableHead className="w-[6.25rem]">
               {CONTENT_PAGE.GLOBAL.actions}
             </TableHead>
           </TableRow>

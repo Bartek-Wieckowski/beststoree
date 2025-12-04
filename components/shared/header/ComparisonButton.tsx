@@ -101,7 +101,7 @@ export default function ComparisonButton({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-[calc(100vw-2rem)] max-w-96 sm:w-96 max-h-[500px] overflow-x-hidden"
+        className="w-[calc(100vw-2rem)] max-w-96 sm:w-96 max-h-[31.25rem] overflow-x-hidden"
         align="end"
         sideOffset={4}
         onMouseEnter={() => {
@@ -136,7 +136,7 @@ export default function ComparisonButton({
             </p>
           </div>
         ) : (
-          <div className="max-h-[400px] overflow-y-auto overflow-x-hidden">
+          <div className="max-h-[25rem] overflow-y-auto overflow-x-hidden">
             {Array.isArray(comparison) &&
               comparison.map((item) => (
                 <div

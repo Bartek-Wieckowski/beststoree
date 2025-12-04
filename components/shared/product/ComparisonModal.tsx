@@ -39,7 +39,7 @@ export default function ComparisonModal({
     {
       label: CONTENT_PAGE.GLOBAL.price,
       getValue: (product: ComparisonItem) =>
-        `$${Number(product.price).toFixed(2)}`,
+        `${CONTENT_PAGE.GLOBAL.currencySymbol}${Number(product.price).toFixed(2)}`,
     },
     {
       label: CONTENT_PAGE.GLOBAL.brand,
@@ -90,13 +90,13 @@ export default function ComparisonModal({
             <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="sticky left-0 z-10 bg-background border-b p-3 sm:p-4 text-left font-semibold min-w-[120px] sm:min-w-[150px]">
+                  <th className="sticky left-0 z-10 bg-background border-b p-3 sm:p-4 text-left font-semibold min-w-[7.5rem] sm:min-w-[9.375rem]">
                     {CONTENT_PAGE.COMPONENT.COMPARISON.feature}
                   </th>
                   {products.map((product) => (
                     <th
                       key={product.productId}
-                      className="border-b p-3 sm:p-4 text-center font-semibold min-w-[180px] sm:min-w-[200px] align-top"
+                      className="border-b p-3 sm:p-4 text-center font-semibold min-w-[11.25rem] sm:min-w-[12.5rem] align-top"
                     >
                       <div className="flex flex-col items-center gap-2 sm:gap-3">
                         <Link

@@ -18,7 +18,7 @@ export default function ProductImages({ images }: { images: string[] }){
         alt='product image'
         width={1000}
         height={1000}
-        className='min-h-[300px] object-cover object-center'
+        className='min-h-[18.75rem] object-cover object-center'
       />
       <div className='flex'>
         {validImages.map((image, index) => (

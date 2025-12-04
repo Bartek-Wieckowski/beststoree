@@ -1,5 +1,6 @@
 "use client";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import CONTENT_PAGE from "@/lib/content-page";
 
 export default function Charts({
   data: { salesData },
@@ -21,7 +22,7 @@ export default function Charts({
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `${CONTENT_PAGE.GLOBAL.currencySymbol}${value}`}
         />
         <Bar
           dataKey="totalSales"

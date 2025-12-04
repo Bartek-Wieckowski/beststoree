@@ -93,7 +93,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                       <span data-testid="quantity">{item.qty}</span>
                       <AddButton item={item} />
                     </TableCell>
-                    <TableCell className="text-right">${item.price}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(item.price)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

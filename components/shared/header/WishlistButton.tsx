@@ -122,7 +122,7 @@ export default function WishlistButton({
             )}
           </div>
         ) : (
-          <div className="max-h-[400px] overflow-y-auto">
+          <div className="max-h-[25rem] overflow-y-auto">
             {Array.isArray(wishlist) &&
               wishlist.map((item) => (
                 <div
@@ -146,7 +146,7 @@ export default function WishlistButton({
                         {item.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        ${Number(item.price).toFixed(2)}
+                        {CONTENT_PAGE.GLOBAL.currencySymbol}{Number(item.price).toFixed(2)}
                       </p>
                     </div>
                   </Link>

@@ -62,7 +62,7 @@ export default async function AdminCategoriesPage() {
             <TableHead>{CONTENT_PAGE.GLOBAL.slug}</TableHead>
             <TableHead>{CONTENT_PAGE.GLOBAL.icon}</TableHead>
             <TableHead>{CONTENT_PAGE.GLOBAL.products}</TableHead>
-            <TableHead className="w-[100px]">
+            <TableHead className="w-[6.25rem]">
               {CONTENT_PAGE.GLOBAL.actions}
             </TableHead>
           </TableRow>

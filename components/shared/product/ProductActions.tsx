@@ -108,7 +108,7 @@ export default function ProductActions({ product }: { product: Product }) {
         className={cn(
           "flex-1 justify-start",
           isInWishlist(product.id) &&
-            "bg-red-50 border-red-200 hover:bg-red-100 text-stone-900 hover:text-stone-900 text-[12px]"
+            "bg-red-50 border-red-200 hover:bg-red-100 text-stone-900 hover:text-stone-900 text-[0.75rem]"
         )}
       >
         <Heart
@@ -129,7 +129,7 @@ export default function ProductActions({ product }: { product: Product }) {
         className={cn(
           "flex-1 justify-start",
           isInComparison(product.id) &&
-            "bg-blue-50 border-blue-200 hover:bg-blue-100 text-stone-900 hover:text-stone-900 text-[12px]"
+            "bg-blue-50 border-blue-200 hover:bg-blue-100 text-stone-900 hover:text-stone-900 text-[0.75rem]"
         )}
       >
         <Scale

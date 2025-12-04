@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function UnauthorizedPage() {
   return (
-    <div className="container mx-auto flex h-[calc(100vh-200px)] flex-col items-center justify-center space-y-4">
+    <div className="container mx-auto flex h-[calc(100vh-12.5rem)] flex-col items-center justify-center space-y-4">
       <h1 className="h1-bold text-4xl">
         {CONTENT_PAGE.PAGE.UNAUTHORIZED.title}
       </h1>

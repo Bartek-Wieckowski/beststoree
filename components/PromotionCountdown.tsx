@@ -132,7 +132,7 @@ export default function PromotionCountdown({
           variant="default"
         >
           <Tag className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 text-[10px] font-bold bg-primary text-primary-foreground rounded-full w-4 h-4 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 text-[0.625rem] font-bold bg-primary text-primary-foreground rounded-full w-4 h-4 flex items-center justify-center">
             %
           </span>
         </Button>
@@ -275,7 +275,7 @@ export default function PromotionCountdown({
             </div>
             {/* Arrow pointing to the button */}
             <div className="absolute right-0 top-1/2 translate-y-[-50%] translate-x-full">
-              <div className="w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-card"></div>
+              <div className="w-0 h-0 border-t-[0.5rem] border-t-transparent border-b-[0.5rem] border-b-transparent border-l-[0.5rem] border-l-card"></div>
             </div>
           </div>
         )}
@@ -287,7 +287,7 @@ export default function PromotionCountdown({
 const TimeBox = ({ label, value }: { label: string; value: number }) => (
   <div className="flex-1 min-w-0 bg-muted rounded-md p-1.5 md:p-2 text-center border border-border">
     <p className="text-xs md:text-sm font-bold leading-tight">{value}</p>
-    <p className="text-[8px] md:text-[10px] mt-0.5 text-muted-foreground leading-tight whitespace-nowrap">
+    <p className="text-[0.5rem] md:text-[0.625rem] mt-0.5 text-muted-foreground leading-tight whitespace-nowrap">
       {label}
     </p>
   </div>

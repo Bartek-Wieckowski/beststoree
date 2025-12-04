@@ -101,7 +101,7 @@ export default function ReviewForm({
       <Button onClick={handleOpenForm} variant="default">
         {CONTENT_PAGE.COMPONENT.REVIEW_FORM.writeReview}
       </Button>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[26.5625rem]">
         <Form {...form}>
           <form method="post" onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>

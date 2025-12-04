@@ -77,7 +77,7 @@ export default function CategoryList({
           <CarouselItem className="pl-2 md:pl-4 basis-auto">
             <Link
               href={ROUTES.CATEGORY("all")}
-              className="flex flex-col items-center justify-center p-4 rounded-lg border hover:bg-accent transition-colors min-w-[120px]"
+              className="flex flex-col items-center justify-center p-4 rounded-lg border hover:bg-accent transition-colors min-w-[7.5rem]"
             >
               <Grid3x3 className="h-6 w-6" />
               <span className="mt-2 text-sm font-medium text-center">
@@ -92,7 +92,7 @@ export default function CategoryList({
             <CarouselItem key={category.id} className="pl-2 md:pl-4 basis-auto">
               <Link
                 href={ROUTES.CATEGORY(category.slug)}
-                className="flex flex-col items-center justify-center p-4 rounded-lg border hover:bg-accent transition-colors min-w-[120px]"
+                className="flex flex-col items-center justify-center p-4 rounded-lg border hover:bg-accent transition-colors min-w-[7.5rem]"
               >
                 {category.icon && <CategoryIcon iconName={category.icon} />}
                 <span className="mt-2 text-sm font-medium text-center">

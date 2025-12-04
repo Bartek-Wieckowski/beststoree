@@ -35,7 +35,7 @@ export default function ProductCarousel({ data }: { data: Product[] }) {
             .map((product: Product) => (
               <CarouselItem key={product.id}>
                 <Link href={ROUTES.PRODUCT(product.slug)}>
-                  <div className="relative mx-auto h-[350px]">
+                  <div className="relative mx-auto h-[21.875rem]">
                     <Image
                       src={product.banner!}
                       alt={product.name}

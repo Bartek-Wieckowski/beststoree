@@ -29,7 +29,7 @@ const AdminSearch = () => {
         name="query"
         value={queryValue}
         onChange={(e) => setQueryValue(e.target.value)}
-        className="md:w-[100px] lg:w-[300px]"
+        className="md:w-[6.25rem] lg:w-[18.75rem]"
       />
       <button className="sr-only" type="submit">
         {CONTENT_PAGE.GLOBAL.search}

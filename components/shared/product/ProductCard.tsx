@@ -277,7 +277,7 @@ export default function ProductCard({
       </CardContent>
 
       <Dialog open={showQuickAdd} onOpenChange={setShowQuickAdd}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[26.5625rem]">
           <DialogHeader>
             <DialogTitle>
               {CONTENT_PAGE.GLOBAL.quickAdd} - {product.name}
