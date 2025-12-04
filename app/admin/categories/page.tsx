@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { getAllCategories, deleteCategory } from "@/lib/actions/category.actions";
+import {
+  getAllCategories,
+  deleteCategory,
+} from "@/lib/actions/category.actions";
 import { formatId } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +17,17 @@ import DeleteDialog from "@/components/DeleteDialog";
 import { requireAdmin } from "@/lib/admin-guard";
 import ROUTES from "@/lib/routes";
 import * as LucideIcons from "lucide-react";
+import CONTENT_PAGE from "@/lib/content-page";
 
 function CategoryIcon({ iconName }: { iconName: string | null }) {
   if (!iconName) return null;
 
-  const IconComponent = (LucideIcons as Record<string, any>)[iconName];
+  const IconComponent = (
+    LucideIcons as unknown as Record<
+      string,
+      React.ComponentType<{ className?: string }>
+    >
+  )[iconName];
 
   if (IconComponent) {
     return <IconComponent className="h-4 w-4" />;
@@ -35,9 +44,13 @@ export default async function AdminCategoriesPage() {
   return (
     <div className="space-y-2">
       <div className="flex-between">
-        <h1 className="h2-bold">Categories</h1>
+        <h1 className="h2-bold">
+          {CONTENT_PAGE.PAGE.ADMIN_CATEGORIES.categories}
+        </h1>
         <Button asChild variant="default" data-testid="create-category-button">
-          <Link href={ROUTES.ADMIN_CATEGORIES_CREATE}>Create Category</Link>
+          <Link href={ROUTES.ADMIN_CATEGORIES_CREATE}>
+            {CONTENT_PAGE.PAGE.ADMIN_CATEGORIES.createCategory}
+          </Link>
         </Button>
       </div>
 
@@ -45,18 +58,20 @@ export default async function AdminCategoriesPage() {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Slug</TableHead>
-            <TableHead>Icon</TableHead>
-            <TableHead>Products</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.name}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.slug}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.icon}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.products}</TableHead>
+            <TableHead className="w-[100px]">
+              {CONTENT_PAGE.GLOBAL.actions}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {categories.length === 0 ? (
             <TableRow>
               <TableCell colSpan={6} className="text-center">
-                No categories found
+                {CONTENT_PAGE.GLOBAL.noCategoriesFound}
               </TableCell>
             </TableRow>
           ) : (
@@ -76,13 +91,10 @@ export default async function AdminCategoriesPage() {
                 <TableCell className="flex gap-1">
                   <Button asChild variant="outline" size="sm">
                     <Link href={ROUTES.ADMIN_CATEGORIES_EDIT(category.id)}>
-                      Edit
+                      {CONTENT_PAGE.GLOBAL.edit}
                     </Link>
                   </Button>
-                  <DeleteDialog
-                    id={category.id}
-                    action={deleteCategory}
-                  />
+                  <DeleteDialog id={category.id} action={deleteCategory} />
                 </TableCell>
               </TableRow>
             ))
@@ -92,4 +104,3 @@ export default async function AdminCategoriesPage() {
     </div>
   );
 }
-

@@ -28,17 +28,17 @@ export default async function OrdersPage({
 
   return (
     <div className="space-y-2">
-      <h2 className="h2-bold">{CONTENT_PAGE.USER_ORDERS_PAGE.orders}</h2>
+      <h2 className="h2-bold">{CONTENT_PAGE.PAGE.USER_ORDERS.orders}</h2>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{CONTENT_PAGE.USER_ORDERS_PAGE.orderId}</TableHead>
-              <TableHead>{CONTENT_PAGE.USER_ORDERS_PAGE.date}</TableHead>
-              <TableHead>{CONTENT_PAGE.USER_ORDERS_PAGE.total}</TableHead>
-              <TableHead>{CONTENT_PAGE.USER_ORDERS_PAGE.paid}</TableHead>
-              <TableHead>{CONTENT_PAGE.USER_ORDERS_PAGE.delivered}</TableHead>
-              <TableHead>{CONTENT_PAGE.USER_ORDERS_PAGE.actions}</TableHead>
+              <TableHead>{CONTENT_PAGE.PAGE.USER_ORDERS.orderId}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.date}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.total}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.paid}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.delivered}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.actions}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -52,16 +52,16 @@ export default async function OrdersPage({
                 <TableCell>
                   {order.isPaid && order.paidAt
                     ? formatDateTime(order.paidAt).dateTime
-                    : CONTENT_PAGE.USER_ORDERS_PAGE.notPaid}
+                    : CONTENT_PAGE.GLOBAL.notPaid}
                 </TableCell>
                 <TableCell>
                   {order.isDelivered && order.deliveredAt
                     ? formatDateTime(order.deliveredAt).dateTime
-                    : CONTENT_PAGE.USER_ORDERS_PAGE.notDelivered}
+                    : CONTENT_PAGE.GLOBAL.notDelivered}
                 </TableCell>
                 <TableCell>
                   <Link href={ROUTES.ORDER(order.id)}>
-                    <span className="px-2">Details</span>
+                    <span className="px-2">{CONTENT_PAGE.GLOBAL.details}</span>
                   </Link>
                 </TableCell>
               </TableRow>

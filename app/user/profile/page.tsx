@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   return (
     <SessionProvider session={session}>
       <div className="max-w-md mx-auto space-y-4">
-        <h2 className="h2-bold">{CONTENT_PAGE.USER_PROFILE_PAGE.title}</h2>
+        <h2 className="h2-bold">{CONTENT_PAGE.PAGE.USER_PROFILE.title}</h2>
         <ProfileForm />
       </div>
     </SessionProvider>

@@ -11,7 +11,7 @@ export default function Search() {
         <Input
           name="q"
           type="text"
-          placeholder={CONTENT_PAGE.SEARCH.search}
+          placeholder={CONTENT_PAGE.GLOBAL.search}
           className="md:w-[6.25rem] lg:w-[18.75rem]"
         />
         <Button className="block md:hidden">

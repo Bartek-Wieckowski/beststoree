@@ -16,6 +16,7 @@ import { Order } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import sampleData from "@/db/sample-data";
 import dotenv from "dotenv";
+import CONTENT_PAGE from "@/lib/content-page";
 dotenv.config();
 
 PurchaseReceiptEmail.PreviewProps = {
@@ -70,23 +71,27 @@ type OrderInformationProps = {
 export default function PurchaseReceiptEmail({ order }: OrderInformationProps) {
   return (
     <Html>
-      <Preview>View order receipt</Preview>
+      <Preview>
+        {CONTENT_PAGE.COMPONENT.PURCHASE_RECEIPT.viewOrderReceipt}
+      </Preview>
       <Tailwind>
         <Head />
         <Body className="font-sans bg-white">
           <Container className="max-w-xl">
-            <Heading>Purchase Receipt</Heading>
+            <Heading>
+              {CONTENT_PAGE.COMPONENT.PURCHASE_RECEIPT.purchaseReceipt}
+            </Heading>
             <Section>
               <Row>
                 <Column>
                   <Text className="mb-0 mr-4 text-gray-500 whitespace-nowrap text-nowrap">
-                    Order ID
+                    {CONTENT_PAGE.COMPONENT.PURCHASE_RECEIPT.orderId}
                   </Text>
                   <Text className="mt-0 mr-4">{order.id.toString()}</Text>
                 </Column>
                 <Column>
                   <Text className="mb-0 mr-4 text-gray-500 whitespace-nowrap text-nowrap">
-                    Purchase Date
+                    {CONTENT_PAGE.COMPONENT.PURCHASE_RECEIPT.purchaseDate}
                   </Text>
                   <Text className="mt-0 mr-4">
                     {dateFormatter.format(order.createdAt)}
@@ -94,7 +99,7 @@ export default function PurchaseReceiptEmail({ order }: OrderInformationProps) {
                 </Column>
                 <Column>
                   <Text className="mb-0 mr-4 text-gray-500 whitespace-nowrap text-nowrap">
-                    Price Paid
+                    {CONTENT_PAGE.COMPONENT.PURCHASE_RECEIPT.pricePaid}
                   </Text>
                   <Text className="mt-0 mr-4">
                     {formatCurrency(order.totalPrice)}
@@ -126,10 +131,13 @@ export default function PurchaseReceiptEmail({ order }: OrderInformationProps) {
                 </Row>
               ))}
               {[
-                { name: "Items", price: order.itemsPrice },
-                { name: "Tax", price: order.taxPrice },
-                { name: "Shipping", price: order.shippingPrice },
-                { name: "Total", price: order.totalPrice },
+                { name: CONTENT_PAGE.GLOBAL.items, price: order.itemsPrice },
+                { name: CONTENT_PAGE.GLOBAL.tax, price: order.taxPrice },
+                {
+                  name: CONTENT_PAGE.GLOBAL.shipping,
+                  price: order.shippingPrice,
+                },
+                { name: CONTENT_PAGE.GLOBAL.total, price: order.totalPrice },
               ].map(({ name, price }) => (
                 <Row key={name} className="py-1">
                   <Column align="right">{name}: </Column>

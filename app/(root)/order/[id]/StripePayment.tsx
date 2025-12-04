@@ -67,7 +67,7 @@ export default function StripePayment({
     return (
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="text-xl">
-          {CONTENT_PAGE.STRIPE_PAYMENT.stripeCheckout}
+          {CONTENT_PAGE.COMPONENT.STRIPE_PAYMENT.stripeCheckout}
         </div>
         {errorMessage && <div className="text-destructive">{errorMessage}</div>}
         <PaymentElement />
@@ -82,8 +82,8 @@ export default function StripePayment({
           disabled={stripe == null || elements == null || isLoading}
         >
           {isLoading
-            ? CONTENT_PAGE.STRIPE_PAYMENT.purchasing
-            : `${CONTENT_PAGE.STRIPE_PAYMENT.purchase} ${formatCurrency(
+            ? CONTENT_PAGE.COMPONENT.STRIPE_PAYMENT.purchasing
+            : `${CONTENT_PAGE.COMPONENT.STRIPE_PAYMENT.purchase} ${formatCurrency(
                 priceInCents / 100
               )}`}
         </Button>
@@ -100,10 +100,10 @@ export default function StripePayment({
             theme === "dark"
               ? "night"
               : theme === "light"
-              ? "stripe"
-              : systemTheme === "light"
-              ? "stripe"
-              : "night",
+                ? "stripe"
+                : systemTheme === "light"
+                  ? "stripe"
+                  : "night",
         },
       }}
       stripe={stripePromise}

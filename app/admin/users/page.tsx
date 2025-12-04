@@ -36,14 +36,13 @@ export default async function AdminUsersPage({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
-        <h1 className="h2-bold">{CONTENT_PAGE.ADMIN_USERS_PAGE.users}</h1>
+        <h1 className="h2-bold">{CONTENT_PAGE.PAGE.ADMIN_USERS.users}</h1>
         {searchText && (
           <div>
-            {CONTENT_PAGE.ADMIN_USERS_PAGE.filteredBy}{" "}
-            <i>&quot;{searchText}&quot;</i>{" "}
+            {CONTENT_PAGE.GLOBAL.filteredBy} <i>&quot;{searchText}&quot;</i>{" "}
             <Link href={ROUTES.ADMIN_USERS}>
               <Button variant="outline" size="sm">
-                {CONTENT_PAGE.ADMIN_USERS_PAGE.removeFilter}
+                {CONTENT_PAGE.GLOBAL.removeFilter}
               </Button>
             </Link>
           </div>
@@ -53,11 +52,11 @@ export default async function AdminUsersPage({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{CONTENT_PAGE.ADMIN_USERS_PAGE.id}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_USERS_PAGE.name}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_USERS_PAGE.email}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_USERS_PAGE.role}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_USERS_PAGE.actions}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.id}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.name}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.email}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.role}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.actions}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -69,18 +68,16 @@ export default async function AdminUsersPage({
                 <TableCell>
                   {user.role === "user" ? (
                     <Badge variant="secondary">
-                      {CONTENT_PAGE.ADMIN_USERS_PAGE.user}
+                      {CONTENT_PAGE.GLOBAL.user}
                     </Badge>
                   ) : (
-                    <Badge variant="default">
-                      {CONTENT_PAGE.ADMIN_USERS_PAGE.admin}
-                    </Badge>
+                    <Badge variant="default">{CONTENT_PAGE.GLOBAL.admin}</Badge>
                   )}
                 </TableCell>
                 <TableCell>
                   <Button asChild variant="outline" size="sm">
                     <Link href={ROUTES.ADMIN_USERS_EDIT(user.id)}>
-                      {CONTENT_PAGE.ADMIN_USERS_PAGE.edit}
+                      {CONTENT_PAGE.GLOBAL.edit}
                     </Link>
                   </Button>
                   <DeleteDialog id={user.id} action={deleteUser} />

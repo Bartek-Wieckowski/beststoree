@@ -1,6 +1,7 @@
 import CategoryForm from "@/components/admin/CategoryForm";
 import { getCategoryById } from "@/lib/actions/category.actions";
 import { requireAdmin } from "@/lib/admin-guard";
+import CONTENT_PAGE from "@/lib/content-page";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -23,7 +24,9 @@ export default async function AdminCategoryUpdatePage(props: {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
-      <h1 className="h2-bold">Update Category</h1>
+      <h1 className="h2-bold">
+        {CONTENT_PAGE.PAGE.ADMIN_CATEGORIES.updateCategory}
+      </h1>
 
       <CategoryForm
         type="Update"

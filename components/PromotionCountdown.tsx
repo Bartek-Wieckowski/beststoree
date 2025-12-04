@@ -152,7 +152,7 @@ export default function PromotionCountdown({
         <button
           onClick={() => setIsVisible(false)}
           className="md:hidden absolute -top-2 -right-2 z-10 rounded-full bg-destructive text-destructive-foreground p-1 shadow-lg hover:bg-destructive/90 transition-colors"
-          aria-label="Hide promotion"
+          aria-label={CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.hidePromotion}
         >
           <X className="h-4 w-4" />
         </button>
@@ -162,7 +162,9 @@ export default function PromotionCountdown({
           ref={infoButtonRef}
           onClick={() => setShowMobileInfo(!showMobileInfo)}
           className="md:hidden absolute -top-14 -right-[0.65rem] rounded-full bg-primary text-primary-foreground p-1.5 shadow-lg hover:bg-primary/90 transition-colors z-10"
-          aria-label="Show product info"
+          aria-label={
+            CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.showProductInfo
+          }
         >
           <Info className="h-4 w-4" />
         </button>
@@ -197,12 +199,12 @@ export default function PromotionCountdown({
             <div className="flex flex-col gap-3">
               <div className="flex items-start justify-between">
                 <h3 className="text-lg font-bold">
-                  {CONTENT_PAGE.DEAL_COUNTDOWN.dealOfTheMonth}
+                  {CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.dealOfTheMonth}
                 </h3>
                 <button
                   onClick={() => setShowMobileInfo(false)}
                   className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none"
-                  aria-label="Close"
+                  aria-label={CONTENT_PAGE.GLOBAL.close}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -222,14 +224,14 @@ export default function PromotionCountdown({
                   <ProductRating value={Number(product.rating)} />
                   <span className="text-sm">
                     {Number(product.rating).toFixed(1)} ({product.numReviews}{" "}
-                    {CONTENT_PAGE.PRODUCT_DETAILS.reviews})
+                    {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews})
                   </span>
                 </div>
               </div>
               <div className="flex justify-center">
                 <Button asChild size="sm" className="w-full">
                   <Link href={ROUTES.PRODUCT(product.slug)}>
-                    {CONTENT_PAGE.DEAL_COUNTDOWN.viewProducts}
+                    {CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.viewProducts}
                   </Link>
                 </Button>
               </div>
@@ -242,7 +244,7 @@ export default function PromotionCountdown({
           <div className="hidden md:block absolute right-full mr-4 top-0 w-64 md:w-72 bg-card border rounded-lg shadow-xl p-4 md:p-6 animate-in fade-in slide-in-from-right-2 duration-200">
             <div className="flex flex-col gap-3">
               <h3 className="text-lg md:text-xl font-bold">
-                {CONTENT_PAGE.DEAL_COUNTDOWN.dealOfTheMonth}
+                {CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.dealOfTheMonth}
               </h3>
               {/* Product name */}
               <p className="text-base font-semibold text-foreground">
@@ -259,14 +261,14 @@ export default function PromotionCountdown({
                   <ProductRating value={Number(product.rating)} />
                   <span className="text-sm">
                     {Number(product.rating).toFixed(1)} ({product.numReviews}{" "}
-                    {CONTENT_PAGE.PRODUCT_DETAILS.reviews})
+                    {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews})
                   </span>
                 </div>
               </div>
               <div className="flex justify-center">
                 <Button asChild size="sm" className="w-full">
                   <Link href={ROUTES.PRODUCT(product.slug)}>
-                    {CONTENT_PAGE.DEAL_COUNTDOWN.viewProducts}
+                    {CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.viewProducts}
                   </Link>
                 </Button>
               </div>

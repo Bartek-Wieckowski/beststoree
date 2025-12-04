@@ -28,12 +28,12 @@ export default async function AdminOverviewPage() {
 
   return (
     <div className="space-y-2">
-      <h1 className="h2-bold">{CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.title}</h1>
+      <h1 className="h2-bold">{CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.title}</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.totalRevenue}
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.totalRevenue}
             </CardTitle>
             <BadgeDollarSign />
           </CardHeader>
@@ -48,7 +48,7 @@ export default async function AdminOverviewPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.sales}
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.sales}
             </CardTitle>
             <CreditCard />
           </CardHeader>
@@ -61,7 +61,7 @@ export default async function AdminOverviewPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.customers}
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.customers}
             </CardTitle>
             <Users />
           </CardHeader>
@@ -74,7 +74,7 @@ export default async function AdminOverviewPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.products}
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.products}
             </CardTitle>
             <Barcode />
           </CardHeader>
@@ -88,7 +88,7 @@ export default async function AdminOverviewPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>{CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.overview}</CardTitle>
+            <CardTitle>{CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.overview}</CardTitle>
           </CardHeader>
           <CardContent>
             <Charts
@@ -101,23 +101,17 @@ export default async function AdminOverviewPage() {
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>
-              {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.recentSales}
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.recentSales}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>
-                    {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.buyer}
-                  </TableHead>
-                  <TableHead>{CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.date}</TableHead>
-                  <TableHead>
-                    {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.total}
-                  </TableHead>
-                  <TableHead>
-                    {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.actions}
-                  </TableHead>
+                  <TableHead>{CONTENT_PAGE.GLOBAL.buyer}</TableHead>
+                  <TableHead>{CONTENT_PAGE.GLOBAL.date}</TableHead>
+                  <TableHead>{CONTENT_PAGE.GLOBAL.total}</TableHead>
+                  <TableHead>{CONTENT_PAGE.GLOBAL.actions}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -126,7 +120,7 @@ export default async function AdminOverviewPage() {
                     <TableCell>
                       {order?.user?.name
                         ? order.user.name
-                        : CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.deletedUser}
+                        : CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.deletedUser}
                     </TableCell>
                     <TableCell>
                       {formatDateTime(order.createdAt).dateOnly}
@@ -135,7 +129,7 @@ export default async function AdminOverviewPage() {
                     <TableCell>
                       <Link href={ROUTES.ORDER(order.id)}>
                         <span className="px-2">
-                          {CONTENT_PAGE.ADMIN_OVERVIEW_PAGE.details}
+                          {CONTENT_PAGE.GLOBAL.details}
                         </span>
                       </Link>
                     </TableCell>

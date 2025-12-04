@@ -73,7 +73,7 @@ export default function ProfileForm() {
                 <FormControl>
                   <Input
                     disabled
-                    placeholder={CONTENT_PAGE.USER_PROFILE_PAGE.email}
+                    placeholder={CONTENT_PAGE.GLOBAL.email}
                     className="input-field"
                     {...field}
                   />
@@ -89,7 +89,7 @@ export default function ProfileForm() {
               <FormItem className="w-full">
                 <FormControl>
                   <Input
-                    placeholder={CONTENT_PAGE.USER_PROFILE_PAGE.name}
+                    placeholder={CONTENT_PAGE.GLOBAL.name}
                     className="input-field"
                     {...field}
                   />
@@ -106,8 +106,8 @@ export default function ProfileForm() {
           disabled={form.formState.isSubmitting}
         >
           {form.formState.isSubmitting
-            ? CONTENT_PAGE.USER_PROFILE_PAGE.submitting
-            : CONTENT_PAGE.USER_PROFILE_PAGE.updateProfile}
+            ? CONTENT_PAGE.GLOBAL.submitting
+            : CONTENT_PAGE.PAGE.USER_PROFILE.updateProfile}
         </Button>
       </form>
     </Form>

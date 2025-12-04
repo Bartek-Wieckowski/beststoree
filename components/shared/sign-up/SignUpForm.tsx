@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { signUpUser } from '@/lib/actions/user.actions';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { SignUpActionResponse } from '@/types';
-import ROUTES from '@/lib/routes';
-import CONTENT_PAGE from '@/lib/content-page';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signUpUser } from "@/lib/actions/user.actions";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { SignUpActionResponse } from "@/types";
+import ROUTES from "@/lib/routes";
+import CONTENT_PAGE from "@/lib/content-page";
 
 const initialState: SignUpActionResponse = {
   success: false,
   fieldErrors: null,
-  message: '',
+  message: "",
   generalError: null,
   prismaError: null,
   inputs: {
-    name: '',
-    email: '',
+    name: "",
+    email: "",
   },
 };
 
@@ -28,7 +28,7 @@ export default function SignUpForm() {
   const [data, action] = useActionState(signUpUser, initialState);
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || ROUTES.HOME;
+  const callbackUrl = searchParams.get("callbackUrl") || ROUTES.HOME;
 
   function SignUpButton() {
     const { pending } = useFormStatus();
@@ -41,8 +41,8 @@ export default function SignUpForm() {
         data-testid="sign-up-button"
       >
         {pending
-          ? CONTENT_PAGE.BUTTON_SIGN_UP_FORM.submitting
-          : CONTENT_PAGE.BUTTON_SIGN_UP_FORM.signUp}
+          ? CONTENT_PAGE.COMPONENT.BUTTON_SIGN_UP.submitting
+          : CONTENT_PAGE.COMPONENT.BUTTON_SIGN_UP.signUp}
       </Button>
     );
   }
@@ -58,7 +58,7 @@ export default function SignUpForm() {
         )}
 
         <div>
-          <Label htmlFor="name">{CONTENT_PAGE.SIGN_UP_FORM.name}</Label>
+          <Label htmlFor="name">{CONTENT_PAGE.GLOBAL.name}</Label>
           <Input
             id="name"
             name="name"
@@ -73,7 +73,7 @@ export default function SignUpForm() {
           )}
         </div>
         <div>
-          <Label htmlFor="email">{CONTENT_PAGE.SIGN_UP_FORM.email}</Label>
+          <Label htmlFor="email">{CONTENT_PAGE.GLOBAL.email}</Label>
           <Input
             id="email"
             name="email"
@@ -88,7 +88,7 @@ export default function SignUpForm() {
           )}
         </div>
         <div>
-          <Label htmlFor="password">{CONTENT_PAGE.SIGN_UP_FORM.password}</Label>
+          <Label htmlFor="password">{CONTENT_PAGE.GLOBAL.password}</Label>
           <Input id="password" name="password" type="password" />
           {data.fieldErrors?.password && (
             <p className="text-sm text-red-500 mt-1">
@@ -98,7 +98,7 @@ export default function SignUpForm() {
         </div>
         <div>
           <Label htmlFor="confirmPassword">
-            {CONTENT_PAGE.SIGN_UP_FORM.confirmPassword}
+            {CONTENT_PAGE.GLOBAL.confirmPassword}
           </Label>
           <Input id="confirmPassword" name="confirmPassword" type="password" />
           {data.fieldErrors?.confirmPassword && (
@@ -125,14 +125,14 @@ export default function SignUpForm() {
         </div>
 
         <div className="text-sm text-center text-muted-foreground">
-          {CONTENT_PAGE.SIGN_UP_FORM.alreadyHaveAccount}{' '}
+          {CONTENT_PAGE.COMPONENT.SIGN_UP_FORM.alreadyHaveAccount}{" "}
           <Link
             href={ROUTES.SIGN_IN}
             target="_self"
             className="link"
             data-testid="sign-up-sign-in-link"
           >
-            {CONTENT_PAGE.SIGN_UP_FORM.signIn}
+            {CONTENT_PAGE.GLOBAL.signIn}
           </Link>
         </div>
       </div>

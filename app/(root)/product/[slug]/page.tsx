@@ -44,11 +44,12 @@ export default async function ProductDetailsPage(props: {
               </h1>
               {/* <p>
                 {product.rating} of {product.numReviews}{" "}
-                {CONTENT_PAGE.PRODUCT_DETAILS.reviews}
+                {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews}
               </p> */}
               <ProductRating value={Number(product.rating)} />
               <p>
-                {product.numReviews} {CONTENT_PAGE.PRODUCT_DETAILS.reviews}
+                {product.numReviews}{" "}
+                {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <ProductPrice
@@ -59,7 +60,7 @@ export default async function ProductDetailsPage(props: {
             </div>
             <div className="mt-10">
               <h2 className="font-semibold">
-                {CONTENT_PAGE.PRODUCT_DETAILS.description}
+                {CONTENT_PAGE.GLOBAL.description}
               </h2>
               <p data-testid="product-description">{product.description}</p>
             </div>
@@ -68,21 +69,21 @@ export default async function ProductDetailsPage(props: {
             <Card>
               <CardContent className="p-4">
                 <div className="mb-2 flex justify-between">
-                  <div>{CONTENT_PAGE.PRODUCT_DETAILS.price}</div>
+                  <div>{CONTENT_PAGE.GLOBAL.price}</div>
                   <div>
                     <ProductPrice value={Number(product.price)} />
                   </div>
                 </div>
                 <div className="mb-2 flex justify-between">
-                  <div>{CONTENT_PAGE.PRODUCT_DETAILS.status}</div>
+                  <div>{CONTENT_PAGE.GLOBAL.status}</div>
                   <div>
                     {product.stock > 0 ? (
                       <Badge variant="outline">
-                        {CONTENT_PAGE.PRODUCT_CARD.inStock}
+                        {CONTENT_PAGE.GLOBAL.inStock}
                       </Badge>
                     ) : (
                       <Badge variant="destructive">
-                        {CONTENT_PAGE.PRODUCT_CARD.outOfStock}
+                        {CONTENT_PAGE.GLOBAL.outOfStock}
                       </Badge>
                     )}
                   </div>
@@ -97,7 +98,7 @@ export default async function ProductDetailsPage(props: {
       </section>
       <section className="mt-10">
         <h2 className="h2-bold mb-5">
-          {CONTENT_PAGE.PRODUCT_DETAILS.customerReviews}
+          {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.customerReviews}
         </h2>
         <ReviewList
           userId={userId || ""}

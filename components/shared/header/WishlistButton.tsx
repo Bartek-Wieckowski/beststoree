@@ -45,7 +45,7 @@ export default function WishlistButton({
   const handleRemove = (productId: string, productName: string) => {
     removeFromWishlist(productId);
     toast({
-      description: `${productName} removed from wishlist`,
+      description: `${productName} ${CONTENT_PAGE.COMPONENT.WISHLIST.removedFromWishlist}`,
     });
   };
 
@@ -80,7 +80,9 @@ export default function WishlistButton({
           }}
         >
           <Heart className="h-5 w-5" />
-          <span className="sr-only">{CONTENT_PAGE.HEADER.wishlist}</span>
+          <span className="sr-only">
+            {CONTENT_PAGE.COMPONENT.HEADER.wishlist}
+          </span>
           {count > 0 && (
             <Badge
               variant="destructive"
@@ -102,18 +104,20 @@ export default function WishlistButton({
           if (!isTouchDevice) setOpen(false);
         }}
       >
-        <DropdownMenuLabel>{CONTENT_PAGE.WISHLIST.title}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {CONTENT_PAGE.COMPONENT.WISHLIST.title}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {!Array.isArray(wishlist) || wishlist.length === 0 ? (
           <div className="p-4 text-center text-sm text-muted-foreground">
-            <p className="mb-2">{CONTENT_PAGE.WISHLIST.empty}</p>
+            <p className="mb-2">{CONTENT_PAGE.COMPONENT.WISHLIST.empty}</p>
             {pathname !== ROUTES.HOME && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => router.push(ROUTES.HOME)}
               >
-                {CONTENT_PAGE.WISHLIST.goShopping}
+                {CONTENT_PAGE.GLOBAL.goShopping}
               </Button>
             )}
           </div>
@@ -157,7 +161,7 @@ export default function WishlistButton({
                   >
                     <Trash2 className="h-4 w-4" />
                     <span className="sr-only">
-                      {CONTENT_PAGE.WISHLIST.remove}
+                      {CONTENT_PAGE.GLOBAL.remove}
                     </span>
                   </Button>
                 </div>

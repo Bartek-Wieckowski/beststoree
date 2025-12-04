@@ -11,8 +11,8 @@ const AdminSearch = () => {
   const formActionUrl = pathname.includes(ROUTES.ADMIN_ORDERS)
     ? ROUTES.ADMIN_ORDERS
     : pathname.includes(ROUTES.ADMIN_USERS)
-    ? ROUTES.ADMIN_USERS
-    : ROUTES.ADMIN_PRODUCTS;
+      ? ROUTES.ADMIN_USERS
+      : ROUTES.ADMIN_PRODUCTS;
 
   const searchParams = useSearchParams();
   const [queryValue, setQueryValue] = useState(searchParams.get("query") || "");
@@ -25,14 +25,14 @@ const AdminSearch = () => {
     <form action={formActionUrl} method="GET">
       <Input
         type="search"
-        placeholder={CONTENT_PAGE.ADMIN_SEARCH.search}
+        placeholder={CONTENT_PAGE.GLOBAL.search}
         name="query"
         value={queryValue}
         onChange={(e) => setQueryValue(e.target.value)}
         className="md:w-[100px] lg:w-[300px]"
       />
       <button className="sr-only" type="submit">
-        {CONTENT_PAGE.ADMIN_SEARCH.search}
+        {CONTENT_PAGE.GLOBAL.search}
       </button>
     </form>
   );

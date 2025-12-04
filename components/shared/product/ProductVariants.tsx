@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { getColorValue } from "@/lib/constants/colors";
+import CONTENT_PAGE from "@/lib/content-page";
 
 type ProductVariantsProps = {
   sizes: string[];
@@ -39,13 +40,13 @@ export default function ProductVariants({
     <div className="space-y-4">
       {hasSizes && (
         <div>
-          <Label htmlFor="size-select">Size</Label>
+          <Label htmlFor="size-select">{CONTENT_PAGE.GLOBAL.size}</Label>
           <Select
             value={selectedSize || ""}
             onValueChange={(value) => onSizeChange(value || null)}
           >
             <SelectTrigger id="size-select" className="w-full">
-              <SelectValue placeholder="Select size" />
+              <SelectValue placeholder={CONTENT_PAGE.GLOBAL.selectSize} />
             </SelectTrigger>
             <SelectContent>
               {sizes.map((size) => (
@@ -60,7 +61,7 @@ export default function ProductVariants({
 
       {hasColors && (
         <div>
-          <Label>Color</Label>
+          <Label>{CONTENT_PAGE.GLOBAL.color}</Label>
           <div className="flex flex-wrap gap-2 mt-2">
             {colors.map((color) => {
               const colorValue = getColorValue(color);
@@ -86,7 +87,9 @@ export default function ProductVariants({
                       style={{ backgroundColor: colorValue }}
                     />
                   )}
-                  <span className="text-sm font-medium text-foreground">{color}</span>
+                  <span className="text-sm font-medium text-foreground">
+                    {color}
+                  </span>
                 </button>
               );
             })}
@@ -96,4 +99,3 @@ export default function ProductVariants({
     </div>
   );
 }
-

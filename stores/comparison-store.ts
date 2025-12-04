@@ -18,7 +18,7 @@ export type ComparisonItem = {
 
 const MAX_COMPARISON_ITEMS = 4;
 
-interface ComparisonStore {
+type ComparisonStore = {
   comparison: ComparisonItem[];
   isLoaded: boolean;
   addToComparison: (product: Product) => { success: boolean; message: string };
@@ -34,7 +34,7 @@ interface ComparisonStore {
   };
   count: number;
   maxItems: number;
-}
+};
 
 export const useComparisonStore = create<ComparisonStore>()(
   persist(
@@ -139,4 +139,3 @@ export const useComparisonStore = create<ComparisonStore>()(
     }
   )
 );
-

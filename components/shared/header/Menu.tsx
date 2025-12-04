@@ -42,7 +42,9 @@ export default async function Menu() {
           >
             <Link href={ROUTES.CART} className="relative overflow-visible">
               <ShoppingCart />
-              <span className="sr-only">{CONTENT_PAGE.HEADER.cart}</span>
+              <span className="sr-only">
+                {CONTENT_PAGE.COMPONENT.HEADER.cart}
+              </span>
               {cartItemsCount > 0 && (
                 <Badge
                   variant="destructive"

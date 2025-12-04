@@ -27,11 +27,11 @@ export default function CartTable({ cart }: { cart?: Cart }) {
 
   return (
     <>
-      <h1 className="py-4 h2-bold">{CONTENT_PAGE.CART_PAGE.shoppingCart}</h1>
+      <h1 className="py-4 h2-bold">{CONTENT_PAGE.PAGE.CART.shoppingCart}</h1>
       {!cart || cart.items.length === 0 ? (
         <div>
-          {CONTENT_PAGE.CART_PAGE.cartIsEmpty}{" "}
-          <Link href={ROUTES.HOME}>{CONTENT_PAGE.CART_PAGE.goShopping}</Link>
+          {CONTENT_PAGE.PAGE.CART.cartIsEmpty}{" "}
+          <Link href={ROUTES.HOME}>{CONTENT_PAGE.GLOBAL.goShopping}</Link>
         </div>
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
@@ -39,12 +39,12 @@ export default function CartTable({ cart }: { cart?: Cart }) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{CONTENT_PAGE.CART_PAGE.item}</TableHead>
+                  <TableHead>{CONTENT_PAGE.GLOBAL.item}</TableHead>
                   <TableHead className="text-center">
-                    {CONTENT_PAGE.CART_PAGE.quantity}
+                    {CONTENT_PAGE.GLOBAL.quantity}
                   </TableHead>
                   <TableHead className="text-right">
-                    {CONTENT_PAGE.CART_PAGE.price}
+                    {CONTENT_PAGE.GLOBAL.price}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -70,9 +70,19 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                           <span>{item.name}</span>
                           {(item.size || item.color) && (
                             <div className="text-xs text-muted-foreground">
-                              {item.size && <span>Size: {item.size}</span>}
-                              {item.size && item.color && <span> • </span>}
-                              {item.color && <span>Color: {item.color}</span>}
+                              {item.size && (
+                                <span>
+                                  {CONTENT_PAGE.GLOBAL.size} {item.size}
+                                </span>
+                              )}
+                              {item.size && item.color && (
+                                <span>{CONTENT_PAGE.GLOBAL.separator}</span>
+                              )}
+                              {item.color && (
+                                <span>
+                                  {CONTENT_PAGE.GLOBAL.color} {item.color}
+                                </span>
+                              )}
                             </div>
                           )}
                         </div>
@@ -93,7 +103,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
           <Card>
             <CardContent className="p-4 gap-4">
               <div className="pb-3 text-xl">
-                {CONTENT_PAGE.CART_PAGE.subTotal} (
+                {CONTENT_PAGE.GLOBAL.subtotal} (
                 {cart.items.reduce((a, c) => a + c.qty, 0)}):
                 <span className="font-bold">
                   {formatCurrency(cart.itemsPrice)}
@@ -112,7 +122,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                 ) : (
                   <ArrowRight className="w-4 h-4" />
                 )}{" "}
-                {CONTENT_PAGE.CART_PAGE.proceedToCheckout}
+                {CONTENT_PAGE.PAGE.CART.proceedToCheckout}
               </Button>
             </CardContent>
           </Card>

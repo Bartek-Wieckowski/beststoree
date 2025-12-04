@@ -33,20 +33,20 @@ export default function ComparisonModal({
     getValue: (product: ComparisonItem) => ReactNode;
   }> = [
     {
-      label: CONTENT_PAGE.COMPARISON.name,
+      label: CONTENT_PAGE.GLOBAL.name,
       getValue: (product: ComparisonItem) => product.name,
     },
     {
-      label: CONTENT_PAGE.COMPARISON.price,
+      label: CONTENT_PAGE.GLOBAL.price,
       getValue: (product: ComparisonItem) =>
         `$${Number(product.price).toFixed(2)}`,
     },
     {
-      label: CONTENT_PAGE.COMPARISON.brand,
+      label: CONTENT_PAGE.GLOBAL.brand,
       getValue: (product: ComparisonItem) => product.brand,
     },
     {
-      label: CONTENT_PAGE.COMPARISON.rating,
+      label: CONTENT_PAGE.GLOBAL.rating,
       getValue: (product: ComparisonItem) => (
         <div className="flex items-center justify-center gap-1">
           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -55,19 +55,22 @@ export default function ComparisonModal({
       ),
     },
     {
-      label: CONTENT_PAGE.COMPARISON.stock,
+      label: CONTENT_PAGE.GLOBAL.stock,
       getValue: (product: ComparisonItem) => (
         <span className={product.stock > 0 ? "text-green-600" : "text-red-600"}>
-          {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+          {product.stock > 0
+            ? `${product.stock} ${CONTENT_PAGE.GLOBAL.inStockLabel}`
+            : CONTENT_PAGE.GLOBAL.outOfStock}
         </span>
       ),
     },
     {
-      label: CONTENT_PAGE.COMPARISON.category,
-      getValue: (product: ComparisonItem) => product.categoryName || "N/A",
+      label: CONTENT_PAGE.GLOBAL.category,
+      getValue: (product: ComparisonItem) =>
+        product.categoryName || CONTENT_PAGE.GLOBAL.notAvailable,
     },
     {
-      label: CONTENT_PAGE.COMPARISON.description,
+      label: CONTENT_PAGE.GLOBAL.description,
       getValue: (product: ComparisonItem) => (
         <p className="text-sm text-muted-foreground line-clamp-3">
           {product.description}
@@ -80,7 +83,7 @@ export default function ComparisonModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] w-full max-h-[90vh] overflow-hidden flex flex-col p-0">
         <DialogHeader className="px-6 pt-6 pb-4">
-          <DialogTitle>{CONTENT_PAGE.COMPARISON.title}</DialogTitle>
+          <DialogTitle>{CONTENT_PAGE.COMPONENT.COMPARISON.title}</DialogTitle>
         </DialogHeader>
         <div className="flex-1 overflow-auto px-6">
           <div className="overflow-x-auto">
@@ -88,7 +91,7 @@ export default function ComparisonModal({
               <thead>
                 <tr>
                   <th className="sticky left-0 z-10 bg-background border-b p-3 sm:p-4 text-left font-semibold min-w-[120px] sm:min-w-[150px]">
-                    Feature
+                    {CONTENT_PAGE.COMPONENT.COMPARISON.feature}
                   </th>
                   {products.map((product) => (
                     <th
@@ -143,7 +146,7 @@ export default function ComparisonModal({
         </div>
         <div className="flex justify-end gap-2 pt-4 pb-6 px-6 border-t">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Close
+            {CONTENT_PAGE.GLOBAL.close}
           </Button>
         </div>
       </DialogContent>

@@ -4,19 +4,19 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Metadata } from 'next';
-import Link from 'next/link';
-import Image from 'next/image';
-import { APP_NAME } from '@/lib/constants';
-import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
-import ROUTES from '@/lib/routes';
-import CONTENT_PAGE from '@/lib/content-page';
-import { CredentialsSignInForm } from '@/components/shared/sign-in/CredentialsSignInForm';
+} from "@/components/ui/card";
+import { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { APP_NAME } from "@/lib/constants";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import ROUTES from "@/lib/routes";
+import CONTENT_PAGE from "@/lib/content-page";
+import { CredentialsSignInForm } from "@/components/shared/sign-in/CredentialsSignInForm";
 
 export const metadata: Metadata = {
-  title: 'Sign In',
+  title: "Sign In",
 };
 
 export default async function SignInPage(props: {
@@ -47,13 +47,13 @@ export default async function SignInPage(props: {
             />
           </Link>
           <CardTitle className="text-center" data-testid="sign-in-title">
-            {CONTENT_PAGE.SIGN_IN_PAGE.signIn}
+            {CONTENT_PAGE.GLOBAL.signIn}
           </CardTitle>
           <CardDescription
             className="text-center"
             data-testid="sign-in-description"
           >
-            {CONTENT_PAGE.SIGN_IN_PAGE.signInToYourAccount}
+            {CONTENT_PAGE.PAGE.SIGN_IN.signInToYourAccount}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

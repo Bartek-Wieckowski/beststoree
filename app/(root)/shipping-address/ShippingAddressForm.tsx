@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { useTransition } from 'react';
-import { ShippingAddress } from '@/types';
-import { shippingAddressSchema } from '@/lib/validators';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ControllerRenderProps, useForm, SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useTransition } from "react";
+import { ShippingAddress } from "@/types";
+import { shippingAddressSchema } from "@/lib/validators";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ControllerRenderProps, useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -15,14 +15,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Loader } from 'lucide-react';
-import { updateUserAddress } from '@/lib/actions/user.actions';
-import { shippingAddressDefaultValues } from '@/lib/constants';
-import ROUTES from '@/lib/routes';
-import CONTENT_PAGE from '@/lib/content-page';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Loader } from "lucide-react";
+import { updateUserAddress } from "@/lib/actions/user.actions";
+import { shippingAddressDefaultValues } from "@/lib/constants";
+import ROUTES from "@/lib/routes";
+import CONTENT_PAGE from "@/lib/content-page";
 
 export default function ShippingAddressForm({
   address,
@@ -47,7 +47,7 @@ export default function ShippingAddressForm({
 
       if (!res.success) {
         toast({
-          variant: 'destructive',
+          variant: "destructive",
           description: res.message as string,
         });
         return;
@@ -61,10 +61,13 @@ export default function ShippingAddressForm({
     <>
       <div className="max-w-md mx-auto space-y-4">
         <h1 className="h2-bold mt-4">
-          {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.shippingAddress}
+          {CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.shippingAddress}
         </h1>
         <p className="text-sm text-muted-foreground">
-          {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.pleaseEnterAddressToShipTo}
+          {
+            CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM
+              .pleaseEnterAddressToShipTo
+          }
         </p>
         <Form {...form}>
           <form
@@ -81,17 +84,18 @@ export default function ShippingAddressForm({
                 }: {
                   field: ControllerRenderProps<
                     z.infer<typeof shippingAddressSchema>,
-                    'fullName'
+                    "fullName"
                   >;
                 }) => (
                   <FormItem className="w-full">
                     <FormLabel>
-                      {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.fullName}
+                      {CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.fullName}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
-                          CONTENT_PAGE.SHIPPING_ADDRESS_FORM.enterFullName
+                          CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM
+                            .enterFullName
                         }
                         {...field}
                       />
@@ -110,17 +114,18 @@ export default function ShippingAddressForm({
                 }: {
                   field: ControllerRenderProps<
                     z.infer<typeof shippingAddressSchema>,
-                    'streetAddress'
+                    "streetAddress"
                   >;
                 }) => (
                   <FormItem className="w-full">
                     <FormLabel>
-                      {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.address}
+                      {CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.address}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
-                          CONTENT_PAGE.SHIPPING_ADDRESS_FORM.enterAddress
+                          CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM
+                            .enterAddress
                         }
                         {...field}
                       />
@@ -139,17 +144,17 @@ export default function ShippingAddressForm({
                 }: {
                   field: ControllerRenderProps<
                     z.infer<typeof shippingAddressSchema>,
-                    'city'
+                    "city"
                   >;
                 }) => (
                   <FormItem className="w-full">
                     <FormLabel>
-                      {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.city}
+                      {CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.city}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
-                          CONTENT_PAGE.SHIPPING_ADDRESS_FORM.enterCity
+                          CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.enterCity
                         }
                         {...field}
                       />
@@ -168,17 +173,18 @@ export default function ShippingAddressForm({
                 }: {
                   field: ControllerRenderProps<
                     z.infer<typeof shippingAddressSchema>,
-                    'postalCode'
+                    "postalCode"
                   >;
                 }) => (
                   <FormItem className="w-full">
                     <FormLabel>
-                      {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.postalCode}
+                      {CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.postalCode}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
-                          CONTENT_PAGE.SHIPPING_ADDRESS_FORM.enterPostalCode
+                          CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM
+                            .enterPostalCode
                         }
                         {...field}
                       />
@@ -197,17 +203,18 @@ export default function ShippingAddressForm({
                 }: {
                   field: ControllerRenderProps<
                     z.infer<typeof shippingAddressSchema>,
-                    'country'
+                    "country"
                   >;
                 }) => (
                   <FormItem className="w-full">
                     <FormLabel>
-                      {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.country}
+                      {CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM.country}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
-                          CONTENT_PAGE.SHIPPING_ADDRESS_FORM.enterCountry
+                          CONTENT_PAGE.COMPONENT.SHIPPING_ADDRESS_FORM
+                            .enterCountry
                         }
                         {...field}
                       />
@@ -227,8 +234,8 @@ export default function ShippingAddressForm({
                   <Loader className="w-4 h-4 animate-spin" />
                 ) : (
                   <ArrowRight className="w-4 h-4" />
-                )}{' '}
-                {CONTENT_PAGE.SHIPPING_ADDRESS_FORM.continue}
+                )}{" "}
+                {CONTENT_PAGE.GLOBAL.continue}
               </Button>
             </div>
           </form>

@@ -30,6 +30,7 @@ import {
 import * as LucideIcons from "lucide-react";
 import { Control, useWatch } from "react-hook-form";
 import { Category } from "@/types";
+import CONTENT_PAGE from "@/lib/content-page";
 
 type IconFieldProps = {
   control: Control<z.infer<typeof insertCategorySchema>>;
@@ -218,7 +219,7 @@ export default function CategoryForm({
       if (!idToUse || typeof idToUse !== "string" || idToUse.trim() === "") {
         toast({
           variant: "destructive",
-          description: "Category ID is missing",
+          description: CONTENT_PAGE.COMPONENT.CATEGORY_FORM.categoryIdMissing,
         });
         return;
       }
@@ -229,7 +230,7 @@ export default function CategoryForm({
       if (!slugValue || slugValue.length < 3) {
         toast({
           variant: "destructive",
-          description: "Slug is required and must be at least 3 characters",
+          description: CONTENT_PAGE.COMPONENT.CATEGORY_FORM.slugRequired,
         });
         return;
       }
@@ -258,20 +259,14 @@ export default function CategoryForm({
   };
 
   const onError = (errors: Record<string, { message?: string }>) => {
-    console.error("❌ FORM VALIDATION ERRORS:", errors);
-    console.error("❌ Form state:", form.formState);
-
     const errorMessages = Object.values(errors)
       .map((error) => error?.message)
       .filter(Boolean)
       .join(", ");
 
-    console.error("❌ Error messages:", errorMessages);
-
     toast({
       variant: "destructive",
-      description:
-        errorMessages || "Please fix the form errors before submitting",
+      description: errorMessages || CONTENT_PAGE.GLOBAL.pleaseFixFormErrors,
     });
   };
 
@@ -320,7 +315,9 @@ export default function CategoryForm({
                 <Input
                   {...field}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="Category name"
+                  placeholder={
+                    CONTENT_PAGE.COMPONENT.CATEGORY_FORM.categoryName
+                  }
                 />
               </FormControl>
               <FormMessage />
@@ -343,7 +340,7 @@ export default function CategoryForm({
                     className="w-fit"
                     onClick={handleGenerateSlug}
                   >
-                    Generate from name
+                    {CONTENT_PAGE.COMPONENT.CATEGORY_FORM.generateFromName}
                   </Button>
                 </div>
               </FormControl>
@@ -357,17 +354,17 @@ export default function CategoryForm({
         <div className="flex gap-4">
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting
-              ? "Saving..."
+              ? CONTENT_PAGE.GLOBAL.saving
               : type === "Create"
-                ? "Create Category"
-                : "Update Category"}
+                ? CONTENT_PAGE.COMPONENT.CATEGORY_FORM.createCategory
+                : CONTENT_PAGE.COMPONENT.CATEGORY_FORM.updateCategory}
           </Button>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.push(ROUTES.ADMIN_CATEGORIES)}
           >
-            Cancel
+            {CONTENT_PAGE.GLOBAL.cancel}
           </Button>
         </div>
       </form>

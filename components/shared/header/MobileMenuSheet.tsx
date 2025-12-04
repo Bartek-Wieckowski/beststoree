@@ -63,7 +63,7 @@ export default function MobileMenuSheet({
         <EllipsisVertical />
       </SheetTrigger>
       <SheetContent className="flex flex-col items-start">
-        <SheetTitle>{CONTENT_PAGE.MENU.menu}</SheetTitle>
+        <SheetTitle>{CONTENT_PAGE.COMPONENT.MENU.menu}</SheetTitle>
         <div className="flex flex-col gap-4 w-full mt-4">
           <div
             onClick={handleThemeClick}
@@ -73,7 +73,7 @@ export default function MobileMenuSheet({
               <ModeToggle open={themeOpen} onOpenChange={setThemeOpen} />
             </div>
             <span className="text-sm">
-              {CONTENT_PAGE.MODE_TOGGLE.appearance}
+              {CONTENT_PAGE.COMPONENT.MODE_TOGGLE.appearance}
             </span>
           </div>
           <div
@@ -86,7 +86,9 @@ export default function MobileMenuSheet({
                 onOpenChange={setWishlistOpen}
               />
             </div>
-            <span className="text-sm">{CONTENT_PAGE.HEADER.wishlist}</span>
+            <span className="text-sm">
+              {CONTENT_PAGE.COMPONENT.HEADER.wishlist}
+            </span>
           </div>
           <div
             onClick={handleComparisonClick}
@@ -98,7 +100,9 @@ export default function MobileMenuSheet({
                 onOpenChange={setComparisonOpen}
               />
             </div>
-            <span className="text-sm">{CONTENT_PAGE.HEADER.comparison}</span>
+            <span className="text-sm">
+              {CONTENT_PAGE.COMPONENT.HEADER.comparison}
+            </span>
           </div>
           <Link
             href={ROUTES.CART}
@@ -108,7 +112,9 @@ export default function MobileMenuSheet({
               <Button asChild variant="ghost" size="icon">
                 <div className="relative">
                   <ShoppingCart />
-                  <span className="sr-only">{CONTENT_PAGE.HEADER.cart}</span>
+                  <span className="sr-only">
+                    {CONTENT_PAGE.COMPONENT.HEADER.cart}
+                  </span>
                   {cartItemsCount > 0 && (
                     <Badge
                       variant="destructive"
@@ -120,7 +126,9 @@ export default function MobileMenuSheet({
                 </div>
               </Button>
             </div>
-            <span className="text-sm">{CONTENT_PAGE.HEADER.cart}</span>
+            <span className="text-sm">
+              {CONTENT_PAGE.COMPONENT.HEADER.cart}
+            </span>
           </Link>
         </div>
         <div className="mt-6 w-full">

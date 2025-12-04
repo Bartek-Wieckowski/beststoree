@@ -8,7 +8,7 @@ export default function ViewAllProductsButton() {
     <div className="flex justify-center items-center my-8">
       <Button asChild className="px-8 py-4 text-lg font-semibold">
         <Link href={ROUTES.SEARCH}>
-          {CONTENT_PAGE.BUTTON.viewAllProductsButton}
+          {CONTENT_PAGE.COMPONENT.BUTTON.viewAllProductsButton}
         </Link>
       </Button>
     </div>

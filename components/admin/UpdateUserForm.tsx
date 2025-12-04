@@ -86,13 +86,14 @@ export default function UpdateUserForm({
             }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  {CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.email}
+                  {CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.email}
                 </FormLabel>
                 <FormControl>
                   <Input
                     disabled={true}
                     placeholder={
-                      CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.emailPlaceholder
+                      CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM
+                        .emailPlaceholder
                     }
                     {...field}
                   />
@@ -117,12 +118,13 @@ export default function UpdateUserForm({
             }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  {CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.name}
+                  {CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.name}
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder={
-                      CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.namePlaceholder
+                      CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM
+                        .namePlaceholder
                     }
                     {...field}
                   />
@@ -147,7 +149,7 @@ export default function UpdateUserForm({
             }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  {CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.role}
+                  {CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.role}
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -157,7 +159,8 @@ export default function UpdateUserForm({
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.rolePlaceholder
+                          CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM
+                            .rolePlaceholder
                         }
                       />
                     </SelectTrigger>
@@ -182,8 +185,8 @@ export default function UpdateUserForm({
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting
-              ? CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.submitting
-              : CONTENT_PAGE.ADMIN_USERS_UPDATE_FORM.updateUser}
+              ? CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.submitting
+              : CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.updateUser}
           </Button>
         </div>
       </form>

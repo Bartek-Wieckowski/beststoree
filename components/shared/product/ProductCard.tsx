@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition, useCallback, useMemo } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import ROUTES from "@/lib/routes";
 import CONTENT_PAGE from "@/lib/content-page";
 import ProductPrice from "./ProductPrice";
@@ -17,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { useWishlist } from "@/hooks/use-wishlist";
 import { useComparison } from "@/hooks/use-comparison";
 import { useToast } from "@/hooks/use-toast";
+import { addItemToCart } from "@/lib/actions/cart.actions";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +37,8 @@ export default function ProductCard({
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const {
     addToWishlist,
     removeFromWishlist,
@@ -49,28 +54,145 @@ export default function ProductCard({
   } = useComparison();
   const { toast } = useToast();
 
-  const firstImage = product.images?.find((img) => img && img.trim() !== "");
+  const firstImage = useMemo(
+    () => product.images?.find((img) => img && img.trim() !== ""),
+    [product.images]
+  );
+
+  const sizes = useMemo(() => product.sizes || [], [product.sizes]);
+  const colors = useMemo(() => product.colors || [], [product.colors]);
+
+  const cartItem: CartItem = useMemo(
+    () => ({
+      image: firstImage || "",
+      productId: product.id,
+      slug: product.slug,
+      qty: 1,
+      name: product.name,
+      price: product.price,
+      size: selectedSize || null,
+      color: selectedColor || null,
+    }),
+    [
+      firstImage,
+      product.id,
+      product.slug,
+      product.name,
+      product.price,
+      selectedSize,
+      selectedColor,
+    ]
+  );
+
+  const handleWishlistClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isInWishlist(product.id)) {
+        const result = removeFromWishlist(product.id);
+        toast({ description: result.message });
+      } else {
+        const result = addToWishlist(product);
+        toast({
+          description: result.message,
+          variant: result.success ? "default" : "destructive",
+        });
+      }
+    },
+    [product, isInWishlist, removeFromWishlist, addToWishlist, toast]
+  );
+
+  const handleComparisonClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isInComparison(product.id)) {
+        const result = removeFromComparison(product.id);
+        toast({ description: result.message });
+      } else {
+        const canAdd = canAddProduct(product);
+        if (!canAdd.canAdd) {
+          let message = "";
+          switch (canAdd.reason) {
+            case "max_limit":
+              message = CONTENT_PAGE.COMPONENT.COMPARISON.maxItems;
+              break;
+            case "different_category":
+              message = CONTENT_PAGE.COMPONENT.COMPARISON.differentCategory;
+              break;
+            case "already_added":
+              message = CONTENT_PAGE.COMPONENT.COMPARISON.alreadyAdded;
+              break;
+            default:
+              message = "Cannot add product to comparison";
+          }
+          toast({ description: message, variant: "destructive" });
+          return;
+        }
+        const result = addToComparison(product);
+        toast({
+          description: result.message,
+          variant: result.success ? "default" : "destructive",
+        });
+      }
+    },
+    [
+      product,
+      isInComparison,
+      removeFromComparison,
+      canAddProduct,
+      addToComparison,
+      toast,
+    ]
+  );
+
+  const handleQuickAddClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const hasVariants = sizes.length > 0 || colors.length > 0;
+
+      if (!hasVariants) {
+        // No variants - add directly to cart
+        startTransition(async () => {
+          const res = await addItemToCart(cartItem);
+          if (!res.success) {
+            toast({
+              description: res.message as string,
+              variant: "destructive",
+            });
+            return;
+          }
+
+          toast({
+            description: res.message as string,
+            action: (
+              <ToastAction
+                className=""
+                altText={CONTENT_PAGE.GLOBAL.goToCart}
+                onClick={() => router.push(ROUTES.CART)}
+              >
+                {CONTENT_PAGE.GLOBAL.goToCart}
+              </ToastAction>
+            ),
+          });
+        });
+      } else {
+        // Has variants - show dialog
+        setShowQuickAdd(true);
+      }
+    },
+    [sizes, colors, cartItem, startTransition, toast, router]
+  );
 
   if (!firstImage) return null;
 
   const hasVariants = product.hasVariants || false;
-  const sizes = product.sizes || [];
-  const colors = product.colors || [];
   const isVariantRequired =
     hasVariants && (sizes.length > 0 || colors.length > 0);
   const isVariantSelected =
     (!sizes.length || selectedSize) && (!colors.length || selectedColor);
-
-  const cartItem: CartItem = {
-    image: firstImage,
-    productId: product.id,
-    slug: product.slug,
-    qty: 1,
-    name: product.name,
-    price: product.price,
-    size: selectedSize || null,
-    color: selectedColor || null,
-  };
 
   return (
     <Card className="w-full max-w-sm group mx-auto" data-testid="product-card">
@@ -96,20 +218,7 @@ export default function ProductCard({
                 isInWishlist(product.id) &&
                   "opacity-100 bg-red-50 hover:bg-red-100"
               )}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (isInWishlist(product.id)) {
-                  const result = removeFromWishlist(product.id);
-                  toast({ description: result.message });
-                } else {
-                  const result = addToWishlist(product);
-                  toast({
-                    description: result.message,
-                    variant: result.success ? "default" : "destructive",
-                  });
-                }
-              }}
+              onClick={handleWishlistClick}
             >
               <Heart
                 className={cn(
@@ -127,39 +236,7 @@ export default function ProductCard({
                 isInComparison(product.id) &&
                   "opacity-100 bg-blue-50 hover:bg-blue-100"
               )}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (isInComparison(product.id)) {
-                  const result = removeFromComparison(product.id);
-                  toast({ description: result.message });
-                } else {
-                  const canAdd = canAddProduct(product);
-                  if (!canAdd.canAdd) {
-                    let message = "";
-                    switch (canAdd.reason) {
-                      case "max_limit":
-                        message = CONTENT_PAGE.COMPARISON.maxItems;
-                        break;
-                      case "different_category":
-                        message = CONTENT_PAGE.COMPARISON.differentCategory;
-                        break;
-                      case "already_added":
-                        message = CONTENT_PAGE.COMPARISON.alreadyAdded;
-                        break;
-                      default:
-                        message = "Cannot add product to comparison";
-                    }
-                    toast({ description: message, variant: "destructive" });
-                    return;
-                  }
-                  const result = addToComparison(product);
-                  toast({
-                    description: result.message,
-                    variant: result.success ? "default" : "destructive",
-                  });
-                }
-              }}
+              onClick={handleComparisonClick}
             >
               <Scale
                 className={cn(
@@ -175,15 +252,12 @@ export default function ProductCard({
             <Button
               type="button"
               size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowQuickAdd(true);
-              }}
+              onClick={handleQuickAddClick}
+              disabled={isPending}
               className="shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Plus className="w-4 h-4 mr-1" />
-              Quick Add
+              {CONTENT_PAGE.GLOBAL.quickAdd}
             </Button>
           </div>
         )}
@@ -197,9 +271,7 @@ export default function ProductCard({
           {product.stock > 0 ? (
             <ProductPrice value={Number(product.price)} />
           ) : (
-            <p className="text-destructive">
-              {CONTENT_PAGE.PRODUCT_CARD.outOfStock}
-            </p>
+            <p className="text-destructive">{CONTENT_PAGE.GLOBAL.outOfStock}</p>
           )}
         </div>
       </CardContent>
@@ -207,7 +279,9 @@ export default function ProductCard({
       <Dialog open={showQuickAdd} onOpenChange={setShowQuickAdd}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Quick Add - {product.name}</DialogTitle>
+            <DialogTitle>
+              {CONTENT_PAGE.GLOBAL.quickAdd} - {product.name}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             {isVariantRequired && (

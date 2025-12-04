@@ -38,7 +38,7 @@ export default function Pagination({
         disabled={Number(page) <= 1}
         onClick={() => handleClick("prev")}
       >
-        {CONTENT_PAGE.PAGINATION.previous}
+        {CONTENT_PAGE.GLOBAL.previous}
       </Button>
       <Button
         size="lg"
@@ -47,7 +47,7 @@ export default function Pagination({
         disabled={Number(page) >= totalPages}
         onClick={() => handleClick("next")}
       >
-        {CONTENT_PAGE.PAGINATION.next}
+        {CONTENT_PAGE.GLOBAL.next}
       </Button>
     </div>
   );

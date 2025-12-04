@@ -62,16 +62,16 @@ export default function ProductActions({ product }: { product: Product }) {
         let message = "";
         switch (canAdd.reason) {
           case "max_limit":
-            message = CONTENT_PAGE.COMPARISON.maxItems;
+            message = CONTENT_PAGE.COMPONENT.COMPARISON.maxItems;
             break;
           case "different_category":
-            message = CONTENT_PAGE.COMPARISON.differentCategory;
+            message = CONTENT_PAGE.COMPONENT.COMPARISON.differentCategory;
             break;
           case "already_added":
-            message = CONTENT_PAGE.COMPARISON.alreadyAdded;
+            message = CONTENT_PAGE.COMPONENT.COMPARISON.alreadyAdded;
             break;
           default:
-            message = "Cannot add product to comparison";
+            message = CONTENT_PAGE.COMPONENT.COMPARISON.cannotAddProduct;
         }
         toast({
           description: message,
@@ -118,8 +118,8 @@ export default function ProductActions({ product }: { product: Product }) {
           )}
         />
         {isInWishlist(product.id)
-          ? CONTENT_PAGE.PRODUCT_DETAILS.removeFromWishlist
-          : CONTENT_PAGE.PRODUCT_DETAILS.addToWishlist}
+          ? CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.removeFromWishlist
+          : CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToWishlist}
       </Button>
       <Button
         type="button"
@@ -139,8 +139,8 @@ export default function ProductActions({ product }: { product: Product }) {
           )}
         />
         {isInComparison(product.id)
-          ? CONTENT_PAGE.PRODUCT_DETAILS.removeFromComparison
-          : CONTENT_PAGE.PRODUCT_DETAILS.addToComparison}
+          ? CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.removeFromComparison
+          : CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToComparison}
       </Button>
     </div>
   );

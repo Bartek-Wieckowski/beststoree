@@ -27,7 +27,7 @@ export default async function AdminProductUpdatePage(props: {
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       <h1 className="h2-bold">
-        {CONTENT_PAGE.ADMIN_PRODUCTS_UPDATE_PAGE.updateProduct}
+        {CONTENT_PAGE.PAGE.ADMIN_PRODUCTS_UPDATE.updateProduct}
       </h1>
 
       <ProductForm

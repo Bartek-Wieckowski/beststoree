@@ -26,7 +26,7 @@ export default function ProductList({
         </div>
       ) : (
         <div>
-          <p>{CONTENT_PAGE.PRODUCT_LIST.noProductsFound}</p>
+          <p>{CONTENT_PAGE.GLOBAL.noProductsFound}</p>
         </div>
       )}
     </div>

@@ -60,6 +60,7 @@ export async function getProductById(productId: string) {
         select: {
           id: true,
           name: true,
+          slug: true,
         },
       },
     },

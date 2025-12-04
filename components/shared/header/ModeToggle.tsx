@@ -55,26 +55,26 @@ export default function ModeToggle({
       </DropdownMenuTrigger>
       <DropdownMenuContent data-testid="theme-options">
         <DropdownMenuLabel>
-          {CONTENT_PAGE.MODE_TOGGLE.appearance}
+          {CONTENT_PAGE.COMPONENT.MODE_TOGGLE.appearance}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
           checked={theme === "light"}
           onClick={() => setTheme("light")}
         >
-          {CONTENT_PAGE.MODE_TOGGLE.light}
+          {CONTENT_PAGE.COMPONENT.MODE_TOGGLE.light}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={theme === "dark"}
           onClick={() => setTheme("dark")}
         >
-          {CONTENT_PAGE.MODE_TOGGLE.dark}
+          {CONTENT_PAGE.COMPONENT.MODE_TOGGLE.dark}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={theme === "system"}
           onClick={() => setTheme("system")}
         >
-          {CONTENT_PAGE.MODE_TOGGLE.system}
+          {CONTENT_PAGE.COMPONENT.MODE_TOGGLE.system}
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

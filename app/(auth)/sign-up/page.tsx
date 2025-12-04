@@ -1,22 +1,22 @@
-import { auth } from '@/auth';
-import SignUpForm from '@/components/shared/sign-up/SignUpForm';
+import { auth } from "@/auth";
+import SignUpForm from "@/components/shared/sign-up/SignUpForm";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { APP_NAME } from '@/lib/constants';
-import CONTENT_PAGE from '@/lib/content-page';
-import ROUTES from '@/lib/routes';
-import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
+} from "@/components/ui/card";
+import { APP_NAME } from "@/lib/constants";
+import CONTENT_PAGE from "@/lib/content-page";
+import ROUTES from "@/lib/routes";
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: 'Sign Up',
+  title: "Sign Up",
 };
 
 export default async function SignUpPage(props: {
@@ -46,10 +46,10 @@ export default async function SignUpPage(props: {
             />
           </Link>
           <CardTitle className="text-center">
-            {CONTENT_PAGE.SIGN_UP_PAGE.createAccount}
+            {CONTENT_PAGE.PAGE.SIGN_UP.createAccount}
           </CardTitle>
           <CardDescription className="text-center">
-            {CONTENT_PAGE.SIGN_UP_PAGE.enterYourInformationBelowToSignUp}
+            {CONTENT_PAGE.PAGE.SIGN_UP.enterYourInformationBelowToSignUp}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

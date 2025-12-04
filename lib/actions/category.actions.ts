@@ -158,6 +158,23 @@ export async function deleteCategory(id: string) {
       message: "Category deleted successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    let errorMessage: string;
+
+    if ("generalError" in formattedError) {
+      errorMessage = formattedError.generalError;
+    } else if ("prismaError" in formattedError) {
+      errorMessage = formattedError.prismaError.message;
+    } else if ("message" in formattedError) {
+      errorMessage = formattedError.message;
+    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
+      errorMessage = Object.values(formattedError.fieldErrors)
+        .flat()
+        .join(", ");
+    } else {
+      errorMessage = "An error occurred";
+    }
+
+    return { success: false, message: errorMessage };
   }
 }

@@ -27,6 +27,7 @@ import { setPromotion, clearPromotion } from "@/lib/actions/promotion.actions";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Checkbox } from "../ui/checkbox";
+import CONTENT_PAGE from "@/lib/content-page";
 
 export default function PromotionForm({
   products,
@@ -86,7 +87,7 @@ export default function PromotionForm({
           description:
             typeof result.message === "string"
               ? result.message
-              : "Promotion set successfully",
+              : CONTENT_PAGE.GLOBAL.promotionSetSuccessfully,
         });
         // Reload to get updated promotion
         window.location.reload();
@@ -96,13 +97,13 @@ export default function PromotionForm({
           description:
             typeof result.message === "string"
               ? result.message
-              : "Failed to set promotion",
+              : CONTENT_PAGE.GLOBAL.failedToSetPromotion,
         });
       }
     } catch {
       toast({
         variant: "destructive",
-        description: "An error occurred",
+        description: CONTENT_PAGE.GLOBAL.errorOccurred,
       });
     } finally {
       setIsSubmitting(false);
@@ -118,7 +119,7 @@ export default function PromotionForm({
           description:
             typeof result.message === "string"
               ? result.message
-              : "Promotion cleared successfully",
+              : CONTENT_PAGE.GLOBAL.promotionClearedSuccessfully,
         });
         form.reset();
         window.location.reload();
@@ -128,13 +129,13 @@ export default function PromotionForm({
           description:
             typeof result.message === "string"
               ? result.message
-              : "Failed to clear promotion",
+              : CONTENT_PAGE.GLOBAL.failedToClearPromotion,
         });
       }
     } catch {
       toast({
         variant: "destructive",
-        description: "An error occurred",
+        description: CONTENT_PAGE.GLOBAL.errorOccurred,
       });
     } finally {
       setIsClearing(false);
@@ -144,7 +145,7 @@ export default function PromotionForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Manage Promotion</CardTitle>
+        <CardTitle>{CONTENT_PAGE.GLOBAL.managePromotion}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -154,11 +155,13 @@ export default function PromotionForm({
               name="productId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product</FormLabel>
+                  <FormLabel>{CONTENT_PAGE.GLOBAL.product}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a product" />
+                        <SelectValue
+                          placeholder={CONTENT_PAGE.GLOBAL.selectProduct}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -179,7 +182,9 @@ export default function PromotionForm({
               name="endDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Promotion End Date</FormLabel>
+                  <FormLabel>
+                    {CONTENT_PAGE.COMPONENT.PROMOTION_FORM.promotionEndDate}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="datetime-local"
@@ -211,9 +216,14 @@ export default function PromotionForm({
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>Enable Promotion</FormLabel>
+                    <FormLabel>
+                      {CONTENT_PAGE.COMPONENT.PROMOTION_FORM.enablePromotion}
+                    </FormLabel>
                     <p className="text-sm text-muted-foreground">
-                      Uncheck to completely hide promotion from the site
+                      {
+                        CONTENT_PAGE.COMPONENT.PROMOTION_FORM
+                          .uncheckToHidePromotion
+                      }
                     </p>
                   </div>
                 </FormItem>
@@ -222,7 +232,9 @@ export default function PromotionForm({
 
             <div className="flex gap-4">
               <Button type="submit" disabled={isSubmitting || isClearing}>
-                {isSubmitting ? "Setting..." : "Set Promotion"}
+                {isSubmitting
+                  ? CONTENT_PAGE.GLOBAL.submitting
+                  : CONTENT_PAGE.COMPONENT.PROMOTION_FORM.setPromotion}
               </Button>
               {currentPromotion && (
                 <Button
@@ -231,7 +243,9 @@ export default function PromotionForm({
                   onClick={handleClear}
                   disabled={isSubmitting || isClearing}
                 >
-                  {isClearing ? "Clearing..." : "Clear Promotion"}
+                  {isClearing
+                    ? CONTENT_PAGE.GLOBAL.clearing
+                    : CONTENT_PAGE.COMPONENT.PROMOTION_FORM.clearPromotion}
                 </Button>
               )}
             </div>
@@ -240,21 +254,24 @@ export default function PromotionForm({
 
         {currentPromotion && (
           <div className="mt-6 p-4 bg-muted rounded-lg">
-            <h3 className="font-semibold mb-2">Current Promotion</h3>
+            <h3 className="font-semibold mb-2">
+              {CONTENT_PAGE.GLOBAL.currentPromotion}
+            </h3>
             <p>
-              <strong>Product:</strong> {currentPromotion.product.name}
+              <strong>{CONTENT_PAGE.GLOBAL.product}:</strong>{" "}
+              {currentPromotion.product.name}
             </p>
             <p>
-              <strong>End Date:</strong>{" "}
+              <strong>{CONTENT_PAGE.GLOBAL.endDate}:</strong>{" "}
               {currentPromotion.endDate
                 ? new Date(currentPromotion.endDate).toLocaleString()
-                : "N/A"}
+                : CONTENT_PAGE.GLOBAL.notAvailable}
             </p>
             <p>
-              <strong>Status:</strong>{" "}
+              <strong>{CONTENT_PAGE.GLOBAL.status}:</strong>{" "}
               {currentPromotion.isEnabled === false
-                ? "Disabled (not shown on site)"
-                : "Enabled"}
+                ? CONTENT_PAGE.GLOBAL.disabledNotShownOnSite
+                : CONTENT_PAGE.GLOBAL.enabled}
             </p>
           </div>
         )}

@@ -43,18 +43,17 @@ export default async function AdminProductsPage({
       <div className="flex-between">
         <div className="flex items-center gap-3">
           <h1 className="h2-bold">
-            {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.products}
+            {CONTENT_PAGE.PAGE.ADMIN_PRODUCTS.products}
           </h1>
           {searchText && (
             <div>
-              {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.filteredBy}{" "}
-              <i>&quot;{searchText}&quot;</i>{" "}
+              {CONTENT_PAGE.GLOBAL.filteredBy} <i>&quot;{searchText}&quot;</i>{" "}
               <Link
                 href={ROUTES.ADMIN_PRODUCTS}
                 data-testid="remove-filter-button"
               >
                 <Button variant="outline" size="sm">
-                  {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.removeFilter}
+                  {CONTENT_PAGE.GLOBAL.removeFilter}
                 </Button>
               </Link>
             </div>
@@ -62,7 +61,7 @@ export default async function AdminProductsPage({
         </div>
         <Button asChild variant="default" data-testid="create-product-button">
           <Link href={ROUTES.ADMIN_PRODUCTS_CREATE}>
-            {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.createProduct}
+            {CONTENT_PAGE.PAGE.ADMIN_PRODUCTS.createProduct}
           </Link>
         </Button>
       </div>
@@ -70,16 +69,16 @@ export default async function AdminProductsPage({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.id}</TableHead>
-            <TableHead>{CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.name}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.id}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.name}</TableHead>
             <TableHead className="text-right">
-              {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.price}
+              {CONTENT_PAGE.GLOBAL.price}
             </TableHead>
-            <TableHead>{CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.category}</TableHead>
-            <TableHead>{CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.stock}</TableHead>
-            <TableHead>{CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.rating}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.category}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.stock}</TableHead>
+            <TableHead>{CONTENT_PAGE.GLOBAL.rating}</TableHead>
             <TableHead className="w-[100px]">
-              {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.actions}
+              {CONTENT_PAGE.GLOBAL.actions}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -92,14 +91,14 @@ export default async function AdminProductsPage({
                 {formatCurrency(product.price)}
               </TableCell>
               <TableCell>
-                {product.category?.name || "N/A"}
+                {product.category?.name || CONTENT_PAGE.GLOBAL.notAvailable}
               </TableCell>
               <TableCell>{product.stock}</TableCell>
               <TableCell>{product.rating}</TableCell>
               <TableCell className="flex gap-1">
                 <Button asChild variant="outline" size="sm">
                   <Link href={ROUTES.ADMIN_PRODUCTS_EDIT(product.id)}>
-                    {CONTENT_PAGE.ADMIN_PRODUCTS_PAGE.editProduct}
+                    {CONTENT_PAGE.GLOBAL.edit}
                   </Link>
                 </Button>
                 <DeleteDialog id={product.id} action={deleteProduct} />

@@ -256,11 +256,14 @@ export default function ProductForm({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>{CONTENT_PAGE.ADMIN_PRODUCTS_FORM.name}</FormLabel>
+                <FormLabel>
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.name}
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder={
-                      CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterProductName
+                      CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM
+                        .enterProductName
                     }
                     {...field}
                     onChange={(e) => handleNameChange(e.target.value)}
@@ -283,11 +286,15 @@ export default function ProductForm({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>{CONTENT_PAGE.ADMIN_PRODUCTS_FORM.slug}</FormLabel>
+                <FormLabel>
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.slug}
+                </FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
-                      placeholder={CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterSlug}
+                      placeholder={
+                        CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.enterSlug
+                      }
                       {...field}
                     />
                     <Button
@@ -295,7 +302,7 @@ export default function ProductForm({
                       className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 mt-2"
                       onClick={handleGenerateSlug}
                     >
-                      {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.generate}
+                      {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.generate}
                     </Button>
                   </div>
                 </FormControl>
@@ -319,7 +326,7 @@ export default function ProductForm({
             }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.category}
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.category}
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -329,7 +336,8 @@ export default function ProductForm({
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterCategory
+                          CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM
+                            .enterCategory
                         }
                       />
                     </SelectTrigger>
@@ -359,10 +367,14 @@ export default function ProductForm({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>{CONTENT_PAGE.ADMIN_PRODUCTS_FORM.brand}</FormLabel>
+                <FormLabel>
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.brand}
+                </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterBrand}
+                    placeholder={
+                      CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.enterBrand
+                    }
                     {...field}
                   />
                 </FormControl>
@@ -385,10 +397,14 @@ export default function ProductForm({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>{CONTENT_PAGE.ADMIN_PRODUCTS_FORM.price}</FormLabel>
+                <FormLabel>
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.price}
+                </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterPrice}
+                    placeholder={
+                      CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.enterPrice
+                    }
                     {...field}
                   />
                 </FormControl>
@@ -409,10 +425,14 @@ export default function ProductForm({
               >;
             }) => (
               <FormItem className="w-full">
-                <FormLabel>{CONTENT_PAGE.ADMIN_PRODUCTS_FORM.stock}</FormLabel>
+                <FormLabel>
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.stock}
+                </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterStock}
+                    placeholder={
+                      CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.enterStock
+                    }
                     {...field}
                   />
                 </FormControl>
@@ -428,7 +448,9 @@ export default function ProductForm({
             name="images"
             render={() => (
               <FormItem className="w-full">
-                <FormLabel>{CONTENT_PAGE.ADMIN_PRODUCTS_FORM.images}</FormLabel>
+                <FormLabel>
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.images}
+                </FormLabel>
                 <Card className="p-0 pt-2">
                   <CardContent className="space-y-2 min-h-48">
                     <div className="flex-start space-x-2">
@@ -494,7 +516,7 @@ export default function ProductForm({
         </div>
         <div className="upload-field">
           {/* isFeatured */}
-          {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.featuredProduct}
+          {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.featuredProduct}
           <Card>
             <CardContent className="space-y-2 mt-2">
               <FormField
@@ -509,7 +531,7 @@ export default function ProductForm({
                       />
                     </FormControl>
                     <FormLabel>
-                      {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.isFeatured}
+                      {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.isFeatured}
                     </FormLabel>
                   </FormItem>
                 )}
@@ -530,7 +552,7 @@ export default function ProductForm({
                     type="button"
                   >
                     <Trash className="w-4 h-4 mr-2" />
-                    {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.removeBanner}
+                    {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.removeBanner}
                   </Button>
                 </div>
               )}
@@ -719,12 +741,13 @@ export default function ProductForm({
             }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  {CONTENT_PAGE.ADMIN_PRODUCTS_FORM.description}
+                  {CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.description}
                 </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder={
-                      CONTENT_PAGE.ADMIN_PRODUCTS_FORM.enterDescription
+                      CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM
+                        .enterDescription
                     }
                     className="resize-none"
                     {...field}
@@ -743,8 +766,8 @@ export default function ProductForm({
             className="button col-span-2 w-full"
           >
             {form.formState.isSubmitting
-              ? CONTENT_PAGE.ADMIN_PRODUCTS_FORM.submitting
-              : `${type} ${CONTENT_PAGE.ADMIN_PRODUCTS_FORM.product}`}
+              ? CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.submitting
+              : `${type} ${CONTENT_PAGE.COMPONENT.ADMIN_PRODUCTS_FORM.product}`}
           </Button>
         </div>
       </form>

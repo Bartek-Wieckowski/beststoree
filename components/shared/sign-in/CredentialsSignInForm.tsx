@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import CONTENT_PAGE from '@/lib/content-page';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import CONTENT_PAGE from "@/lib/content-page";
 // import { signInDefaultValues } from '@/lib/constants';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { signInWithCredentials } from '@/lib/actions/user.actions';
-import { Button } from '@/components/ui/button';
-import ROUTES from '@/lib/routes';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { SignInActionResponse } from '@/types';
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { signInWithCredentials } from "@/lib/actions/user.actions";
+import { Button } from "@/components/ui/button";
+import ROUTES from "@/lib/routes";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { SignInActionResponse } from "@/types";
 
 export function CredentialsSignInForm() {
   const initialState: SignInActionResponse = {
     success: false,
-    message: '',
+    message: "",
     fieldErrors: null,
     generalError: null,
     prismaError: null,
-    inputs: { email: '' },
+    inputs: { email: "" },
   };
 
   const [data, action] = useActionState(signInWithCredentials, initialState);
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || ROUTES.HOME;
+  const callbackUrl = searchParams.get("callbackUrl") || ROUTES.HOME;
 
   function SignInButton() {
     const { pending } = useFormStatus();
@@ -38,8 +38,8 @@ export function CredentialsSignInForm() {
         data-testid="sign-in-button"
       >
         {pending
-          ? CONTENT_PAGE.BUTTON_CREDENTIALS_SIGN_IN.signing
-          : CONTENT_PAGE.BUTTON_CREDENTIALS_SIGN_IN.signIn}
+          ? CONTENT_PAGE.COMPONENT.BUTTON_SIGN_IN.signing
+          : CONTENT_PAGE.GLOBAL.signIn}
       </Button>
     );
   }
@@ -54,9 +54,7 @@ export function CredentialsSignInForm() {
           </div>
         )}
         <div>
-          <Label htmlFor="email">
-            {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.email}
-          </Label>
+          <Label htmlFor="email">{CONTENT_PAGE.GLOBAL.email}</Label>
           <Input
             id="email"
             name="email"
@@ -71,9 +69,7 @@ export function CredentialsSignInForm() {
           )}
         </div>
         <div>
-          <Label htmlFor="password">
-            {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.password}
-          </Label>
+          <Label htmlFor="password">{CONTENT_PAGE.GLOBAL.password}</Label>
           <Input
             id="password"
             name="password"
@@ -97,14 +93,14 @@ export function CredentialsSignInForm() {
         )}
 
         <div className="text-sm text-center text-muted-foreground">
-          {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.text}{' '}
+          {CONTENT_PAGE.COMPONENT.SIGN_IN_FORM.text}{" "}
           <Link
             href={ROUTES.SIGN_UP}
             target="_self"
             className="link"
             data-testid="sign-in-sign-up-link"
           >
-            {CONTENT_PAGE.SIGN_IN_PAGE_CREDENTIALS_FORM.signUp}
+            {CONTENT_PAGE.GLOBAL.signUp}
           </Link>
         </div>
       </div>

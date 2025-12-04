@@ -99,15 +99,17 @@ export default function ReviewForm({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button onClick={handleOpenForm} variant="default">
-        {CONTENT_PAGE.REVIEW_FORM.writeReview}
+        {CONTENT_PAGE.COMPONENT.REVIEW_FORM.writeReview}
       </Button>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form method="post" onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>{CONTENT_PAGE.REVIEW_FORM.writeReview}</DialogTitle>
+              <DialogTitle>
+                {CONTENT_PAGE.COMPONENT.REVIEW_FORM.writeReview}
+              </DialogTitle>
               <DialogDescription>
-                {CONTENT_PAGE.REVIEW_FORM.shareYourThoughts}
+                {CONTENT_PAGE.COMPONENT.REVIEW_FORM.shareYourThoughts}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -116,9 +118,16 @@ export default function ReviewForm({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{CONTENT_PAGE.REVIEW_FORM.title}</FormLabel>
+                    <FormLabel>
+                      {CONTENT_PAGE.COMPONENT.REVIEW_FORM.title}
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter title" {...field} />
+                      <Input
+                        placeholder={
+                          CONTENT_PAGE.COMPONENT.REVIEW_FORM.enterTitle
+                        }
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -130,10 +139,15 @@ export default function ReviewForm({
                   return (
                     <FormItem>
                       <FormLabel>
-                        {CONTENT_PAGE.REVIEW_FORM.description}
+                        {CONTENT_PAGE.COMPONENT.REVIEW_FORM.description}
                       </FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter description" {...field} />
+                        <Textarea
+                          placeholder={
+                            CONTENT_PAGE.COMPONENT.REVIEW_FORM.enterDescription
+                          }
+                          {...field}
+                        />
                       </FormControl>
                     </FormItem>
                   );
@@ -145,7 +159,9 @@ export default function ReviewForm({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>{CONTENT_PAGE.REVIEW_FORM.rating}</FormLabel>
+                      <FormLabel>
+                        {CONTENT_PAGE.COMPONENT.REVIEW_FORM.rating}
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value.toString()}
@@ -181,8 +197,8 @@ export default function ReviewForm({
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting
-                  ? CONTENT_PAGE.REVIEW_FORM.submitting
-                  : CONTENT_PAGE.REVIEW_FORM.submitReview}
+                  ? CONTENT_PAGE.COMPONENT.REVIEW_FORM.submitting
+                  : CONTENT_PAGE.COMPONENT.REVIEW_FORM.submitReview}
               </Button>
             </DialogFooter>
           </form>

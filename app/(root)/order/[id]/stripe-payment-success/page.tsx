@@ -38,14 +38,14 @@ export default async function SuccessPage({
     <div className="max-w-4xl w-full mx-auto space-y-8">
       <div className="flex flex-col gap-6 items-center">
         <h1 className="h1-bold">
-          {CONTENT_PAGE.STRIPE_PAYMENT_SUCCESS_PAGE.thanksForYourPurchase}
+          {CONTENT_PAGE.PAGE.STRIPE_PAYMENT_SUCCESS.thanksForYourPurchase}
         </h1>
         <div>
-          {CONTENT_PAGE.STRIPE_PAYMENT_SUCCESS_PAGE.weAreProcessingYourOrder}
+          {CONTENT_PAGE.PAGE.STRIPE_PAYMENT_SUCCESS.weAreProcessingYourOrder}
         </div>
         <Button asChild>
           <Link href={ROUTES.ORDER(id)}>
-            {CONTENT_PAGE.STRIPE_PAYMENT_SUCCESS_PAGE.viewOrder}
+            {CONTENT_PAGE.PAGE.STRIPE_PAYMENT_SUCCESS.viewOrder}
           </Link>
         </Button>
       </div>

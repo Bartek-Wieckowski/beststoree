@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import ROUTES from "@/lib/routes";
 import Menu from "./Menu";
-// import CategoryDrawer from "./CategoryDrawer";
 import Search from "./Search";
 
 export default function Header() {
@@ -11,7 +10,6 @@ export default function Header() {
     <header className="w-full wrapper">
       <div className="flex items-center justify-between border-b border-gray-200 pb-4">
         <div className="flex-start">
-          {/* <CategoryDrawer /> */}
           <Link
             href={ROUTES.HOME}
             className="flex-start ml-4"

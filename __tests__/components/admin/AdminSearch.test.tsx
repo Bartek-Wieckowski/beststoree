@@ -86,7 +86,7 @@ describe("AdminSearch", () => {
       render(<AdminSearch />);
 
       const input = screen.getByPlaceholderText(
-        CONTENT_PAGE.ADMIN_SEARCH.search
+        CONTENT_PAGE.GLOBAL.search
       );
       expect(input).toBeInTheDocument();
       expect(input).toHaveAttribute("type", "search");
@@ -105,7 +105,7 @@ describe("AdminSearch", () => {
       render(<AdminSearch />);
 
       const input = screen.getByPlaceholderText(
-        CONTENT_PAGE.ADMIN_SEARCH.search
+        CONTENT_PAGE.GLOBAL.search
       );
       expect(input).toHaveValue(queryValue);
     });
@@ -122,7 +122,7 @@ describe("AdminSearch", () => {
       render(<AdminSearch />);
 
       const input = screen.getByPlaceholderText(
-        CONTENT_PAGE.ADMIN_SEARCH.search
+        CONTENT_PAGE.GLOBAL.search
       );
       expect(input).toHaveValue("existing query");
     });
@@ -142,7 +142,7 @@ describe("AdminSearch", () => {
       expect(submitButton).toBeInTheDocument();
       expect(submitButton).toHaveAttribute("type", "submit");
       expect(submitButton).toHaveClass("sr-only");
-      expect(submitButton).toHaveTextContent(CONTENT_PAGE.ADMIN_SEARCH.search);
+      expect(submitButton).toHaveTextContent(CONTENT_PAGE.GLOBAL.search);
     });
   });
 });

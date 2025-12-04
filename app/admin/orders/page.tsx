@@ -38,14 +38,13 @@ export default async function AdminOrdersPage({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
-        <h1 className="h2-bold">{CONTENT_PAGE.ADMIN_ORDERS_PAGE.orders}</h1>
+        <h1 className="h2-bold">{CONTENT_PAGE.PAGE.ADMIN_ORDERS.orders}</h1>
         {searchText && (
           <div>
-            {CONTENT_PAGE.ADMIN_ORDERS_PAGE.filteredBy}{" "}
-            <i>&quot;{searchText}&quot;</i>{" "}
+            {CONTENT_PAGE.GLOBAL.filteredBy} <i>&quot;{searchText}&quot;</i>{" "}
             <Link href={ROUTES.ADMIN_ORDERS}>
               <Button variant="outline" size="sm">
-                {CONTENT_PAGE.ADMIN_ORDERS_PAGE.removeFilter}
+                {CONTENT_PAGE.GLOBAL.removeFilter}
               </Button>
             </Link>
           </div>
@@ -55,13 +54,13 @@ export default async function AdminOrdersPage({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.orderId}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.date}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.buyer}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.total}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.paid}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.delivered}</TableHead>
-              <TableHead>{CONTENT_PAGE.ADMIN_ORDERS_PAGE.actions}</TableHead>
+              <TableHead>{CONTENT_PAGE.PAGE.ADMIN_ORDERS.orderId}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.date}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.buyer}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.total}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.paid}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.delivered}</TableHead>
+              <TableHead>{CONTENT_PAGE.GLOBAL.actions}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -76,17 +75,17 @@ export default async function AdminOrdersPage({
                 <TableCell>
                   {order.isPaid && order.paidAt
                     ? formatDateTime(order.paidAt).dateTime
-                    : CONTENT_PAGE.ADMIN_ORDERS_PAGE.notPaid}
+                    : CONTENT_PAGE.GLOBAL.notPaid}
                 </TableCell>
                 <TableCell>
                   {order.isDelivered && order.deliveredAt
                     ? formatDateTime(order.deliveredAt).dateTime
-                    : CONTENT_PAGE.ADMIN_ORDERS_PAGE.notDelivered}
+                    : CONTENT_PAGE.GLOBAL.notDelivered}
                 </TableCell>
                 <TableCell>
                   <Button asChild variant="outline" size="sm">
                     <Link href={ROUTES.ORDER(order.id)}>
-                      {CONTENT_PAGE.ADMIN_ORDERS_PAGE.details}
+                      {CONTENT_PAGE.GLOBAL.details}
                     </Link>
                   </Button>
                   <DeleteDialog id={order.id} action={deleteOrder} />

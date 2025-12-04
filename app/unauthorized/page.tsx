@@ -12,14 +12,14 @@ export default function UnauthorizedPage() {
   return (
     <div className="container mx-auto flex h-[calc(100vh-200px)] flex-col items-center justify-center space-y-4">
       <h1 className="h1-bold text-4xl">
-        {CONTENT_PAGE.UNAUTHORIZED_PAGE.title}
+        {CONTENT_PAGE.PAGE.UNAUTHORIZED.title}
       </h1>
       <p className="text-muted-foreground">
-        {CONTENT_PAGE.UNAUTHORIZED_PAGE.text}
+        {CONTENT_PAGE.PAGE.UNAUTHORIZED.text}
       </p>
       <Button asChild>
         <Link href={ROUTES.HOME}>
-          {CONTENT_PAGE.UNAUTHORIZED_PAGE.returnHome}
+          {CONTENT_PAGE.PAGE.UNAUTHORIZED.returnHome}
         </Link>
       </Button>
     </div>

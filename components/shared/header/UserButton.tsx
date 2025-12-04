@@ -20,7 +20,7 @@ export default async function UserButton() {
     return (
       <Button asChild data-testid="sign-in-button">
         <Link href={ROUTES.SIGN_IN}>
-          <UserIcon /> {CONTENT_PAGE.HEADER.signIn}
+          <UserIcon /> {CONTENT_PAGE.GLOBAL.signIn}
         </Link>
       </Button>
     );
@@ -61,19 +61,19 @@ export default async function UserButton() {
 
           <DropdownMenuItem>
             <Link href={ROUTES.USER_PROFILE} className="w-full">
-              {CONTENT_PAGE.USER_BUTTON.userProfile}
+              {CONTENT_PAGE.COMPONENT.USER_BUTTON.userProfile}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href={ROUTES.USER_ORDERS} className="w-full">
-              {CONTENT_PAGE.USER_BUTTON.orderHistory}
+              {CONTENT_PAGE.COMPONENT.USER_BUTTON.orderHistory}
             </Link>
           </DropdownMenuItem>
 
           {session?.user?.role === "admin" && (
             <DropdownMenuItem>
               <Link href={ROUTES.ADMIN_OVERVIEW} className="w-full">
-                {CONTENT_PAGE.USER_BUTTON.admin}
+                {CONTENT_PAGE.COMPONENT.USER_BUTTON.admin}
               </Link>
             </DropdownMenuItem>
           )}
@@ -85,7 +85,7 @@ export default async function UserButton() {
                 data-testid="sign-out-button"
                 variant="ghost"
               >
-                {CONTENT_PAGE.USER_BUTTON.signOut}
+                {CONTENT_PAGE.COMPONENT.USER_BUTTON.signOut}
               </Button>
             </form>
           </DropdownMenuItem>

@@ -33,7 +33,7 @@ export default function PlaceOrderForm() {
         ) : (
           <Check className="w-4 h-4" />
         )}{" "}
-        {CONTENT_PAGE.PLACE_ORDER_PAGE.placeOrder}
+        {CONTENT_PAGE.PAGE.PLACE_ORDER.placeOrder}
       </Button>
     );
   };

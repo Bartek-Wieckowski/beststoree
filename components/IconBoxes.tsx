@@ -10,37 +10,37 @@ export default function IconBoxes() {
           <div className="space-y-2">
             <ShoppingBag />
             <div className="text-sm font-bold">
-              {CONTENT_PAGE.ICON_BOXES.freeShipping}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.freeShipping}
             </div>
             <div className="text-sm text-muted-foreground">
-              {CONTENT_PAGE.ICON_BOXES.freeShippingDescription}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.freeShippingDescription}
             </div>
           </div>
           <div className="space-y-2">
             <DollarSign />
             <div className="text-sm font-bold">
-              {CONTENT_PAGE.ICON_BOXES.moneyBackGuarantee}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.moneyBackGuarantee}
             </div>
             <div className="text-sm text-muted-foreground">
-              {CONTENT_PAGE.ICON_BOXES.moneyBackGuaranteeDescription}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.moneyBackGuaranteeDescription}
             </div>
           </div>
           <div className="space-y-2">
             <WalletCards />
             <div className="text-sm font-bold">
-              {CONTENT_PAGE.ICON_BOXES.flexiblePayment}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.flexiblePayment}
             </div>
             <div className="text-sm text-muted-foreground">
-              {CONTENT_PAGE.ICON_BOXES.flexiblePaymentDescription}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.flexiblePaymentDescription}
             </div>
           </div>
           <div className="space-y-2">
             <Headset />
             <div className="text-sm font-bold">
-              {CONTENT_PAGE.ICON_BOXES.support}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.support}
             </div>
             <div className="text-sm text-muted-foreground">
-              {CONTENT_PAGE.ICON_BOXES.supportDescription}
+              {CONTENT_PAGE.COMPONENT.ICON_BOXES.supportDescription}
             </div>
           </div>
         </CardContent>

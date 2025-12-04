@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="p-5 flex-center">
         <span data-testid="current-year">{currentYear}</span>
         <span>&nbsp;{APP_NAME}.&nbsp;</span>
-        <span>{CONTENT_PAGE.FOOTER.allRightsReserved}</span>
+        <span>{CONTENT_PAGE.COMPONENT.FOOTER.allRightsReserved}</span>
       </div>
     </footer>
   );

@@ -8,16 +8,16 @@ describe("IconBoxes()", () => {
     render(<IconBoxes />);
 
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.freeShipping)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.freeShipping)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.moneyBackGuarantee)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.moneyBackGuarantee)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.flexiblePayment)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.flexiblePayment)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.support)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.support)
     ).toBeInTheDocument();
   });
 
@@ -25,16 +25,16 @@ describe("IconBoxes()", () => {
     render(<IconBoxes />);
 
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.freeShippingDescription)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.freeShippingDescription)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.moneyBackGuaranteeDescription)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.moneyBackGuaranteeDescription)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.flexiblePaymentDescription)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.flexiblePaymentDescription)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.ICON_BOXES.supportDescription)
+      screen.getByText(CONTENT_PAGE.COMPONENT.ICON_BOXES.supportDescription)
     ).toBeInTheDocument();
   });
 });

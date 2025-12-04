@@ -1,5 +1,3 @@
-// Map of common color names to their CSS color values
-// Used for displaying color swatches in ProductVariants
 export const COLOR_NAME_TO_HEX: Record<string, string> = {
   // Basic colors
   red: "#FF0000",
@@ -55,10 +53,6 @@ export const COLOR_NAME_TO_HEX: Record<string, string> = {
   "off-white": "#FAF9F6",
 };
 
-/**
- * Get CSS color value from color name
- * Returns the color name if no mapping found (for custom colors)
- */
 export function getColorValue(colorName: string): string {
   const normalized = colorName.toLowerCase().trim();
   return COLOR_NAME_TO_HEX[normalized] || colorName;

@@ -48,22 +48,20 @@ export default function DeleteDialog({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button size="sm" variant="destructive" className="ml-2">
-          {CONTENT_PAGE.DELETE_DIALOG.delete}
+          {CONTENT_PAGE.GLOBAL.delete}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {CONTENT_PAGE.DELETE_DIALOG.areYouAbsolutelySure}
+            {CONTENT_PAGE.GLOBAL.areYouAbsolutelySure}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {CONTENT_PAGE.DELETE_DIALOG.thisActionCannotBeUndone}
+            {CONTENT_PAGE.GLOBAL.thisActionCannotBeUndone}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>
-            {CONTENT_PAGE.DELETE_DIALOG.cancel}
-          </AlertDialogCancel>
+          <AlertDialogCancel>{CONTENT_PAGE.GLOBAL.cancel}</AlertDialogCancel>
           <Button
             variant="destructive"
             size="sm"
@@ -71,8 +69,8 @@ export default function DeleteDialog({
             onClick={handleDeleteClick}
           >
             {isPending
-              ? CONTENT_PAGE.DELETE_DIALOG.deleting
-              : CONTENT_PAGE.DELETE_DIALOG.delete}
+              ? CONTENT_PAGE.GLOBAL.deleting
+              : CONTENT_PAGE.GLOBAL.delete}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

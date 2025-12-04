@@ -45,14 +45,14 @@ export default function ComparisonButton({
   const handleRemove = (productId: string, productName: string) => {
     removeFromComparison(productId);
     toast({
-      description: `${productName} removed from comparison`,
+      description: `${productName} ${CONTENT_PAGE.GLOBAL.removedFromComparison}`,
     });
   };
 
   const handleClear = () => {
     clearComparison();
     toast({
-      description: "Comparison cleared",
+      description: CONTENT_PAGE.COMPONENT.COMPARISON.comparisonCleared,
     });
   };
 
@@ -87,7 +87,9 @@ export default function ComparisonButton({
           }}
         >
           <Scale className="h-5 w-5" />
-          <span className="sr-only">{CONTENT_PAGE.HEADER.comparison}</span>
+          <span className="sr-only">
+            {CONTENT_PAGE.COMPONENT.HEADER.comparison}
+          </span>
           {count > 0 && (
             <Badge
               variant="destructive"
@@ -111,7 +113,7 @@ export default function ComparisonButton({
       >
         <div className="flex items-center justify-between p-2">
           <DropdownMenuLabel className="p-0">
-            {CONTENT_PAGE.COMPARISON.title}
+            {CONTENT_PAGE.COMPONENT.COMPARISON.title}
           </DropdownMenuLabel>
           {count > 0 && (
             <Button
@@ -121,16 +123,16 @@ export default function ComparisonButton({
               className="h-7 text-xs"
             >
               <X className="h-3 w-3 mr-1" />
-              {CONTENT_PAGE.COMPARISON.clear}
+              {CONTENT_PAGE.COMPONENT.COMPARISON.clearComparison}
             </Button>
           )}
         </div>
         <DropdownMenuSeparator />
         {!Array.isArray(comparison) || comparison.length === 0 ? (
           <div className="p-4 text-center text-sm text-muted-foreground">
-            <p>{CONTENT_PAGE.COMPARISON.empty}</p>
+            <p>{CONTENT_PAGE.COMPONENT.COMPARISON.empty}</p>
             <p className="mt-2 text-xs">
-              {CONTENT_PAGE.COMPARISON.addProducts}
+              {CONTENT_PAGE.COMPONENT.COMPARISON.addProducts}
             </p>
           </div>
         ) : (
@@ -158,7 +160,8 @@ export default function ComparisonButton({
                         {item.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        ${Number(item.price).toFixed(2)}
+                        {CONTENT_PAGE.GLOBAL.currencySymbol}
+                        {Number(item.price).toFixed(2)}
                       </p>
                       {item.categoryName && (
                         <p className="text-xs text-muted-foreground">
@@ -178,7 +181,7 @@ export default function ComparisonButton({
                   >
                     <Trash2 className="h-4 w-4" />
                     <span className="sr-only">
-                      {CONTENT_PAGE.COMPARISON.remove}
+                      {CONTENT_PAGE.GLOBAL.remove}
                     </span>
                   </Button>
                 </div>
@@ -196,7 +199,7 @@ export default function ComparisonButton({
                       setModalOpen(true);
                     }}
                   >
-                    Compare Products
+                    {CONTENT_PAGE.COMPONENT.COMPARISON.compareProducts}
                   </Button>
                 </div>
               </>

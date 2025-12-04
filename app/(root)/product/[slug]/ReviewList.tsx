@@ -47,7 +47,7 @@ export default function ReviewList({
   return (
     <div className="space-y-4">
       {reviews.length === 0 && (
-        <div>{CONTENT_PAGE.REVIEW_LIST.noReviewsYet}</div>
+        <div>{CONTENT_PAGE.COMPONENT.REVIEW_LIST.noReviewsYet}</div>
       )}
       {userId ? (
         <ReviewForm
@@ -57,14 +57,14 @@ export default function ReviewList({
         />
       ) : (
         <div>
-          {CONTENT_PAGE.REVIEW_LIST.please}
+          {CONTENT_PAGE.COMPONENT.REVIEW_LIST.please}
           <Link
             className="text-blue-700 px-2"
             href={`/sign-in?callbackUrl=/product/${productSlug}`}
           >
-            {CONTENT_PAGE.REVIEW_LIST.signIn}
+            {CONTENT_PAGE.COMPONENT.REVIEW_LIST.signIn}
           </Link>
-          {CONTENT_PAGE.REVIEW_LIST.toWriteReview}
+          {CONTENT_PAGE.COMPONENT.REVIEW_LIST.toWriteReview}
         </div>
       )}
       <div className="flex flex-col gap-3">

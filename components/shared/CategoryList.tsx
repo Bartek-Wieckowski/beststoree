@@ -13,6 +13,7 @@ import * as LucideIcons from "lucide-react";
 import { Grid3x3 } from "lucide-react";
 import { Category } from "@/types";
 import { cn } from "@/lib/utils";
+import CONTENT_PAGE from "@/lib/content-page";
 
 const SLIDER_THRESHOLD = 10;
 
@@ -21,11 +22,9 @@ type CategoryListProps = {
   totalProductsCount?: number;
 };
 
-// Funkcja do renderowania ikony
 function CategoryIcon({ iconName }: { iconName: string | null }) {
   if (!iconName) return null;
 
-  // Sprawdź czy ikona istnieje w lucide-react
   const IconComponent = (
     LucideIcons as unknown as Record<
       string,
@@ -37,7 +36,6 @@ function CategoryIcon({ iconName }: { iconName: string | null }) {
     return <IconComponent className="h-6 w-6" />;
   }
 
-  // Jeśli nie ma ikony w lucide-react, możesz zwrócić domyślną ikonę lub obrazek
   return null;
 }
 
@@ -51,7 +49,7 @@ export default function CategoryList({
   // Create "All" category item
   const allCategory = {
     id: "all",
-    name: "All",
+    name: CONTENT_PAGE.GLOBAL.all,
     slug: "all",
     icon: "Grid3x3",
     _count: {
@@ -101,7 +99,7 @@ export default function CategoryList({
                   {category.name}
                 </span>
                 <span className="text-xs text-muted-foreground mt-1">
-                  ({category._count.products})
+                  ({category._count?.products ?? 0})
                 </span>
               </Link>
             </CarouselItem>

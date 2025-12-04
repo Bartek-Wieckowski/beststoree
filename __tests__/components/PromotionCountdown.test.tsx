@@ -1,9 +1,9 @@
 import { render, screen, act } from "@testing-library/react";
 import { describe, expect, it, afterEach, vi } from "vitest";
-import DealCountdown from "@/components/PromotionCountdown";
 import CONTENT_PAGE from "@/lib/content-page";
+import PromotionCountdown from "@/components/PromotionCountdown";
 
-describe("DealCountdown()", () => {
+describe("PromotionCountdown()", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.useRealTimers();
@@ -14,7 +14,7 @@ describe("DealCountdown()", () => {
     const mockDate = new Date("2025-12-20T12:00:00");
     vi.useFakeTimers({ now: mockDate });
 
-    render(<DealCountdown />);
+    render(<PromotionCountdown />);
 
     // Advance timers to allow useEffect to run
     await act(async () => {
@@ -22,22 +22,26 @@ describe("DealCountdown()", () => {
     });
 
     expect(
-      screen.getByText(CONTENT_PAGE.DEAL_COUNTDOWN.dealOfTheMonth)
+      screen.getByText(
+        CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.dealOfTheMonth
+      )
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.DEAL_COUNTDOWN.dealOfTheMonthDescription)
+      screen.getByText(
+        CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.dealOfTheMonthDescription
+      )
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.DEAL_COUNTDOWN.days)
+      screen.getByText(CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.days)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.DEAL_COUNTDOWN.hours)
+      screen.getByText(CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.hours)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.DEAL_COUNTDOWN.minutes)
+      screen.getByText(CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.minutes)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(CONTENT_PAGE.DEAL_COUNTDOWN.seconds)
+      screen.getByText(CONTENT_PAGE.COMPONENT.PROMOTION_COUNTDOWN.seconds)
     ).toBeInTheDocument();
   });
 });

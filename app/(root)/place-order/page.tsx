@@ -47,14 +47,14 @@ export default async function PlaceOrderPage() {
     <>
       <CheckoutSteps current={3} />
       <h1 className="py-4 text-2xl">
-        {CONTENT_PAGE.PLACE_ORDER_PAGE.placeOrder}
+        {CONTENT_PAGE.PAGE.PLACE_ORDER.placeOrder}
       </h1>
       <div className="grid md:grid-cols-3 md:gap-5">
         <div className="md:col-span-2 overflow-x-auto space-y-4">
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">
-                {CONTENT_PAGE.PLACE_ORDER_PAGE.shippingAddress}
+                {CONTENT_PAGE.PAGE.PLACE_ORDER.shippingAddress}
               </h2>
               <p>{userAddress.fullName}</p>
               <p>
@@ -63,9 +63,7 @@ export default async function PlaceOrderPage() {
               </p>
               <div className="mt-3">
                 <Link href={ROUTES.SHIPPING_ADDRESS}>
-                  <Button variant="outline">
-                    {CONTENT_PAGE.PLACE_ORDER_PAGE.edit}
-                  </Button>
+                  <Button variant="outline">{CONTENT_PAGE.GLOBAL.edit}</Button>
                 </Link>
               </div>
             </CardContent>
@@ -74,14 +72,12 @@ export default async function PlaceOrderPage() {
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">
-                {CONTENT_PAGE.PLACE_ORDER_PAGE.paymentMethod}
+                {CONTENT_PAGE.PAGE.PLACE_ORDER.paymentMethod}
               </h2>
               <p>{user.paymentMethod}</p>
               <div className="mt-3">
                 <Link href={ROUTES.PAYMENT_METHOD}>
-                  <Button variant="outline">
-                    {CONTENT_PAGE.PLACE_ORDER_PAGE.edit}
-                  </Button>
+                  <Button variant="outline">{CONTENT_PAGE.GLOBAL.edit}</Button>
                 </Link>
               </div>
             </CardContent>
@@ -90,17 +86,15 @@ export default async function PlaceOrderPage() {
           <Card>
             <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">
-                {CONTENT_PAGE.PLACE_ORDER_PAGE.orderItems}
+                {CONTENT_PAGE.PAGE.PLACE_ORDER.orderItems}
               </h2>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>{CONTENT_PAGE.PLACE_ORDER_PAGE.item}</TableHead>
-                    <TableHead>
-                      {CONTENT_PAGE.PLACE_ORDER_PAGE.quantity}
-                    </TableHead>
+                    <TableHead>{CONTENT_PAGE.GLOBAL.item}</TableHead>
+                    <TableHead>{CONTENT_PAGE.GLOBAL.quantity}</TableHead>
                     <TableHead className="text-right">
-                      {CONTENT_PAGE.PLACE_ORDER_PAGE.price}
+                      {CONTENT_PAGE.GLOBAL.price}
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -138,19 +132,19 @@ export default async function PlaceOrderPage() {
           <Card>
             <CardContent className="p-4 gap-4 space-y-4">
               <div className="flex justify-between">
-                <div>{CONTENT_PAGE.PLACE_ORDER_PAGE.items}</div>
+                <div>{CONTENT_PAGE.GLOBAL.items}</div>
                 <div>{formatCurrency(cart.itemsPrice)}</div>
               </div>
               <div className="flex justify-between">
-                <div>{CONTENT_PAGE.PLACE_ORDER_PAGE.tax}</div>
+                <div>{CONTENT_PAGE.GLOBAL.tax}</div>
                 <div>{formatCurrency(cart.taxPrice)}</div>
               </div>
               <div className="flex justify-between">
-                <div>{CONTENT_PAGE.PLACE_ORDER_PAGE.shipping}</div>
+                <div>{CONTENT_PAGE.GLOBAL.shipping}</div>
                 <div>{formatCurrency(cart.shippingPrice)}</div>
               </div>
               <div className="flex justify-between">
-                <div>{CONTENT_PAGE.PLACE_ORDER_PAGE.total}</div>
+                <div>{CONTENT_PAGE.GLOBAL.total}</div>
                 <div>{formatCurrency(cart.totalPrice)}</div>
               </div>
               <PlaceOrderForm />

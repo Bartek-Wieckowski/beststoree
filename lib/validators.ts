@@ -1,22 +1,23 @@
 import { z } from "zod";
 import { formatNumberWithDecimals } from "./utils";
 import { PAYMENT_METHODS } from "./constants";
+import CONTENT_PAGE from "./content-page";
 
 const currency = z
   .string()
   .refine(
     (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimals(Number(value))),
-    "Price must have exactly two decimal places"
+    CONTENT_PAGE.GLOBAL.priceDecimalPlaces
   );
 
 export const insertProductSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  slug: z.string().min(3, "Slug must be at least 3 characters"),
-  categoryId: z.string().min(1, "Category is required"),
-  brand: z.string().min(3, "Brand must be at least 3 characters"),
-  description: z.string().min(3, "Description must be at least 3 characters"),
+  name: z.string().min(3, CONTENT_PAGE.GLOBAL.nameMinLength),
+  slug: z.string().min(3, CONTENT_PAGE.GLOBAL.slugMinLength),
+  categoryId: z.string().min(1, CONTENT_PAGE.GLOBAL.categoryRequired),
+  brand: z.string().min(3, CONTENT_PAGE.GLOBAL.brandMinLength),
+  description: z.string().min(3, CONTENT_PAGE.GLOBAL.descriptionMinLength),
   stock: z.coerce.number(),
-  images: z.array(z.string()).min(1, "Product must have at least one image"),
+  images: z.array(z.string()).min(1, CONTENT_PAGE.GLOBAL.productImageRequired),
   isFeatured: z.boolean(),
   banner: z.string().nullable(),
   price: currency,
@@ -26,36 +27,36 @@ export const insertProductSchema = z.object({
 });
 
 export const updateProductSchema = insertProductSchema.extend({
-  id: z.string().min(1, "Id is required"),
+  id: z.string().min(1, CONTENT_PAGE.GLOBAL.idRequired),
   imagesToBeDeleted: z.array(z.string()).optional(),
   bannerToBeDeleted: z.string().nullable().optional(),
 });
 
 export const signInFormSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email(CONTENT_PAGE.GLOBAL.invalidEmail),
+  password: z.string().min(6, CONTENT_PAGE.GLOBAL.passwordMinLength),
 });
 
 export const signUpFormSchema = z
   .object({
-    name: z.string().min(3, "Name must be at least 3 characters"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    name: z.string().min(3, CONTENT_PAGE.GLOBAL.nameMinLength),
+    email: z.string().email(CONTENT_PAGE.GLOBAL.invalidEmail),
+    password: z.string().min(6, CONTENT_PAGE.GLOBAL.passwordMinLength),
     confirmPassword: z
       .string()
-      .min(6, "Confirm password must be at least 6 characters"),
+      .min(6, CONTENT_PAGE.GLOBAL.confirmPasswordMinLength),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: CONTENT_PAGE.GLOBAL.passwordsDontMatch,
     path: ["confirmPassword"],
   });
 
 export const cartItemSchema = z.object({
-  productId: z.string().min(1, "Product is required"),
-  name: z.string().min(1, "Name is required"),
-  slug: z.string().min(1, "Slug is required"),
-  qty: z.number().int().nonnegative("Quantity must be a positive number"),
-  image: z.string().min(1, "Image is required"),
+  productId: z.string().min(1, CONTENT_PAGE.GLOBAL.productRequired),
+  name: z.string().min(1, CONTENT_PAGE.GLOBAL.nameRequired),
+  slug: z.string().min(1, CONTENT_PAGE.GLOBAL.slugRequired),
+  qty: z.number().int().nonnegative(CONTENT_PAGE.GLOBAL.quantityPositive),
+  image: z.string().min(1, CONTENT_PAGE.GLOBAL.imageRequired),
   price: currency,
   size: z.string().optional().nullable(),
   color: z.string().optional().nullable(),
@@ -67,37 +68,37 @@ export const insertCartSchema = z.object({
   totalPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
-  sessionCartId: z.string().min(1, "Session cart id is required"),
+  sessionCartId: z.string().min(1, CONTENT_PAGE.GLOBAL.sessionCartIdRequired),
   userId: z.string().optional().nullable(),
 });
 
 export const shippingAddressSchema = z.object({
-  fullName: z.string().min(3, "Name must be at least 3 characters"),
-  streetAddress: z.string().min(3, "Address must be at least 3 characters"),
-  city: z.string().min(3, "City must be at least 3 characters"),
-  postalCode: z.string().min(3, "Postal code must be at least 3 characters"),
-  country: z.string().min(3, "Country must be at least 3 characters"),
+  fullName: z.string().min(3, CONTENT_PAGE.GLOBAL.nameMinLength),
+  streetAddress: z.string().min(3, CONTENT_PAGE.GLOBAL.addressMinLength),
+  city: z.string().min(3, CONTENT_PAGE.GLOBAL.cityMinLength),
+  postalCode: z.string().min(3, CONTENT_PAGE.GLOBAL.postalCodeMinLength),
+  country: z.string().min(3, CONTENT_PAGE.GLOBAL.countryMinLength),
   lat: z.number().optional(),
   lng: z.number().optional(),
 });
 
 export const paymentMethodSchema = z
   .object({
-    type: z.string().min(1, "Payment method is required"),
+    type: z.string().min(1, CONTENT_PAGE.GLOBAL.paymentMethodRequired),
   })
   .refine((data) => PAYMENT_METHODS.includes(data.type), {
     path: ["type"],
-    message: "Invalid payment method",
+    message: CONTENT_PAGE.GLOBAL.invalidPaymentMethod,
   });
 
 export const insertOrderSchema = z.object({
-  userId: z.string().min(1, "User is required"),
+  userId: z.string().min(1, CONTENT_PAGE.GLOBAL.userRequired),
   itemsPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
   totalPrice: currency,
   paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
-    message: "Invalid payment method",
+    message: CONTENT_PAGE.GLOBAL.invalidPaymentMethod,
   }),
   shippingAddress: shippingAddressSchema,
 });
@@ -121,41 +122,41 @@ export const paymentResultSchema = z.object({
 });
 
 export const updateProfileSchema = z.object({
-  name: z.string().min(3, "Name must be at leaast 3 characters"),
-  email: z.string().min(3, "Email must be at leaast 3 characters"),
+  name: z.string().min(3, CONTENT_PAGE.GLOBAL.nameMinLength),
+  email: z.string().min(3, CONTENT_PAGE.GLOBAL.emailMinLength),
 });
 
 export const updateUserSchema = updateProfileSchema.extend({
-  id: z.string().min(1, "ID is required"),
-  role: z.string().min(1, "Role is required"),
+  id: z.string().min(1, CONTENT_PAGE.GLOBAL.idRequired),
+  role: z.string().min(1, CONTENT_PAGE.GLOBAL.roleRequired),
 });
 
 export const insertReviewSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().min(3, "Description must be at least 3 characters"),
-  productId: z.string().min(1, "Product is required"),
-  userId: z.string().min(1, "User is required"),
+  title: z.string().min(3, CONTENT_PAGE.GLOBAL.titleMinLength),
+  description: z.string().min(3, CONTENT_PAGE.GLOBAL.descriptionMinLength),
+  productId: z.string().min(1, CONTENT_PAGE.GLOBAL.productRequired),
+  userId: z.string().min(1, CONTENT_PAGE.GLOBAL.userRequired),
   rating: z.coerce
     .number()
     .int()
-    .min(1, "Rating must be at least 1")
-    .max(5, "Rating must be at most 5"),
+    .min(1, CONTENT_PAGE.GLOBAL.ratingMin)
+    .max(5, CONTENT_PAGE.GLOBAL.ratingMax),
 });
 
 export const insertCategorySchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  slug: z.string().min(3, "Slug must be at least 3 characters"),
+  name: z.string().min(3, CONTENT_PAGE.GLOBAL.nameMinLength),
+  slug: z.string().min(3, CONTENT_PAGE.GLOBAL.slugMinLength),
   icon: z.string().optional().nullable(),
 });
 
 export const updateCategorySchema = insertCategorySchema.extend({
-  id: z.string().min(1, "Id is required"),
+  id: z.string().min(1, CONTENT_PAGE.GLOBAL.idRequired),
 });
 
 export const insertPromotionSchema = z.object({
-  productId: z.string().min(1, "Product is required"),
+  productId: z.string().min(1, CONTENT_PAGE.GLOBAL.productRequired),
   endDate: z.coerce.date({
-    required_error: "Promotion end date is required",
+    required_error: CONTENT_PAGE.GLOBAL.promotionEndDateRequired,
   }),
   isEnabled: z.boolean().default(true),
 });

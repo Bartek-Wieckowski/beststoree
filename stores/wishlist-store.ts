@@ -12,7 +12,7 @@ export type WishlistItem = {
   categoryName?: string;
 };
 
-interface WishlistStore {
+type WishlistStore = {
   wishlist: WishlistItem[];
   isLoaded: boolean;
   addToWishlist: (product: Product) => { success: boolean; message: string };
@@ -23,7 +23,7 @@ interface WishlistStore {
   isInWishlist: (productId: string) => boolean;
   clearWishlist: () => void;
   count: number;
-}
+};
 
 export const useWishlistStore = create<WishlistStore>()(
   persist(

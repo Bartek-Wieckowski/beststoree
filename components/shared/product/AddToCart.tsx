@@ -42,10 +42,10 @@ export default function AddToCart({
         action: (
           <ToastAction
             className=""
-            altText="Go To Cart"
+            altText={CONTENT_PAGE.GLOBAL.goToCart}
             onClick={() => router.push(ROUTES.CART)}
           >
-            Go To Cart
+            {CONTENT_PAGE.GLOBAL.goToCart}
           </ToastAction>
         ),
       });
@@ -120,7 +120,7 @@ export default function AddToCart({
       ) : (
         <Plus className="w-4 h-4" />
       )}{" "}
-      {CONTENT_PAGE.PRODUCT_DETAILS.addToCart}
+      {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.addToCart}
     </Button>
   );
 }

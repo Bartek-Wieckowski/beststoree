@@ -29,7 +29,7 @@ export default async function CategoryDrawer() {
       >
         <DrawerHeader>
           <DrawerTitle>
-            {CONTENT_PAGE.CATEGORY_DRAWER.selectCategory}
+            {CONTENT_PAGE.COMPONENT.CATEGORY_DRAWER.selectCategory}
           </DrawerTitle>
           <div className="space-y-1 mt-4">
             {categories.map((category) => (

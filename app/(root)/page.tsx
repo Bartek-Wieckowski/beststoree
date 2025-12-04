@@ -13,6 +13,7 @@ import CategoryList from "@/components/shared/CategoryList";
 import { getCategoriesWithProducts } from "@/lib/actions/category.actions";
 import { getTotalProductsCount } from "@/lib/actions/product.actions";
 import { getMyCart } from "@/lib/actions/cart.actions";
+import CONTENT_PAGE from "@/lib/content-page";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -43,11 +44,15 @@ export default async function HomePage() {
       <section className="flex flex-col gap-20">
         <ProductList
           data={latestProducts}
-          title="Newest Arrivals"
+          title={CONTENT_PAGE.PAGE.HOME.newestArrivals}
           limit={4}
           cart={cart}
         />
-        <ProductList data={allProducts} title="All Products" cart={cart} />
+        <ProductList
+          data={allProducts}
+          title={CONTENT_PAGE.PAGE.HOME.allProducts}
+          cart={cart}
+        />
         <IconBoxes />
       </section>
       <PromotionCountdown promotion={promotion} />

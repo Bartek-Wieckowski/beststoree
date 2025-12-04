@@ -25,7 +25,7 @@ export default async function AdminUserUpdatePage(props: {
   return (
     <div className="space-y-8 max-w-lg mx-auto">
       <h1 className="h2-bold">
-        {CONTENT_PAGE.ADMIN_USERS_UPDATE_PAGE.updateUser}
+        {CONTENT_PAGE.PAGE.ADMIN_USERS_UPDATE.updateUser}
       </h1>
       <UpdateUserForm user={user} />
     </div>

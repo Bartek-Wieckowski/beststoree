@@ -16,7 +16,7 @@ export default async function CreateProductPage() {
   return (
     <>
       <h2 className="h2-bold">
-        {CONTENT_PAGE.ADMIN_PRODUCTS_CREATE_PAGE.createProduct}
+        {CONTENT_PAGE.PAGE.ADMIN_PRODUCTS_CREATE.createProduct}
       </h2>
       <div className="my-8">
         <ProductForm type="Create" categories={categories} />

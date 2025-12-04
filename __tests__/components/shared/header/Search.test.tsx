@@ -91,7 +91,7 @@ describe("Search()", () => {
 
       render(await Search());
 
-      const input = screen.getByPlaceholderText(CONTENT_PAGE.SEARCH.search);
+      const input = screen.getByPlaceholderText(CONTENT_PAGE.GLOBAL.search);
       expect(input).toBeInTheDocument();
       expect(input).toHaveAttribute("type", "text");
       expect(input).toHaveAttribute("name", "q");

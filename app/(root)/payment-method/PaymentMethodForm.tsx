@@ -60,10 +60,10 @@ export default function PaymentMethodForm({
     <>
       <div className="max-w-md mx-auto space-y-4">
         <h1 className="h2-bold mt-4">
-          {CONTENT_PAGE.PAYMENT_METHOD_FORM.paymentMethod}
+          {CONTENT_PAGE.COMPONENT.PAYMENT_METHOD_FORM.paymentMethod}
         </h1>
         <p className="text-sm text-muted-foreground">
-          {CONTENT_PAGE.PAYMENT_METHOD_FORM.pleaseSelectPaymentMethod}
+          {CONTENT_PAGE.COMPONENT.PAYMENT_METHOD_FORM.pleaseSelectPaymentMethod}
         </p>
         <Form {...form}>
           <form
@@ -108,13 +108,17 @@ export default function PaymentMethodForm({
             </div>
 
             <div className="flex gap-2">
-              <Button type="submit" disabled={isPending} data-testid="continue-payment-button">
+              <Button
+                type="submit"
+                disabled={isPending}
+                data-testid="continue-payment-button"
+              >
                 {isPending ? (
                   <Loader className="w-4 h-4 animate-spin" />
                 ) : (
                   <ArrowRight className="w-4 h-4" />
                 )}{" "}
-                {CONTENT_PAGE.PAYMENT_METHOD_FORM.continue}
+                {CONTENT_PAGE.GLOBAL.continue}
               </Button>
             </div>
           </form>

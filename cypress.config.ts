@@ -68,10 +68,41 @@ export default defineConfig({
           return null;
         },
         async "db:seed"() {
+          // First ensure categories exist
+          const categories = await Promise.all(
+            sampleData.categories.map((category) =>
+              prisma.category.upsert({
+                where: { slug: category.slug },
+                update: {},
+                create: category,
+              })
+            )
+          );
+
+          // Create a map of category slugs to IDs
+          const categoryMap = new Map(
+            categories.map((cat) => [cat.slug, cat.id])
+          );
+
+          // Transform products to include categoryId instead of categorySlug
+          const productsWithCategoryId = sampleData.products.map((product) => {
+            const categoryId = categoryMap.get(product.categorySlug);
+            if (!categoryId) {
+              throw new Error(
+                `Category not found for slug: ${product.categorySlug}`
+              );
+            }
+            const { categorySlug, ...productData } = product;
+            return {
+              ...productData,
+              categoryId,
+            };
+          });
+
           // Seed products from sample data
           await prisma.product.deleteMany();
           await prisma.product.createMany({
-            data: sampleData.products,
+            data: productsWithCategoryId,
           });
           return null;
         },
@@ -217,11 +248,24 @@ export default defineConfig({
           return { success: true, message: "Order updated to paid" };
         },
         async "db:createTestProduct"() {
+          // Ensure at least one category exists
+          let category = await prisma.category.findFirst();
+          if (!category) {
+            // Create a test category if none exists
+            category = await prisma.category.create({
+              data: {
+                name: "Test Category",
+                slug: "test-category",
+                icon: null,
+              },
+            });
+          }
+
           const testProduct = await prisma.product.create({
             data: {
               name: "Test Product for Cypress",
               slug: `test-product-cypress-${Date.now()}`,
-              category: "Test Category",
+              categoryId: category.id,
               description: "This is a test product created by Cypress",
               images: ["/images/sample-products/p1-1.jpg"],
               brand: "Test Brand",
@@ -295,12 +339,25 @@ export default defineConfig({
           return null;
         },
         async "db:createTestOrder"(userId: string) {
+          // Ensure at least one category exists
+          let category = await prisma.category.findFirst();
+          if (!category) {
+            // Create a test category if none exists
+            category = await prisma.category.create({
+              data: {
+                name: "Test Category",
+                slug: "test-category",
+                icon: null,
+              },
+            });
+          }
+
           // First create a test product
           const testProduct = await prisma.product.create({
             data: {
               name: "Test Product for Order",
               slug: `test-product-order-${Date.now()}`,
-              category: "Test Category",
+              categoryId: category.id,
               description: "This is a test product for order",
               images: ["/images/sample-products/p1-1.jpg"],
               brand: "Test Brand",
