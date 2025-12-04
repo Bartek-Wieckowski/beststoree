@@ -51,6 +51,7 @@ const CONTENT_PAGE = {
     product: "Product",
     remove: "Remove",
     removeFilter: "Remove Filter",
+    filters: "Filters",
     filteredBy: "Filtered by",
     search: "Search...",
     all: "All",

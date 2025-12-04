@@ -146,7 +146,8 @@ export default function WishlistButton({
                         {item.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {CONTENT_PAGE.GLOBAL.currencySymbol}{Number(item.price).toFixed(2)}
+                        {CONTENT_PAGE.GLOBAL.currencySymbol}
+                        {Number(item.price).toFixed(2)}
                       </p>
                     </div>
                   </Link>

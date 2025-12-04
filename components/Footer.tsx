@@ -5,7 +5,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t">
+    <footer className="border-t pb-20 md:pb-0">
       <div className="p-5 flex-center">
         <span data-testid="current-year">{currentYear}</span>
         <span>&nbsp;{APP_NAME}.&nbsp;</span>

@@ -6,6 +6,9 @@ import { getAllCategories } from "@/lib/actions/category.actions";
 import Link from "next/link";
 import CONTENT_PAGE from "@/lib/content-page";
 import ROUTES from "@/lib/routes";
+import SortSelect from "@/components/shared/search/SortSelect";
+import FilterDrawer from "@/components/shared/search/FilterDrawer";
+import FilterLinks from "@/components/shared/search/FilterLinks";
 
 const prices = [
   {
@@ -31,13 +34,6 @@ const prices = [
 ];
 
 const ratings = [4, 3, 2, 1];
-
-const sortOrders = [
-  CONTENT_PAGE.PAGE.SEARCH.newest,
-  CONTENT_PAGE.PAGE.SEARCH.lowest,
-  CONTENT_PAGE.PAGE.SEARCH.highest,
-  CONTENT_PAGE.PAGE.SEARCH.rating,
-];
 
 export const dynamic = "force-dynamic";
 
@@ -94,34 +90,9 @@ export default async function SearchPage({
     category = CONTENT_PAGE.GLOBAL.all,
     price = CONTENT_PAGE.GLOBAL.all,
     rating = CONTENT_PAGE.GLOBAL.all,
-    sort = CONTENT_PAGE.PAGE.SEARCH.newest,
+    sort = CONTENT_PAGE.PAGE.SEARCH.newest.toLowerCase(),
     page = "1",
   } = await searchParams;
-
-  // Construct filter url
-  const getFilterUrl = ({
-    c,
-    p,
-    s,
-    r,
-    pg,
-  }: {
-    c?: string;
-    p?: string;
-    s?: string;
-    r?: string;
-    pg?: string;
-  }) => {
-    const params = { q, category, price, rating, sort, page };
-
-    if (c) params.category = c;
-    if (p) params.price = p;
-    if (s) params.sort = s;
-    if (r) params.rating = r;
-    if (pg) params.page = pg;
-
-    return `/search?${new URLSearchParams(params).toString()}`;
-  };
 
   const products = await getAllProducts({
     query: q,
@@ -136,135 +107,82 @@ export default async function SearchPage({
   const cart = await getMyCart();
 
   return (
-    <div className="grid md:grid-cols-5 md:gap-5">
-      <div className="filter-links">
-        {/* Category Links */}
-        <div className="text-xl mb-2 mt-3">
-          {CONTENT_PAGE.PAGE.SEARCH.department}
-        </div>
-        <div>
-          <ul className="space-y-1">
-            <li>
-              <Link
-                className={`${
-                  (category === CONTENT_PAGE.GLOBAL.all || category === "") &&
-                  "font-bold"
-                }`}
-                href={getFilterUrl({ c: CONTENT_PAGE.GLOBAL.all })}
-              >
-                {CONTENT_PAGE.GLOBAL.any}
-              </Link>
-            </li>
-            {categories.map((cat) => (
-              <li key={cat.id}>
-                <Link
-                  className={`${category === cat.slug && "font-bold"}`}
-                  href={getFilterUrl({ c: cat.slug })}
-                >
-                  {cat.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Price Links */}
-        <div className="text-xl mb-2 mt-8">
-          {CONTENT_PAGE.PAGE.SEARCH.price}
-        </div>
-        <div>
-          <ul className="space-y-1">
-            <li>
-              <Link
-                className={`${price === CONTENT_PAGE.GLOBAL.all && "font-bold"}`}
-                href={getFilterUrl({ p: CONTENT_PAGE.GLOBAL.all })}
-              >
-                {CONTENT_PAGE.GLOBAL.any}
-              </Link>
-            </li>
-            {prices.map((p) => (
-              <li key={p.value}>
-                <Link
-                  className={`${price === p.value && "font-bold"}`}
-                  href={getFilterUrl({ p: p.value })}
-                >
-                  {p.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Rating Links */}
-        <div className="text-xl mb-2 mt-8">
-          {CONTENT_PAGE.PAGE.SEARCH.customerRatings}
-        </div>
-        <div>
-          <ul className="space-y-1">
-            <li>
-              <Link
-                className={`${rating === CONTENT_PAGE.GLOBAL.all && "font-bold"}`}
-                href={getFilterUrl({ r: CONTENT_PAGE.GLOBAL.all })}
-              >
-                {CONTENT_PAGE.GLOBAL.any}
-              </Link>
-            </li>
-            {ratings.map((r) => (
-              <li key={r}>
-                <Link
-                  className={`${rating === r.toString() && "font-bold"}`}
-                  href={getFilterUrl({ r: `${r}` })}
-                >
-                  {`${r} ${CONTENT_PAGE.PAGE.SEARCH.starsAndUp}`}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <>
+      {/* Mobile filter button - outside grid */}
+      <div className="md:hidden mb-4">
+        <FilterDrawer>
+          <FilterLinks
+            categories={categories}
+            prices={prices}
+            ratings={ratings}
+            category={category}
+            price={price}
+            rating={rating}
+            q={q}
+            sort={sort}
+            page={page}
+            isMobile={true}
+          />
+        </FilterDrawer>
       </div>
-      <div className="md:col-span-4 space-y-4">
-        <div className="flex-between flex-col md:flex-row my-4">
-          <div className="flex items-center">
-            {q !== CONTENT_PAGE.GLOBAL.all &&
-              q !== "" &&
-              `${CONTENT_PAGE.PAGE.SEARCH.query} ${q}`}
-            {category !== CONTENT_PAGE.GLOBAL.all &&
-              category !== "" &&
-              ` ${CONTENT_PAGE.PAGE.SEARCH.category} ${category}`}
-            {price !== CONTENT_PAGE.GLOBAL.all &&
-              ` ${CONTENT_PAGE.PAGE.SEARCH.price} ${price}`}
-            {rating !== CONTENT_PAGE.GLOBAL.all &&
-              ` ${CONTENT_PAGE.PAGE.SEARCH.ratingLabel} ${rating} ${CONTENT_PAGE.PAGE.SEARCH.starsAndUp}`}
-            &nbsp;
-            {(q !== CONTENT_PAGE.GLOBAL.all && q !== "") ||
-            (category !== CONTENT_PAGE.GLOBAL.all && category !== "") ||
-            rating !== CONTENT_PAGE.GLOBAL.all ||
-            price !== CONTENT_PAGE.GLOBAL.all ? (
-              <Button variant={"link"} asChild>
-                <Link href={ROUTES.SEARCH}>{CONTENT_PAGE.GLOBAL.clear}</Link>
-              </Button>
-            ) : null}
+      <div className="grid md:grid-cols-5 md:gap-5">
+        {/* Desktop filters - inside grid */}
+        <div className="hidden md:block">
+          <FilterLinks
+            categories={categories}
+            prices={prices}
+            ratings={ratings}
+            category={category}
+            price={price}
+            rating={rating}
+            q={q}
+            sort={sort}
+            page={page}
+            isMobile={false}
+          />
+        </div>
+        <div className="md:col-span-4 space-y-4">
+          <div className="flex-between flex-col md:flex-row my-4">
+            <div className="flex items-center">
+              {q !== CONTENT_PAGE.GLOBAL.all &&
+                q !== "" &&
+                `${CONTENT_PAGE.PAGE.SEARCH.query} ${q}`}
+              {category !== CONTENT_PAGE.GLOBAL.all &&
+                category !== "" &&
+                ` ${CONTENT_PAGE.PAGE.SEARCH.category} ${category}`}
+              {price !== CONTENT_PAGE.GLOBAL.all &&
+                ` ${CONTENT_PAGE.PAGE.SEARCH.price} ${price}`}
+              {rating !== CONTENT_PAGE.GLOBAL.all &&
+                ` ${CONTENT_PAGE.PAGE.SEARCH.ratingLabel} ${rating} ${CONTENT_PAGE.PAGE.SEARCH.starsAndUp}`}
+              &nbsp;
+              {(q !== CONTENT_PAGE.GLOBAL.all && q !== "") ||
+              (category !== CONTENT_PAGE.GLOBAL.all && category !== "") ||
+              rating !== CONTENT_PAGE.GLOBAL.all ||
+              price !== CONTENT_PAGE.GLOBAL.all ? (
+                <Button variant={"link"} asChild>
+                  <Link href={ROUTES.SEARCH}>{CONTENT_PAGE.GLOBAL.clear}</Link>
+                </Button>
+              ) : null}
+            </div>
+            <SortSelect
+              currentSort={sort}
+              q={q}
+              category={category}
+              price={price}
+              rating={rating}
+              page={page}
+            />
           </div>
-          <div>
-            {CONTENT_PAGE.PAGE.SEARCH.sortBy}{" "}
-            {sortOrders.map((s) => (
-              <Link
-                key={s}
-                className={`mx-2 ${sort == s && "font-bold"}`}
-                href={getFilterUrl({ s })}
-              >
-                {s}
-              </Link>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {products.data.length === 0 && (
+              <div>{CONTENT_PAGE.GLOBAL.noProductsFound}</div>
+            )}
+            {products.data.map((product) => (
+              <ProductCard key={product.id} product={product} cart={cart} />
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {products.data.length === 0 && (
-            <div>{CONTENT_PAGE.GLOBAL.noProductsFound}</div>
-          )}
-          {products.data.map((product) => (
-            <ProductCard key={product.id} product={product} cart={cart} />
-          ))}
-        </div>
       </div>
-    </div>
+    </>
   );
 }

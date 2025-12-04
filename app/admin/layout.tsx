@@ -5,12 +5,22 @@ import MainNav from "./MainNav";
 import ROUTES from "@/lib/routes";
 import Menu from "@/components/shared/header/Menu";
 import AdminSearch from "@/components/admin/AdminSearch";
+import BottomMobileBar from "@/components/shared/BottomMobileBar";
+import { getMyCart } from "@/lib/actions/cart.actions";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let cartItemsCount = 0;
+  try {
+    const cart = await getMyCart();
+    cartItemsCount = cart?.items.reduce((sum, item) => sum + item.qty, 0) ?? 0;
+  } catch {
+    cartItemsCount = 0;
+  }
+
   return (
     <>
       <div className="flex flex-col">
@@ -32,10 +42,11 @@ export default function AdminLayout({
           </div>
         </div>
 
-        <div className="flex-1 space-y-4 p-8 pt-6 container mx-auto">
+        <div className="flex-1 space-y-4 p-8 pt-6 container mx-auto pb-20 md:pb-8">
           {children}
         </div>
       </div>
+      <BottomMobileBar cartItemsCount={cartItemsCount} />
     </>
   );
 }

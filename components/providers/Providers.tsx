@@ -1,12 +1,16 @@
 import { ThemeProvider } from 'next-themes';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 
 type ProvidersProps = {
   children: React.ReactNode;
 };
 
-export function Providers({ children }: ProvidersProps) {
+export async function Providers({ children }: ProvidersProps) {
+  const session = await auth();
+  
   return (
-    <>
+    <SessionProvider session={session}>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -15,6 +19,6 @@ export function Providers({ children }: ProvidersProps) {
       >
         {children}
       </ThemeProvider>
-    </>
+    </SessionProvider>
   );
 }
