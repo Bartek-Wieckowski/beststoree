@@ -2,6 +2,7 @@ import { getOrderById } from "@/lib/actions/order.actions";
 import ROUTES from "@/lib/routes";
 import { notFound, redirect } from "next/navigation";
 import Stripe from "stripe";
+import ResetUpsellAndRedirect from "./ResetUpsellAndRedirect";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -29,9 +30,9 @@ export default async function SuccessPage({
 
   const isSuccess = paymentIntent.status === "succeeded";
 
-  // Redirect to root order page after successful payment
+  // Reset localStorage and redirect to root order page after successful payment
   if (isSuccess) {
-    return redirect(ROUTES.ORDER(id));
+    return <ResetUpsellAndRedirect orderId={id} />;
   }
 
   // If payment failed, redirect back to checkout order page

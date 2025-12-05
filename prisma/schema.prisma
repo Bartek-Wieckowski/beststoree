@@ -21,6 +21,7 @@ model Category {
   createdAt DateTime @default(now()) @db.Timestamp(6)
   updatedAt DateTime @updatedAt
   products  Product[]
+  presell   Presell?
 }
 
 model Product {
@@ -45,6 +46,8 @@ model Product {
   orderItems  OrderItem[]
   reviews     Review[]
   promotion   Promotion?
+  upsell      Upsell? @relation("UpsellProduct")
+  presellAsProduct Presell[] @relation("PresellProduct")
 }
 
 model User {
@@ -187,4 +190,24 @@ model Coupon {
   isEnabled         Boolean  @default(true)
   createdAt         DateTime @default(now()) @db.Timestamp(6)
   updatedAt         DateTime @updatedAt
+}
+
+model Presell {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId String  @unique @db.Uuid
+  category  Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  productId String   @db.Uuid
+  product   Product  @relation("PresellProduct", fields: [productId], references: [id], onDelete: Cascade)
+  isEnabled Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt
+}
+
+model Upsell {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  productId String   @unique @db.Uuid
+  product   Product  @relation("UpsellProduct", fields: [productId], references: [id], onDelete: Cascade)
+  isEnabled Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt
 }

@@ -42,6 +42,14 @@ const links = [
     href: ROUTES.ADMIN_PROMOTION,
   },
   {
+    title: "Presell",
+    href: ROUTES.ADMIN_PRESELL,
+  },
+  {
+    title: "Upsell",
+    href: ROUTES.ADMIN_UPSELL,
+  },
+  {
     title: "Coupons",
     href: ROUTES.ADMIN_COUPONS,
   },

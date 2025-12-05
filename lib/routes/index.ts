@@ -21,6 +21,8 @@ const ROUTES = {
   ADMIN_CATEGORIES_CREATE: "/admin/categories/create",
   ADMIN_CATEGORIES_EDIT: (id: string) => `/admin/categories/${id}`,
   ADMIN_PROMOTION: "/admin/promotion",
+  ADMIN_PRESELL: "/admin/presell",
+  ADMIN_UPSELL: "/admin/upsell",
   ADMIN_COUPONS: "/admin/coupons",
   ADMIN_COUPONS_CREATE: "/admin/coupons/create",
   ADMIN_COUPONS_EDIT: (id: string) => `/admin/coupons/${id}`,

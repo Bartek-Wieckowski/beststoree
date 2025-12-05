@@ -10,7 +10,7 @@ import {
   removeCoupon,
 } from "@/lib/actions/cart.actions";
 import { ArrowRight, Loader, Minus, Plus, Trash2, X } from "lucide-react";
-import { Cart, CartItem } from "@/types";
+import { Cart, CartItem, Presell } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -29,7 +29,13 @@ import CONTENT_PAGE from "@/lib/content-page";
 import ROUTES from "@/lib/routes";
 import { useState } from "react";
 
-export default function CartTable({ cart }: { cart?: Cart }) {
+export default function CartTable({
+  cart,
+  presell,
+}: {
+  cart?: Cart;
+  presell?: Presell | null;
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -119,6 +125,9 @@ export default function CartTable({ cart }: { cart?: Cart }) {
             <div className="flex justify-end pt-2">
               <ClearCartButton />
             </div>
+
+            {/* Presell Section */}
+            {presell && <PresellSection presell={presell} />}
           </div>
 
           {/* Order Summary Card */}
@@ -415,5 +424,99 @@ function CouponSection({ cart }: { cart: Cart }) {
         </div>
       )}
     </div>
+  );
+}
+
+function PresellSection({ presell }: { presell: Presell }) {
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const handleAddPresellToCart = () => {
+    const product = presell.product;
+    const cartItem: CartItem = {
+      productId: product.id,
+      name: product.name,
+      slug: product.slug,
+      qty: 1,
+      image: product.images[0] || "",
+      price: product.price.toString(),
+      size: null,
+      color: null,
+    };
+
+    startTransition(async () => {
+      const res = await addItemToCart(cartItem);
+      if (res.success) {
+        toast({
+          description: res.message as string,
+        });
+        router.refresh();
+      } else {
+        toast({
+          variant: "destructive",
+          description: res.message as string,
+        });
+      }
+    });
+  };
+
+  const product = presell.product;
+  const productImage =
+    product.images && product.images.length > 0 ? product.images[0] : "";
+
+  return (
+    <Card className="mt-4">
+      <CardHeader>
+        <CardTitle className="text-lg">
+          {CONTENT_PAGE.COMPONENT.PRESELL_SECTION.recommendedForYou}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center gap-4">
+          {productImage && (
+            <Link href={ROUTES.PRODUCT(product.slug)}>
+              <Image
+                src={productImage}
+                alt={product.name}
+                width={80}
+                height={80}
+                className="rounded-md object-cover"
+              />
+            </Link>
+          )}
+          <div className="flex-1">
+            <Link href={ROUTES.PRODUCT(product.slug)}>
+              <h3 className="font-semibold hover:underline">{product.name}</h3>
+            </Link>
+            <p className="text-sm text-muted-foreground mb-2">
+              {product.description.substring(0, 100)}...
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-lg">
+                {formatCurrency(product.price.toString())}
+              </span>
+              <Button
+                onClick={handleAddPresellToCart}
+                disabled={isPending || product.stock === 0}
+                size="sm"
+              >
+                {isPending ? (
+                  <>
+                    <Loader className="w-4 h-4 animate-spin mr-2" />
+                    {CONTENT_PAGE.COMPONENT.PRESELL_SECTION.adding}
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4 mr-2" />
+                    {CONTENT_PAGE.COMPONENT.PRESELL_SECTION.addToCart}
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

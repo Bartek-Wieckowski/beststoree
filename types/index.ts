@@ -11,6 +11,8 @@ import {
   insertCategorySchema,
   insertPromotionSchema,
   insertCouponSchema,
+  insertPresellSchema,
+  insertUpsellSchema,
 } from "@/lib/validators";
 
 export type FormattedError =
@@ -133,6 +135,37 @@ export type Coupon = Omit<
   createdAt: Date | string;
   updatedAt: Date | string;
   discountPercentage: string | number; // Override: Prisma extension converts Decimal to string
+};
+
+export type Presell = z.infer<typeof insertPresellSchema> & {
+  id: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  product: Product & {
+    category?: {
+      id: string;
+      name: string;
+      slug: string;
+    } | null;
+  };
+};
+
+export type Upsell = z.infer<typeof insertUpsellSchema> & {
+  id: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  product: Product & {
+    category?: {
+      id: string;
+      name: string;
+      slug: string;
+    } | null;
+  };
 };
 
 export type TestCypressUser = {

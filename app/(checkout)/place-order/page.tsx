@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
+import { getUpsell } from "@/lib/actions/upsell.actions";
 import CONTENT_PAGE from "@/lib/content-page";
 import ROUTES from "@/lib/routes";
 import { redirect } from "next/navigation";
@@ -21,6 +22,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import PlaceOrderForm from "./PlaceOrderForm";
+import UpsellSection from "./UpsellSection";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +44,7 @@ export default async function PlaceOrderPage() {
   if (!user.paymentMethod) redirect(ROUTES.PAYMENT_METHOD);
 
   const userAddress = user.address as ShippingAddress;
+  const upsell = await getUpsell();
 
   return (
     <>
@@ -135,6 +138,16 @@ export default async function PlaceOrderPage() {
                 <div>{CONTENT_PAGE.GLOBAL.items}</div>
                 <div>{formatCurrency(cart.itemsPrice)}</div>
               </div>
+              {cart.couponCode &&
+                cart.discountAmount &&
+                Number(cart.discountAmount) > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <div>
+                      {CONTENT_PAGE.PAGE.CART.discount} ({cart.couponCode})
+                    </div>
+                    <div>-{formatCurrency(cart.discountAmount)}</div>
+                  </div>
+                )}
               <div className="flex justify-between">
                 <div>{CONTENT_PAGE.GLOBAL.tax}</div>
                 <div>{formatCurrency(cart.taxPrice)}</div>
@@ -143,10 +156,11 @@ export default async function PlaceOrderPage() {
                 <div>{CONTENT_PAGE.GLOBAL.shipping}</div>
                 <div>{formatCurrency(cart.shippingPrice)}</div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between border-t pt-3 font-semibold">
                 <div>{CONTENT_PAGE.GLOBAL.total}</div>
                 <div>{formatCurrency(cart.totalPrice)}</div>
               </div>
+              {upsell && <UpsellSection upsell={upsell} />}
               <PlaceOrderForm />
             </CardContent>
           </Card>

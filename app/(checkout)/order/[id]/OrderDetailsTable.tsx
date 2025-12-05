@@ -87,6 +87,13 @@ export default function OrderDetailsTable({
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
     const res = await approvePayPalOrder(order.id, data);
 
+    if (res.success) {
+      // Reset localStorage for upsell when order is paid
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("upsell_dismissed");
+      }
+    }
+
     toast({
       variant: res.success ? "default" : "destructive",
       description: res.message as string,
@@ -106,6 +113,12 @@ export default function OrderDetailsTable({
         onClick={() =>
           startTransition(async () => {
             const res = await updateOrderToPaidCOD(order.id);
+            if (res.success) {
+              // Reset localStorage for upsell when order is paid
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("upsell_dismissed");
+              }
+            }
             toast({
               variant: res.success ? "default" : "destructive",
               description: res.message as string,

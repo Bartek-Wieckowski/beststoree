@@ -227,3 +227,14 @@ export const updateCouponSchema = baseCouponSchema
     message: CONTENT_PAGE.PAGE.ADMIN_COUPONS.endDateAfterStartDate,
     path: ["endDate"],
   });
+
+export const insertPresellSchema = z.object({
+  categoryId: z.string().min(1, CONTENT_PAGE.GLOBAL.categoryRequired),
+  productId: z.string().min(1, CONTENT_PAGE.GLOBAL.productRequired),
+  isEnabled: z.boolean().default(true),
+});
+
+export const insertUpsellSchema = z.object({
+  productId: z.string().min(1, CONTENT_PAGE.GLOBAL.productRequired),
+  isEnabled: z.boolean().default(true),
+});

@@ -433,3 +433,23 @@ export async function getAllProductsForSelect() {
 
   return convertToPlainObject(data);
 }
+
+export async function getAllProductsForSelectWithStock() {
+  const data = await prisma.product.findMany({
+    where: {
+      stock: {
+        gt: 0,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return convertToPlainObject(data);
+}
