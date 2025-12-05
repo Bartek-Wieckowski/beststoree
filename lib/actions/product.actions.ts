@@ -30,6 +30,14 @@ export async function getLatestProducts() {
           slug: true,
         },
       },
+      promotion: {
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+          isEnabled: true,
+        },
+      },
     },
   });
 
@@ -45,6 +53,14 @@ export async function getProductBySlug(slug: string) {
           id: true,
           name: true,
           slug: true,
+        },
+      },
+      promotion: {
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+          isEnabled: true,
         },
       },
     },
@@ -154,6 +170,14 @@ export async function getAllProducts({
           id: true,
           name: true,
           slug: true,
+        },
+      },
+      promotion: {
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+          isEnabled: true,
         },
       },
     },
@@ -364,6 +388,14 @@ export async function getFeaturedProducts() {
           slug: true,
         },
       },
+      promotion: {
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+          isEnabled: true,
+        },
+      },
     },
   });
 
@@ -381,6 +413,14 @@ export async function getAllProductsForHome() {
           id: true,
           name: true,
           slug: true,
+        },
+      },
+      promotion: {
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+          isEnabled: true,
         },
       },
     },

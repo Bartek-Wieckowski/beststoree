@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "Category" ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE "Product" ALTER COLUMN "sizes" DROP DEFAULT,
+ALTER COLUMN "colors" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "Promotion" ADD COLUMN     "discountPercentage" DECIMAL(5,2) NOT NULL DEFAULT 0,
+ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMP(3);

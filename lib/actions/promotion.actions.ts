@@ -9,6 +9,7 @@ import { convertToPlainObject } from "../utils";
 export async function setPromotion(
   productId: string,
   endDate: Date,
+  discountPercentage: number,
   isEnabled: boolean = true
 ) {
   try {
@@ -22,6 +23,7 @@ export async function setPromotion(
         data: {
           productId: productId,
           endDate: endDate,
+          discountPercentage: discountPercentage,
           isEnabled: isEnabled,
         },
       });
@@ -31,6 +33,7 @@ export async function setPromotion(
         data: {
           productId: productId,
           endDate: endDate,
+          discountPercentage: discountPercentage,
           isEnabled: isEnabled,
         },
       });
@@ -180,6 +183,7 @@ export async function getPromotion() {
     id: "fallback-promotion",
     productId: firstProduct.id,
     endDate: fallbackEndDate,
+    discountPercentage: 0,
     isEnabled: true,
     createdAt: new Date(),
     updatedAt: new Date(),

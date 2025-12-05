@@ -51,6 +51,10 @@ export default function PromotionForm({
       endDate: currentPromotion?.endDate
         ? new Date(currentPromotion.endDate)
         : undefined,
+      discountPercentage:
+        currentPromotion?.discountPercentage !== undefined
+          ? Number(currentPromotion.discountPercentage)
+          : 0,
       isEnabled:
         currentPromotion?.isEnabled !== undefined
           ? currentPromotion.isEnabled
@@ -66,6 +70,10 @@ export default function PromotionForm({
         endDate: currentPromotion.endDate
           ? new Date(currentPromotion.endDate)
           : undefined,
+        discountPercentage:
+          currentPromotion.discountPercentage !== undefined
+            ? Number(currentPromotion.discountPercentage)
+            : 0,
         isEnabled:
           currentPromotion.isEnabled !== undefined
             ? currentPromotion.isEnabled
@@ -80,6 +88,7 @@ export default function PromotionForm({
       const result = await setPromotion(
         data.productId,
         data.endDate,
+        data.discountPercentage,
         data.isEnabled
       );
       if (result.success) {
@@ -206,6 +215,33 @@ export default function PromotionForm({
 
             <FormField
               control={form.control}
+              name="discountPercentage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {CONTENT_PAGE.COMPONENT.PROMOTION_FORM.discountPercentage ||
+                      "Discount Percentage (%)"}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      value={field.value || 0}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(value ? Number(value) : 0);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="isEnabled"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0">
@@ -265,6 +301,16 @@ export default function PromotionForm({
               <strong>{CONTENT_PAGE.GLOBAL.endDate}:</strong>{" "}
               {currentPromotion.endDate
                 ? new Date(currentPromotion.endDate).toLocaleString()
+                : CONTENT_PAGE.GLOBAL.notAvailable}
+            </p>
+            <p>
+              <strong>
+                {CONTENT_PAGE.COMPONENT.PROMOTION_FORM.discountPercentage ||
+                  "Discount Percentage"}
+                :
+              </strong>{" "}
+              {currentPromotion.discountPercentage !== undefined
+                ? `${Number(currentPromotion.discountPercentage)}%`
                 : CONTENT_PAGE.GLOBAL.notAvailable}
             </p>
             <p>

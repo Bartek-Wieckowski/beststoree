@@ -494,6 +494,9 @@ const CONTENT_PAGE = {
       clearPromotion: "Clear Promotion",
       uncheckToHidePromotion:
         "Uncheck to completely hide promotion from the site",
+      discountPercentage: "Discount Percentage",
+      discountMinValue: "Discount percentage must be at least 0",
+      discountMaxValue: "Discount percentage must be at most 100",
     },
     PURCHASE_RECEIPT: {
       orderConfirmation: "Order Confirmation",

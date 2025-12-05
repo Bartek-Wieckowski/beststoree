@@ -20,6 +20,7 @@ import { useComparison } from "@/hooks/use-comparison";
 import { useToast } from "@/hooks/use-toast";
 import { addItemToCart } from "@/lib/actions/cart.actions";
 import { ToastAction } from "@/components/ui/toast";
+import { getProductPrice } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -62,6 +63,8 @@ export default function ProductCard({
   const sizes = useMemo(() => product.sizes || [], [product.sizes]);
   const colors = useMemo(() => product.colors || [], [product.colors]);
 
+  const effectivePrice = useMemo(() => getProductPrice(product), [product]);
+
   const cartItem: CartItem = useMemo(
     () => ({
       image: firstImage || "",
@@ -69,7 +72,7 @@ export default function ProductCard({
       slug: product.slug,
       qty: 1,
       name: product.name,
-      price: product.price,
+      price: effectivePrice.toString(),
       size: selectedSize || null,
       color: selectedColor || null,
     }),
@@ -78,7 +81,7 @@ export default function ProductCard({
       product.id,
       product.slug,
       product.name,
-      product.price,
+      effectivePrice,
       selectedSize,
       selectedColor,
     ]
@@ -269,7 +272,17 @@ export default function ProductCard({
         <div className="flex-between gap-4">
           <ProductRating value={Number(product.rating)} />
           {product.stock > 0 ? (
-            <ProductPrice value={Number(product.price)} />
+            <div className="flex flex-col items-end">
+              {product.promotion &&
+                product.promotion.isEnabled &&
+                new Date(product.promotion.endDate) >= new Date() && (
+                  <p className="text-xs text-muted-foreground line-through">
+                    {CONTENT_PAGE.GLOBAL.currencySymbol}
+                    {Number(product.price).toFixed(2)}
+                  </p>
+                )}
+              <ProductPrice value={effectivePrice} />
+            </div>
           ) : (
             <p className="text-destructive">{CONTENT_PAGE.GLOBAL.outOfStock}</p>
           )}

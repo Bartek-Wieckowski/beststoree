@@ -10,6 +10,7 @@ import { getMyCart } from "@/lib/actions/cart.actions";
 import ReviewList from "./ReviewList";
 import { auth } from "@/auth";
 import ProductRating from "@/components/shared/product/ProductRating";
+import { getProductPrice } from "@/lib/utils";
 
 export default async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -25,6 +26,7 @@ export default async function ProductDetailsPage(props: {
   const userId = session?.user?.id;
 
   const cart = await getMyCart();
+  const effectivePrice = getProductPrice(product);
 
   return (
     <>
@@ -53,9 +55,17 @@ export default async function ProductDetailsPage(props: {
                   {CONTENT_PAGE.COMPONENT.PRODUCT_DETAILS.reviews}
                 </p>
               </div>
-              <div>
+              <div className="flex flex-col gap-1">
+                {product.promotion &&
+                  product.promotion.isEnabled &&
+                  new Date(product.promotion.endDate) >= new Date() && (
+                    <p className="text-sm text-muted-foreground line-through">
+                      {CONTENT_PAGE.GLOBAL.currencySymbol}
+                      {Number(product.price).toFixed(2)}
+                    </p>
+                  )}
                 <ProductPrice
-                  value={Number(product.price)}
+                  value={effectivePrice}
                   className="rounded-full bg-green-100 text-green-700 px-5 py-2 inline-block"
                 />
               </div>
@@ -68,7 +78,17 @@ export default async function ProductDetailsPage(props: {
                   <span className="text-sm font-medium">
                     {CONTENT_PAGE.GLOBAL.price}
                   </span>
-                  <ProductPrice value={Number(product.price)} />
+                  <div className="flex flex-col items-end">
+                    {product.promotion &&
+                      product.promotion.isEnabled &&
+                      new Date(product.promotion.endDate) >= new Date() && (
+                        <p className="text-xs text-muted-foreground line-through">
+                          {CONTENT_PAGE.GLOBAL.currencySymbol}
+                          {Number(product.price).toFixed(2)}
+                        </p>
+                      )}
+                    <ProductPrice value={effectivePrice} />
+                  </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">

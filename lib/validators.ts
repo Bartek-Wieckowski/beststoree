@@ -158,6 +158,10 @@ export const insertPromotionSchema = z.object({
   endDate: z.coerce.date({
     required_error: CONTENT_PAGE.GLOBAL.promotionEndDateRequired,
   }),
+  discountPercentage: z.coerce
+    .number()
+    .min(0, CONTENT_PAGE.COMPONENT.PROMOTION_FORM.discountMinValue)
+    .max(100, CONTENT_PAGE.COMPONENT.PROMOTION_FORM.discountMaxValue),
   isEnabled: z.boolean().default(true),
 });
 

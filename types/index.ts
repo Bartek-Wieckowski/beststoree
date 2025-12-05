@@ -56,6 +56,12 @@ export type Product = z.infer<typeof insertProductSchema> & {
     name: string;
     slug: string;
   } | null;
+  promotion?: {
+    id: string;
+    discountPercentage: string | number;
+    endDate: Date | string;
+    isEnabled: boolean;
+  } | null;
 };
 
 export type Cart = z.infer<typeof insertCartSchema>;
@@ -97,10 +103,14 @@ export type Category = z.infer<typeof insertCategorySchema> & {
   };
 };
 
-export type Promotion = z.infer<typeof insertPromotionSchema> & {
+export type Promotion = Omit<
+  z.infer<typeof insertPromotionSchema>,
+  "discountPercentage"
+> & {
   id: string;
   createdAt: Date | string;
   updatedAt: Date | string;
+  discountPercentage: string | number; // Override: Prisma extension converts Decimal to string
   product: Product & {
     images: string[];
     category?: {

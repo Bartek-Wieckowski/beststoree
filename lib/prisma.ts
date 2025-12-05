@@ -75,5 +75,13 @@ export const prisma = new PrismaClient().$extends({
         },
       },
     },
+    promotion: {
+      discountPercentage: {
+        needs: { discountPercentage: true },
+        compute(promotion) {
+          return promotion.discountPercentage.toString();
+        },
+      },
+    },
   },
 });

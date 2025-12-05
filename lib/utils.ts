@@ -169,3 +169,55 @@ export function formUrlQuery({
     }
   );
 }
+
+export function calculatePromotionalPrice(
+  originalPrice: number | string,
+  discountPercentage: number | string
+): number {
+  const price =
+    typeof originalPrice === "string" ? Number(originalPrice) : originalPrice;
+  const discount =
+    typeof discountPercentage === "string"
+      ? Number(discountPercentage)
+      : discountPercentage;
+
+  if (discount <= 0) {
+    return price;
+  }
+
+  const discountAmount = (price * discount) / 100;
+  const promotionalPrice = price - discountAmount;
+
+  return round2(promotionalPrice);
+}
+
+export function getProductPrice(product: {
+  price: number | string;
+  promotion?: {
+    discountPercentage: number | string;
+    endDate: Date | string;
+    isEnabled: boolean;
+  } | null;
+}): number {
+  const originalPrice =
+    typeof product.price === "string" ? Number(product.price) : product.price;
+
+  if (!product.promotion || !product.promotion.isEnabled) {
+    return originalPrice;
+  }
+
+  const endDate =
+    typeof product.promotion.endDate === "string"
+      ? new Date(product.promotion.endDate)
+      : product.promotion.endDate;
+
+  // Check if promotion is still active
+  if (endDate < new Date()) {
+    return originalPrice;
+  }
+
+  return calculatePromotionalPrice(
+    originalPrice,
+    product.promotion.discountPercentage
+  );
+}

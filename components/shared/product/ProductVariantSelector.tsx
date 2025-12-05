@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ProductVariants from "./ProductVariants";
 import AddToCart from "./AddToCart";
 import ProductActions from "./ProductActions";
 import { Cart, CartItem } from "@/types";
 import { Product } from "@/types";
+import { getProductPrice } from "@/lib/utils";
 
 type ProductVariantSelectorProps = {
   product: Product;
@@ -29,13 +30,15 @@ export default function ProductVariantSelector({
   const isVariantSelected =
     (!sizes.length || selectedSize) && (!colors.length || selectedColor);
 
+  const effectivePrice = useMemo(() => getProductPrice(product), [product]);
+
   const cartItem: CartItem = {
     image: product.images[0],
     productId: product.id,
     slug: product.slug,
     qty: 1,
     name: product.name,
-    price: product.price,
+    price: effectivePrice.toString(),
     size: selectedSize || null,
     color: selectedColor || null,
   };

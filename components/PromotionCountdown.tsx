@@ -7,7 +7,7 @@ import { useEffect, useState, useRef } from "react";
 import ROUTES from "@/lib/routes";
 import CONTENT_PAGE from "@/lib/content-page";
 import { Promotion } from "@/types";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, getProductPrice } from "@/lib/utils";
 import { X, Tag, Info } from "lucide-react";
 import ProductRating from "@/components/shared/product/ProductRating";
 
@@ -106,6 +106,20 @@ export default function PromotionCountdown({
   }
 
   const product = promotion.product;
+  const effectivePrice = getProductPrice({
+    price: product.price,
+    promotion: promotion.isEnabled
+      ? {
+          discountPercentage: promotion.discountPercentage,
+          endDate: promotion.endDate,
+          isEnabled: promotion.isEnabled,
+        }
+      : null,
+  });
+  const hasActivePromotion =
+    promotion.isEnabled &&
+    new Date(promotion.endDate) >= new Date() &&
+    Number(promotion.discountPercentage) > 0;
 
   if (!time) {
     return null;
@@ -216,8 +230,13 @@ export default function PromotionCountdown({
               {/* Price and rating */}
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-2">
+                  {hasActivePromotion && (
+                    <span className="text-xs text-muted-foreground line-through">
+                      {formatCurrency(Number(product.price))}
+                    </span>
+                  )}
                   <span className="font-semibold text-primary">
-                    {formatCurrency(Number(product.price))}
+                    {formatCurrency(effectivePrice)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
@@ -253,8 +272,13 @@ export default function PromotionCountdown({
               {/* Price and rating */}
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-2">
+                  {hasActivePromotion && (
+                    <span className="text-xs text-muted-foreground line-through">
+                      {formatCurrency(Number(product.price))}
+                    </span>
+                  )}
                   <span className="font-semibold text-primary">
-                    {formatCurrency(Number(product.price))}
+                    {formatCurrency(effectivePrice)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
