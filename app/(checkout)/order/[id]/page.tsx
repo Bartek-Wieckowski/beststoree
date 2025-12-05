@@ -9,6 +9,7 @@ import ROUTES from "@/lib/routes";
 import Header from "@/components/shared/header/Header";
 import BottomMobileBar from "@/components/shared/BottomMobileBar";
 import { getMyCart } from "@/lib/actions/cart.actions";
+import UserButton from "@/components/shared/header/UserButton";
 
 export const metadata: Metadata = {
   title: "Order Details",
@@ -70,7 +71,10 @@ export default async function OrderPage(props: {
       <div className="flex h-full flex-col">
         <Header />
         <main className="flex-1 wrapper">{orderContent}</main>
-        <BottomMobileBar cartItemsCount={cartItemsCount} />
+        <BottomMobileBar
+          cartItemsCount={cartItemsCount}
+          userButton={<UserButton />}
+        />
       </div>
     );
   }

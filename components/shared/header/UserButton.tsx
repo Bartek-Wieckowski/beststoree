@@ -13,7 +13,11 @@ import ROUTES from "@/lib/routes";
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
 
-export default async function UserButton() {
+type UserButtonProps = {
+  modal?: boolean;
+};
+
+export default async function UserButton({ modal }: UserButtonProps = {}) {
   const session = await auth();
 
   if (!session) {
@@ -30,7 +34,7 @@ export default async function UserButton() {
 
   return (
     <div className="flex gap-2 items-center">
-      <DropdownMenu>
+      <DropdownMenu modal={modal}>
         <DropdownMenuTrigger asChild>
           <Button
             data-testid="user-button"

@@ -17,26 +17,32 @@ import CONTENT_PAGE from "@/lib/content-page";
 type ModeToggleProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  modal?: boolean;
 };
 
 export default function ModeToggle({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
+  modal: controlledModal,
 }: ModeToggleProps = {}) {
   const [mounted, setMounted] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { theme, setTheme } = useTheme();
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
   const setOpen = controlledOnOpenChange || setInternalOpen;
 
   useEffect(() => {
     setMounted(true);
+    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
   if (!mounted) return null;
 
+  const modal = controlledModal !== undefined ? controlledModal : isTouchDevice;
+
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={modal}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"

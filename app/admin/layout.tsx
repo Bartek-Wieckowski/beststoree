@@ -7,6 +7,7 @@ import Menu from "@/components/shared/header/Menu";
 import AdminSearch from "@/components/admin/AdminSearch";
 import BottomMobileBar from "@/components/shared/BottomMobileBar";
 import { getMyCart } from "@/lib/actions/cart.actions";
+import UserButton from "@/components/shared/header/UserButton";
 
 export default async function AdminLayout({
   children,
@@ -46,7 +47,10 @@ export default async function AdminLayout({
           {children}
         </div>
       </div>
-      <BottomMobileBar cartItemsCount={cartItemsCount} />
+      <BottomMobileBar
+        cartItemsCount={cartItemsCount}
+        userButton={<UserButton />}
+      />
     </>
   );
 }

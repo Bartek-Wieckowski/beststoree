@@ -22,11 +22,13 @@ import ComparisonModal from "@/components/shared/product/ComparisonModal";
 type ComparisonButtonProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  modal?: boolean;
 };
 
 export default function ComparisonButton({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
+  modal: controlledModal,
 }: ComparisonButtonProps = {}) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -64,8 +66,10 @@ export default function ComparisonButton({
     );
   }
 
+  const modal = controlledModal !== undefined ? controlledModal : isTouchDevice;
+
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={modal}>
       <DropdownMenuTrigger asChild>
         <Button
           ref={buttonRef}

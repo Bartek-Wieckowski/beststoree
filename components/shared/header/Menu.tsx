@@ -24,13 +24,13 @@ export default async function Menu() {
     <div className="flex justify-end gap-3">
       <nav className="hidden md:flex w-full max-w-xs gap-3 relative">
         <div className="relative ">
-          <ModeToggle />
+          <ModeToggle modal={false} />
         </div>
         <div className="relative ">
-          <WishlistButton />
+          <WishlistButton modal={false} />
         </div>
         <div className="relative ">
-          <ComparisonButton />
+          <ComparisonButton modal={false} />
         </div>
         <div className="relative overflow-visible">
           <Button
@@ -57,7 +57,7 @@ export default async function Menu() {
           </Button>
         </div>
         <div className="relative ">
-          <UserButton />
+          <UserButton modal={false} />
         </div>
       </nav>
       <nav className="md:hidden">

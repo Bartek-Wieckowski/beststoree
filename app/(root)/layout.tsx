@@ -2,6 +2,7 @@ import Header from "@/components/shared/header/Header";
 import Footer from "@/components/Footer";
 import BottomMobileBar from "@/components/shared/BottomMobileBar";
 import { getMyCart } from "@/lib/actions/cart.actions";
+import UserButton from "@/components/shared/header/UserButton";
 
 export default async function RootLayout({
   children,
@@ -21,7 +22,10 @@ export default async function RootLayout({
       <Header />
       <main className="flex-1 wrapper pb-20 md:pb-0">{children}</main>
       <Footer />
-      <BottomMobileBar cartItemsCount={cartItemsCount} />
+      <BottomMobileBar
+        cartItemsCount={cartItemsCount}
+        userButton={<UserButton />}
+      />
     </div>
   );
 }

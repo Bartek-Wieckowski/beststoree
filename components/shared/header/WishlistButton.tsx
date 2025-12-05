@@ -22,11 +22,13 @@ import { useRouter, usePathname } from "next/navigation";
 type WishlistButtonProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  modal?: boolean;
 };
 
 export default function WishlistButton({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
+  modal: controlledModal,
 }: WishlistButtonProps = {}) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -57,8 +59,10 @@ export default function WishlistButton({
     );
   }
 
+  const modal = controlledModal !== undefined ? controlledModal : isTouchDevice;
+
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={modal}>
       <DropdownMenuTrigger asChild>
         <Button
           ref={buttonRef}
