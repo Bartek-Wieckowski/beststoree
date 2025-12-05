@@ -1,7 +1,7 @@
 "use server";
 
 import { UTApi } from "uploadthing/server";
-import { formatError } from "../utils";
+import { formatError, formatErrorMessage } from "../utils";
 
 // Delete images from uploadthing
 export const deleteImages = async (images: string[] | string) => {
@@ -11,6 +11,7 @@ export const deleteImages = async (images: string[] | string) => {
     await utapi.deleteFiles(images);
     return { success: true, message: "Image(s) deleted successfully" };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 };

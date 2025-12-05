@@ -33,16 +33,22 @@ export default function MobileMenuSheet({
   const [themeOpen, setThemeOpen] = useState(false);
   const pathname = usePathname();
 
-  // Close menu when route changes
+  const isAdminPath = pathname.includes("admin/");
+
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
-  // Close other dropdowns when opening a new one
   const handleThemeClick = () => {
     setWishlistOpen(false);
     setComparisonOpen(false);
     setThemeOpen(true);
+  };
+
+  const handleThemeOpenChange = (open: boolean) => {
+    setWishlistOpen(false);
+    setComparisonOpen(false);
+    setThemeOpen(open);
   };
 
   const handleWishlistClick = () => {
@@ -51,10 +57,22 @@ export default function MobileMenuSheet({
     setWishlistOpen(true);
   };
 
+  const handleWishlistOpenChange = (open: boolean) => {
+    setThemeOpen(false);
+    setComparisonOpen(false);
+    setWishlistOpen(open);
+  };
+
   const handleComparisonClick = () => {
     setThemeOpen(false);
     setWishlistOpen(false);
     setComparisonOpen(true);
+  };
+
+  const handleComparisonOpenChange = (open: boolean) => {
+    setThemeOpen(false);
+    setWishlistOpen(false);
+    setComparisonOpen(open);
   };
 
   return (
@@ -70,7 +88,10 @@ export default function MobileMenuSheet({
             className="flex items-center gap-3 w-full text-left hover:bg-accent rounded-sm p-2 -ml-2 cursor-pointer"
           >
             <div onClick={(e) => e.stopPropagation()}>
-              <ModeToggle open={themeOpen} onOpenChange={setThemeOpen} />
+              <ModeToggle
+                open={themeOpen}
+                onOpenChange={handleThemeOpenChange}
+              />
             </div>
             <span className="text-sm">
               {CONTENT_PAGE.COMPONENT.MODE_TOGGLE.appearance}
@@ -83,7 +104,7 @@ export default function MobileMenuSheet({
             <div onClick={(e) => e.stopPropagation()}>
               <WishlistButton
                 open={wishlistOpen}
-                onOpenChange={setWishlistOpen}
+                onOpenChange={handleWishlistOpenChange}
               />
             </div>
             <span className="text-sm">
@@ -97,7 +118,7 @@ export default function MobileMenuSheet({
             <div onClick={(e) => e.stopPropagation()}>
               <ComparisonButton
                 open={comparisonOpen}
-                onOpenChange={setComparisonOpen}
+                onOpenChange={handleComparisonOpenChange}
               />
             </div>
             <span className="text-sm">
@@ -131,9 +152,7 @@ export default function MobileMenuSheet({
             </span>
           </Link>
         </div>
-        <div className="mt-6 w-full">
-          <Search />
-        </div>
+        <div className="mt-6 w-full">{!isAdminPath && <Search />}</div>
         <SheetDescription></SheetDescription>
       </SheetContent>
     </Sheet>

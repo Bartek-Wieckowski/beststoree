@@ -10,6 +10,7 @@ import {
   insertReviewSchema,
   insertCategorySchema,
   insertPromotionSchema,
+  insertCouponSchema,
 } from "@/lib/validators";
 
 export type FormattedError =
@@ -64,7 +65,10 @@ export type Product = z.infer<typeof insertProductSchema> & {
   } | null;
 };
 
-export type Cart = z.infer<typeof insertCartSchema>;
+export type Cart = z.infer<typeof insertCartSchema> & {
+  couponCode?: string | null;
+  discountAmount?: string;
+};
 
 export type CartItem = z.infer<typeof cartItemSchema>;
 
@@ -119,6 +123,16 @@ export type Promotion = Omit<
       slug: string;
     } | null;
   };
+};
+
+export type Coupon = Omit<
+  z.infer<typeof insertCouponSchema>,
+  "discountPercentage"
+> & {
+  id: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  discountPercentage: string | number; // Override: Prisma extension converts Decimal to string
 };
 
 export type TestCypressUser = {

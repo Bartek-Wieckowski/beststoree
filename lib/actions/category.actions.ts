@@ -1,7 +1,11 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { convertToPlainObject, formatError } from "../utils";
+import {
+  convertToPlainObject,
+  formatError,
+  formatErrorMessage,
+} from "../utils";
 import { revalidatePath } from "next/cache";
 import ROUTES from "../routes";
 import { insertCategorySchema, updateCategorySchema } from "../validators";
@@ -77,7 +81,8 @@ export async function createCategory(
       message: "Category created successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -118,7 +123,8 @@ export async function updateCategory(
       message: "Category updated successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -159,22 +165,6 @@ export async function deleteCategory(id: string) {
     };
   } catch (error) {
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }

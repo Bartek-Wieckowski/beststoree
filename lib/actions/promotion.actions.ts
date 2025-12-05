@@ -1,10 +1,13 @@
 "use server";
 
 import { prisma } from "../prisma";
-import { formatError } from "../utils";
+import {
+  formatError,
+  formatErrorMessage,
+  convertToPlainObject,
+} from "../utils";
 import { revalidatePath } from "next/cache";
 import ROUTES from "../routes";
-import { convertToPlainObject } from "../utils";
 
 export async function setPromotion(
   productId: string,
@@ -48,7 +51,8 @@ export async function setPromotion(
       message: "Promotion set successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -73,7 +77,8 @@ export async function updatePromotionEnabled(isEnabled: boolean) {
       message: `Promotion ${isEnabled ? "enabled" : "disabled"} successfully`,
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -90,7 +95,8 @@ export async function clearPromotion() {
       message: "Promotion cleared successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 

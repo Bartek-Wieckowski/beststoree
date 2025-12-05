@@ -13,7 +13,7 @@ import {
   signUpFormSchema,
   updateUserSchema,
 } from "../validators";
-import { formatError } from "../utils";
+import { formatError, formatErrorMessage } from "../utils";
 import { ShippingAddress } from "@/types";
 import z from "zod";
 import { Prisma } from "@prisma/client";
@@ -159,7 +159,8 @@ export async function updateUserAddress(data: ShippingAddress) {
       message: "User updated successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -186,7 +187,8 @@ export async function updateUserPaymentMethod(
       message: "User updated successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -216,7 +218,8 @@ export async function updateProfile(user: { name: string; email: string }) {
       message: "User updated successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -268,23 +271,7 @@ export async function deleteUser(id: string) {
     };
   } catch (error) {
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -305,7 +292,8 @@ export async function updateUser(user: z.infer<typeof updateUserSchema>) {
       message: "User updated successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -354,23 +342,7 @@ export async function changePassword(
     };
   } catch (error) {
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -402,23 +374,7 @@ export async function resetUserPassword(
     };
   } catch (error) {
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -456,22 +412,6 @@ export async function deleteMyAccount() {
       throw error;
     }
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }

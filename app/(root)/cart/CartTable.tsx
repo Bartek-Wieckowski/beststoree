@@ -6,8 +6,10 @@ import {
   addItemToCart,
   removeItemFromCart,
   clearCart,
+  applyCoupon,
+  removeCoupon,
 } from "@/lib/actions/cart.actions";
-import { ArrowRight, Loader, Minus, Plus, Trash2 } from "lucide-react";
+import { ArrowRight, Loader, Minus, Plus, Trash2, X } from "lucide-react";
 import { Cart, CartItem } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,9 +23,11 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { formatCurrency } from "@/lib/utils";
 import CONTENT_PAGE from "@/lib/content-page";
 import ROUTES from "@/lib/routes";
+import { useState } from "react";
 
 export default function CartTable({ cart }: { cart?: Cart }) {
   const router = useRouter();
@@ -159,6 +163,18 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                     </span>
                   </div>
                 )}
+                {cart.couponCode &&
+                  cart.discountAmount &&
+                  Number(cart.discountAmount) > 0 && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span className="text-muted-foreground">
+                        {CONTENT_PAGE.PAGE.CART.discount} ({cart.couponCode})
+                      </span>
+                      <span className="font-medium">
+                        -{formatCurrency(cart.discountAmount)}
+                      </span>
+                    </div>
+                  )}
                 <div className="border-t pt-3 flex justify-between text-lg">
                   <span className="font-semibold">
                     {CONTENT_PAGE.GLOBAL.total}
@@ -168,6 +184,8 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                   </span>
                 </div>
               </div>
+
+              <CouponSection cart={cart} />
 
               <Button
                 data-testid="checkout-button"
@@ -294,5 +312,108 @@ function ClearCartButton() {
       )}
       {CONTENT_PAGE.PAGE.CART.clearAllCart}
     </Button>
+  );
+}
+
+function CouponSection({ cart }: { cart: Cart }) {
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+  const [couponCode, setCouponCode] = useState("");
+
+  const handleApplyCoupon = () => {
+    if (!couponCode.trim()) {
+      toast({
+        variant: "destructive",
+        description: "Please enter a coupon code",
+      });
+      return;
+    }
+
+    startTransition(async () => {
+      const res = await applyCoupon(couponCode.trim());
+      if (res.success) {
+        toast({
+          description: res.message as string,
+        });
+        setCouponCode("");
+      } else {
+        toast({
+          variant: "destructive",
+          description: res.message as string,
+        });
+      }
+    });
+  };
+
+  const handleRemoveCoupon = () => {
+    startTransition(async () => {
+      const res = await removeCoupon();
+      if (res.success) {
+        toast({
+          description: res.message as string,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          description: res.message as string,
+        });
+      }
+    });
+  };
+
+  return (
+    <div className="space-y-2 border-t pt-4">
+      {cart.couponCode ? (
+        <div className="flex items-center justify-between p-2 bg-green-50 rounded-md">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-green-700">
+              {CONTENT_PAGE.PAGE.CART.couponCode}: {cart.couponCode}
+            </span>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleRemoveCoupon}
+            disabled={isPending}
+            className="h-6 w-6 p-0 text-green-700 hover:text-green-900"
+          >
+            {isPending ? (
+              <Loader className="w-3 h-3 animate-spin" />
+            ) : (
+              <X className="w-3 h-3" />
+            )}
+          </Button>
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            placeholder={CONTENT_PAGE.PAGE.CART.couponCode}
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleApplyCoupon();
+              }
+            }}
+            className="flex-1"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleApplyCoupon}
+            disabled={isPending || !couponCode.trim()}
+          >
+            {isPending ? (
+              <Loader className="w-4 h-4 animate-spin" />
+            ) : (
+              CONTENT_PAGE.PAGE.CART.applyCoupon
+            )}
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }

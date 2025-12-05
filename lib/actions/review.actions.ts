@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { insertReviewSchema } from "../validators";
-import { formatError } from "../utils";
+import { formatError, formatErrorMessage } from "../utils";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { prisma } from "../prisma";
@@ -81,7 +81,8 @@ export async function createUpdateReview(
       message: "Review Updated Successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 

@@ -1,7 +1,10 @@
 "use server";
-import { convertToPlainObject } from "@/lib/utils";
+import {
+  convertToPlainObject,
+  formatError,
+  formatErrorMessage,
+} from "@/lib/utils";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { formatError } from "../utils";
 import { auth } from "@/auth";
 import { getMyCart } from "./cart.actions";
 import { getUserById } from "./user.actions";
@@ -102,9 +105,10 @@ export async function createOrder() {
     if (isRedirectError(error)) {
       throw error;
     }
+    const formattedError = formatError(error);
     return {
       success: false,
-      message: formatError(error),
+      message: formatErrorMessage(formattedError),
     };
   }
 }
@@ -156,7 +160,8 @@ export async function createPayPalOrder(orderId: string) {
       throw new Error("Order not found");
     }
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -203,7 +208,8 @@ export async function approvePayPalOrder(
       message: "Your order has been paid",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -303,6 +309,8 @@ export async function getOrderSummary() {
   const ordersCount = await prisma.order.count();
   const productsCount = await prisma.product.count();
   const usersCount = await prisma.user.count();
+  const promotionsCount = await prisma.promotion.count();
+  const couponsCount = await prisma.coupon.count();
 
   // Calculate the total sales
   const totalSales = await prisma.order.aggregate({
@@ -332,6 +340,8 @@ export async function getOrderSummary() {
     ordersCount,
     productsCount,
     usersCount,
+    promotionsCount,
+    couponsCount,
     totalSales,
     latestSales,
     salesData,
@@ -389,23 +399,7 @@ export async function deleteOrder(id: string) {
     };
   } catch (error) {
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -417,7 +411,8 @@ export async function updateOrderToPaidCOD(orderId: string) {
 
     return { success: true, message: "Order marked as paid" };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -447,6 +442,7 @@ export async function deliverOrder(orderId: string) {
       message: "Order has been marked delivered",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }

@@ -70,6 +70,7 @@ export const insertCartSchema = z.object({
   taxPrice: currency,
   sessionCartId: z.string().min(1, CONTENT_PAGE.GLOBAL.sessionCartIdRequired),
   userId: z.string().optional().nullable(),
+  couponCode: z.string().optional().nullable(),
 });
 
 export const shippingAddressSchema = z.object({
@@ -188,4 +189,41 @@ export const resetPasswordSchema = z
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: CONTENT_PAGE.GLOBAL.passwordsDontMatch,
     path: ["confirmPassword"],
+  });
+
+const baseCouponSchema = z.object({
+  code: z
+    .string()
+    .min(3, CONTENT_PAGE.PAGE.ADMIN_COUPONS.codeMinLength)
+    .max(50, CONTENT_PAGE.PAGE.ADMIN_COUPONS.codeMaxLength),
+  discountPercentage: z.coerce
+    .number()
+    .min(0, CONTENT_PAGE.PAGE.ADMIN_COUPONS.discountMin)
+    .max(100, CONTENT_PAGE.PAGE.ADMIN_COUPONS.discountMax),
+  startDate: z.date({
+    required_error: CONTENT_PAGE.PAGE.ADMIN_COUPONS.startDateRequired,
+    invalid_type_error: CONTENT_PAGE.PAGE.ADMIN_COUPONS.startDateRequired,
+  }),
+  endDate: z.date({
+    required_error: CONTENT_PAGE.PAGE.ADMIN_COUPONS.endDateRequired,
+    invalid_type_error: CONTENT_PAGE.PAGE.ADMIN_COUPONS.endDateRequired,
+  }),
+  isEnabled: z.boolean().default(true),
+});
+
+export const insertCouponSchema = baseCouponSchema.refine(
+  (data) => data.endDate > data.startDate,
+  {
+    message: CONTENT_PAGE.PAGE.ADMIN_COUPONS.endDateAfterStartDate,
+    path: ["endDate"],
+  }
+);
+
+export const updateCouponSchema = baseCouponSchema
+  .extend({
+    id: z.string().min(1, CONTENT_PAGE.GLOBAL.idRequired),
+  })
+  .refine((data) => data.endDate > data.startDate, {
+    message: CONTENT_PAGE.PAGE.ADMIN_COUPONS.endDateAfterStartDate,
+    path: ["endDate"],
   });

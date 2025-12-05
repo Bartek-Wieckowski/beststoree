@@ -23,8 +23,8 @@ export default function BottomMobileBar({
     <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center justify-around h-16 px-2">
         <ModeToggle />
-        <WishlistButton modal={false} />
-        <ComparisonButton modal={false} />
+        <WishlistButton modal={false} badgePosition="right" />
+        <ComparisonButton modal={false} badgePosition="right" />
         <Button
           asChild
           variant="ghost"

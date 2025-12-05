@@ -9,7 +9,14 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getOrderSummary } from "@/lib/actions/order.actions";
 import { formatCurrency, formatDateTime, formatNumber } from "@/lib/utils";
-import { BadgeDollarSign, Barcode, CreditCard, Users } from "lucide-react";
+import {
+  BadgeDollarSign,
+  Barcode,
+  CreditCard,
+  Users,
+  Tag,
+  Ticket,
+} from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin-guard";
@@ -29,7 +36,7 @@ export default async function AdminOverviewPage() {
   return (
     <div className="space-y-2">
       <h1 className="h2-bold">{CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.title}</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -81,6 +88,32 @@ export default async function AdminOverviewPage() {
           <CardContent>
             <div className="text-2xl font-bold">
               {formatNumber(summary.productsCount)}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.promotions}
+            </CardTitle>
+            <Tag />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatNumber(summary.promotionsCount)}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {CONTENT_PAGE.PAGE.ADMIN_OVERVIEW.coupons}
+            </CardTitle>
+            <Ticket />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatNumber(summary.couponsCount)}
             </div>
           </CardContent>
         </Card>

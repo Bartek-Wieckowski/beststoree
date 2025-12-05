@@ -23,12 +23,14 @@ type ComparisonButtonProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   modal?: boolean;
+  badgePosition?: "left" | "right";
 };
 
 export default function ComparisonButton({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
   modal: controlledModal,
+  badgePosition,
 }: ComparisonButtonProps = {}) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -68,6 +70,18 @@ export default function ComparisonButton({
 
   const modal = controlledModal !== undefined ? controlledModal : isTouchDevice;
 
+  // Determine badge position classes
+  const getBadgePositionClasses = () => {
+    if (badgePosition === "left") {
+      return "absolute -top-2 -left-2 h-5 w-5 flex items-center justify-center p-0 text-xs z-20";
+    }
+    if (badgePosition === "right") {
+      return "absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs z-20";
+    }
+    // Default: left on mobile, right on desktop
+    return "absolute -top-2 -left-2 md:left-auto md:-right-2 h-5 w-5 flex items-center justify-center p-0 text-xs z-20";
+  };
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={modal}>
       <DropdownMenuTrigger asChild>
@@ -95,10 +109,7 @@ export default function ComparisonButton({
             {CONTENT_PAGE.COMPONENT.HEADER.comparison}
           </span>
           {count > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-2 -left-2 md:left-auto md:-right-2 h-5 w-5 flex items-center justify-center p-0 text-xs z-20"
-            >
+            <Badge variant="destructive" className={getBadgePositionClasses()}>
               {count}
             </Badge>
           )}

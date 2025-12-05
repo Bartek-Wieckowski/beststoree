@@ -11,6 +11,7 @@ export default {
     extend: {
       screens: {
         "xl-custom": "1100px",
+        "nav-desktop": "1500px",
       },
       colors: {
         background: "hsl(var(--background))",

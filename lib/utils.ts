@@ -15,6 +15,25 @@ export function convertToPlainObject<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
 }
 
+export function dateToLocalDateTimeString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+export function localDateTimeStringToDate(value: string): Date {
+  if (!value) return new Date();
+  // datetime-local format: YYYY-MM-DDTHH:mm
+  // Create date in local timezone
+  const [datePart, timePart] = value.split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hours, minutes] = timePart.split(":").map(Number);
+  return new Date(year, month - 1, day, hours, minutes);
+}
+
 export function formatNumberWithDecimals(num: number): string {
   const [int, decimal] = num.toString().split(".");
   return decimal ? `${int}.${decimal.padEnd(2, "0")}` : `${int}.00`;
@@ -71,6 +90,20 @@ export function formatError(error: unknown): FormattedError {
     generalError:
       error instanceof Error ? error.message : JSON.stringify(error),
   };
+}
+
+export function formatErrorMessage(formattedError: FormattedError): string {
+  if ("generalError" in formattedError) {
+    return formattedError.generalError;
+  } else if ("prismaError" in formattedError) {
+    return formattedError.prismaError.message;
+  } else if ("message" in formattedError) {
+    return formattedError.message;
+  } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
+    return Object.values(formattedError.fieldErrors).flat().join(", ");
+  } else {
+    return "An error occurred";
+  }
 }
 
 export function round2(value: number | string) {

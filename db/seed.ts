@@ -59,6 +59,7 @@ export async function main() {
           productId: firstProduct.id,
           endDate: promotionEndDate,
           isEnabled: true,
+          discountPercentage: 10,
         },
       });
     }

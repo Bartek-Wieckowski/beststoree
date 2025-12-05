@@ -1,7 +1,11 @@
 "use server";
 
 import { prisma } from "../prisma";
-import { convertToPlainObject, formatError } from "../utils";
+import {
+  convertToPlainObject,
+  formatError,
+  formatErrorMessage,
+} from "../utils";
 import { LATEST_PRODUCTS_LIMIT, PAGE_SIZE } from "../constants";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -223,23 +227,7 @@ export async function deleteProduct(id: string) {
     return { success: true, message: "Product deleted successfully" };
   } catch (error) {
     const formattedError = formatError(error);
-    let errorMessage: string;
-
-    if ("generalError" in formattedError) {
-      errorMessage = formattedError.generalError;
-    } else if ("prismaError" in formattedError) {
-      errorMessage = formattedError.prismaError.message;
-    } else if ("message" in formattedError) {
-      errorMessage = formattedError.message;
-    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
-      errorMessage = Object.values(formattedError.fieldErrors)
-        .flat()
-        .join(", ");
-    } else {
-      errorMessage = "An error occurred";
-    }
-
-    return { success: false, message: errorMessage };
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -256,7 +244,8 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
       message: "Product created successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
@@ -343,7 +332,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       message: "Product updated successfully",
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const formattedError = formatError(error);
+    return { success: false, message: formatErrorMessage(formattedError) };
   }
 }
 
