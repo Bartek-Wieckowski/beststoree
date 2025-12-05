@@ -160,3 +160,28 @@ export const insertPromotionSchema = z.object({
   }),
   isEnabled: z.boolean().default(true),
 });
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(6, CONTENT_PAGE.GLOBAL.passwordMinLength),
+    newPassword: z.string().min(6, CONTENT_PAGE.GLOBAL.passwordMinLength),
+    confirmPassword: z
+      .string()
+      .min(6, CONTENT_PAGE.GLOBAL.confirmPasswordMinLength),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: CONTENT_PAGE.GLOBAL.passwordsDontMatch,
+    path: ["confirmPassword"],
+  });
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z.string().min(6, CONTENT_PAGE.GLOBAL.passwordMinLength),
+    confirmPassword: z
+      .string()
+      .min(6, CONTENT_PAGE.GLOBAL.confirmPasswordMinLength),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: CONTENT_PAGE.GLOBAL.passwordsDontMatch,
+    path: ["confirmPassword"],
+  });

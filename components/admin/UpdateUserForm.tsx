@@ -27,6 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { ControllerRenderProps, useForm } from "react-hook-form";
 import { z } from "zod";
+import ResetPasswordDialog from "./ResetPasswordDialog";
 
 export default function UpdateUserForm({
   user,
@@ -178,7 +179,7 @@ export default function UpdateUserForm({
             )}
           />
         </div>
-        <div className="flex-between mt-6">
+        <div className="flex-between mt-6 flex-col gap-4">
           <Button
             type="submit"
             className="w-full"
@@ -188,6 +189,7 @@ export default function UpdateUserForm({
               ? CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.submitting
               : CONTENT_PAGE.COMPONENT.ADMIN_USERS_UPDATE_FORM.updateUser}
           </Button>
+          <ResetPasswordDialog userId={user.id} />
         </div>
       </form>
     </Form>

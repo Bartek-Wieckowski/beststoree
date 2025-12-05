@@ -2,10 +2,12 @@
 
 import { auth, signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { hash } from "../encrypt";
+import { compare, hash } from "../encrypt";
 import { prisma } from "../prisma";
 import {
+  changePasswordSchema,
   paymentMethodSchema,
+  resetPasswordSchema,
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
@@ -19,6 +21,7 @@ import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
 import ROUTES from "../routes";
 import { getMyCart } from "./cart.actions";
+import { cookies } from "next/headers";
 
 export async function signInWithCredentials(
   prevState: unknown,
@@ -303,5 +306,172 @@ export async function updateUser(user: z.infer<typeof updateUserSchema>) {
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
+  }
+}
+
+export async function changePassword(
+  data: z.infer<typeof changePasswordSchema>
+) {
+  try {
+    const session = await auth();
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!currentUser) throw new Error("User not found");
+
+    if (!currentUser.password) {
+      return {
+        success: false,
+        message: "User does not have a password set",
+      };
+    }
+
+    const validatedData = changePasswordSchema.parse(data);
+
+    const isCurrentPasswordValid = await compare(
+      validatedData.currentPassword,
+      currentUser.password as string
+    );
+
+    if (!isCurrentPasswordValid) {
+      return {
+        success: false,
+        message: "Current password is incorrect",
+      };
+    }
+
+    const hashedNewPassword = await hash(validatedData.newPassword);
+
+    await prisma.user.update({
+      where: { id: currentUser.id },
+      data: { password: hashedNewPassword },
+    });
+
+    return {
+      success: true,
+      message: "Password changed successfully",
+    };
+  } catch (error) {
+    const formattedError = formatError(error);
+    let errorMessage: string;
+
+    if ("generalError" in formattedError) {
+      errorMessage = formattedError.generalError;
+    } else if ("prismaError" in formattedError) {
+      errorMessage = formattedError.prismaError.message;
+    } else if ("message" in formattedError) {
+      errorMessage = formattedError.message;
+    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
+      errorMessage = Object.values(formattedError.fieldErrors)
+        .flat()
+        .join(", ");
+    } else {
+      errorMessage = "An error occurred";
+    }
+
+    return { success: false, message: errorMessage };
+  }
+}
+
+export async function resetUserPassword(
+  userId: string,
+  data: z.infer<typeof resetPasswordSchema>
+) {
+  try {
+    const validatedData = resetPasswordSchema.parse(data);
+
+    const user = await prisma.user.findFirst({
+      where: { id: userId },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const hashedNewPassword = await hash(validatedData.newPassword);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword },
+    });
+
+    revalidatePath(ROUTES.ADMIN_USERS);
+
+    return {
+      success: true,
+      message: "Password reset successfully",
+    };
+  } catch (error) {
+    const formattedError = formatError(error);
+    let errorMessage: string;
+
+    if ("generalError" in formattedError) {
+      errorMessage = formattedError.generalError;
+    } else if ("prismaError" in formattedError) {
+      errorMessage = formattedError.prismaError.message;
+    } else if ("message" in formattedError) {
+      errorMessage = formattedError.message;
+    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
+      errorMessage = Object.values(formattedError.fieldErrors)
+        .flat()
+        .join(", ");
+    } else {
+      errorMessage = "An error occurred";
+    }
+
+    return { success: false, message: errorMessage };
+  }
+}
+
+export async function deleteMyAccount() {
+  try {
+    const session = await auth();
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!currentUser) throw new Error("User not found");
+
+    const currentCart = await getMyCart();
+    if (currentCart) {
+      await prisma.cart.delete({ where: { id: currentCart.id } });
+    }
+
+    await prisma.user.delete({ where: { id: currentUser.id } });
+
+    // Clear sessionCartId cookie before signing out
+    const cookiesObject = await cookies();
+    const sessionCartIdCookie = cookiesObject.get("sessionCartId");
+    if (sessionCartIdCookie) {
+      cookiesObject.delete("sessionCartId");
+    }
+
+    await signOut();
+
+    return {
+      success: true,
+      message: "Account deleted successfully",
+    };
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+    const formattedError = formatError(error);
+    let errorMessage: string;
+
+    if ("generalError" in formattedError) {
+      errorMessage = formattedError.generalError;
+    } else if ("prismaError" in formattedError) {
+      errorMessage = formattedError.prismaError.message;
+    } else if ("message" in formattedError) {
+      errorMessage = formattedError.message;
+    } else if ("fieldErrors" in formattedError && formattedError.fieldErrors) {
+      errorMessage = Object.values(formattedError.fieldErrors)
+        .flat()
+        .join(", ");
+    } else {
+      errorMessage = "An error occurred";
+    }
+
+    return { success: false, message: errorMessage };
   }
 }

@@ -4,6 +4,8 @@ const CONTENT_PAGE = {
     name: "Name",
     email: "Email",
     password: "Password",
+    currentPassword: "Current Password",
+    newPassword: "New Password",
     confirmPassword: "Confirm Password",
     price: "Price",
     quantity: "Quantity",
@@ -190,6 +192,12 @@ const CONTENT_PAGE = {
     USER_PROFILE: {
       title: "Profile",
       updateProfile: "Update Profile",
+      changePassword: "Change Password",
+      deleteAccount: "Delete Account",
+      accountDeleted: "Account deleted successfully",
+      passwordChanged: "Password changed successfully",
+      passwordReset: "Password reset successfully",
+      incorrectPassword: "Current password is incorrect",
     },
     ADMIN_OVERVIEW: {
       title: "Admin Dashboard",
@@ -370,6 +378,11 @@ const CONTENT_PAGE = {
       rolePlaceholder: "Select a role",
       updateUser: "Update User",
       submitting: "Submitting...",
+      resetPassword: "Reset Password",
+      resetPasswordTitle: "Reset User Password",
+      newPassword: "New Password",
+      confirmPassword: "Confirm Password",
+      passwordResetSuccess: "Password reset successfully",
     },
     DELETE_DIALOG: {},
     MARK_AS_PAID: {

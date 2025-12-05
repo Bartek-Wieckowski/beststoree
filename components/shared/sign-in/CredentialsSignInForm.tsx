@@ -48,7 +48,7 @@ export function CredentialsSignInForm() {
     <form action={action}>
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
-        {data.success && (
+        {data?.success && (
           <div className="text-sm text-green-500 text-center">
             {data.message}
           </div>
