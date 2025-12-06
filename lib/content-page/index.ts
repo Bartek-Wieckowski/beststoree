@@ -446,6 +446,7 @@ const CONTENT_PAGE = {
     },
     BUTTON: {
       viewAllProductsButton: "View All Products",
+      showAll: "Show All",
     },
     REVIEW_LIST: {
       noReviewsYet: "No reviews yet",

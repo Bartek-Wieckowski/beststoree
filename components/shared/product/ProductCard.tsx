@@ -199,15 +199,15 @@ export default function ProductCard({
 
   return (
     <Card className="w-full max-w-sm group mx-auto" data-testid="product-card">
-      <CardHeader className="p-0 items-center relative overflow-hidden">
-        <Link href={ROUTES.PRODUCT(product.slug)}>
+      <CardHeader className="p-0 items-center relative overflow-hidden aspect-square">
+        <Link href={ROUTES.PRODUCT(product.slug)} className="w-full h-full">
           <Image
             src={firstImage}
             alt={product.name}
             height={300}
             width={300}
             priority={true}
-            className="transition-transform group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform group-hover:scale-105"
           />
         </Link>
         {wishlistLoaded && comparisonLoaded && (

@@ -77,9 +77,9 @@ export default function ReviewList({
               <CardDescription>{review.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex space-x-4 text-sm text-muted-foreground">
+              <div className="flex md:space-x-4 text-sm text-muted-foreground flex-col md:flex-row gap-y-1 md:gap-y-0">
                 <ProductRating value={review.rating} />
-                <div className="flex items-center">
+                <div className="flex md:items-center">
                   <User className="mr-1 h-3 w-3" />
                   {review.user ? review.user.name : "User"}
                 </div>

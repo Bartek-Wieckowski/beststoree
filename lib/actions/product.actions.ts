@@ -364,12 +364,14 @@ export async function getFeaturedProducts() {
   const data = await prisma.product.findMany({
     where: {
       isFeatured: true,
+      banner: {
+        not: null,
+      },
       stock: {
         gt: 0, // Only products with stock > 0
       },
     },
     orderBy: { createdAt: "desc" },
-    take: 4,
     include: {
       category: {
         select: {
@@ -448,6 +450,45 @@ export async function getAllProductsForSelectWithStock() {
     },
     orderBy: {
       name: "asc",
+    },
+  });
+
+  return convertToPlainObject(data);
+}
+
+export async function getProductsByCategorySlug(
+  categorySlug: string,
+  limit: number = 4
+) {
+  const data = await prisma.product.findMany({
+    where: {
+      category: {
+        slug: categorySlug,
+      },
+      stock: {
+        gt: 0, // Only products with stock > 0
+      },
+    },
+    take: limit,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+      promotion: {
+        where: {
+          endDate: {
+            gte: new Date(),
+          },
+          isEnabled: true,
+        },
+      },
     },
   });
 
